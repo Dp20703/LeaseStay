@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'
 dotenv.config()
+
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -8,6 +9,7 @@ import rateLimit from "express-rate-limit";
 import cookieParser from "cookie-parser";
 import { errorMiddleware } from "./middleware/error.middleware.js";
 import { notFoundMiddleware } from "./middleware/notFound.middleware.js";
+import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 
@@ -40,7 +42,7 @@ app.get("/", (req, res) => {
 });
 
 // Routes Here
-// app.use("/api/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 // app.use("/api/properties", propertyRoutes);
 
 app.use(notFoundMiddleware);

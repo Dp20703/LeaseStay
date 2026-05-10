@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { lowercase } from "zod";
 
 const userSchema = new mongoose.Schema(
   {
@@ -13,6 +14,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       unique: true,
       trim: true,
+      lowercase:true,
       minlength: 3,
       maxlength: 20,
     },
@@ -78,12 +80,10 @@ const userSchema = new mongoose.Schema(
 // HASH PASSWORD BEFORE SAVE
 // =======================
 
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
 
   this.password = await bcrypt.hash(this.password, 10);
-
-  next();
 });
 
 
