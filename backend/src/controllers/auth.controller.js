@@ -1,33 +1,14 @@
 import asyncHandler from "../utils/asyncHandler.js";
-
 import ApiResponse from "../utils/ApiResponse.js";
-
 import ApiError from "../utils/ApiError.js";
-
-import {
-  sendMail,
-} from "../services/mail.service.js";
-
-import {
-  registerUserService,
-  loginUserService,
-} from "../services/auth.service.js";
-
-import welcomeEmailTemplate from
-"../templates/welcomeEmail.template.js";
-
-import sellerWelcomeTemplate from
-"../templates/sellerWelcome.template.js";
-
+import {sendMail} from "../services/mail.service.js";
+import {registerUserService,loginUserService,} from "../services/auth.service.js";
+import welcomeEmailTemplate from "../templates/welcomeEmail.template.js";
+import sellerWelcomeTemplate from "../templates/sellerWelcome.template.js";
 import sendToken from "../utils/sendToken.js";
+import cloudinary from "../config/cloudinary.config.js";
 
-import cloudinary from
-"../config/cloudinary.config.js";
-
-// ==========================
 // REGISTER USER / SELLER
-// ==========================
-
 export const registerUser =
   asyncHandler(async (req, res) => {
     const {
@@ -41,10 +22,8 @@ export const registerUser =
 
     let licenseId = "";
 
-    // ==========================
-    // SELLER FILE UPLOAD
-    // ==========================
-
+  // SELLER FILE UPLOAD
+  
     if (role === "seller") {
       const licenseFile =
         req.files?.licenseId?.[0];
@@ -87,10 +66,8 @@ export const registerUser =
         uploadedFile.secure_url;
     }
 
-    // ==========================
-    // CREATE USER
-    // ==========================
-
+  // CREATE USER
+  
     const user =
       await registerUserService({
         userName,
@@ -107,19 +84,15 @@ export const registerUser =
           fullName?.lastName,
       });
 
-    // ==========================
-    // GENERATE TOKEN
-    // ==========================
-
+  // GENERATE TOKEN
+  
     const token =
       user.generateAuthToken();
 
     sendToken(res, token);
 
-    // ==========================
-    // SEND EMAIL
-    // ==========================
-
+  // SEND EMAIL
+  
     const template =
       role === "seller"
         ? sellerWelcomeTemplate(
@@ -155,12 +128,8 @@ export const registerUser =
     );
   });
 
-// ==========================
 // LOGIN USER
-// ==========================
-
-export const loginUser =
-  asyncHandler(async (req, res) => {
+export const loginUser =asyncHandler(async (req, res) => {
     const { email, password } =
       req.body;
 
@@ -188,12 +157,8 @@ export const loginUser =
     );
   });
 
-// ==========================
 // CURRENT USER
-// ==========================
-
-export const getCurrentUser =
-  asyncHandler(async (req, res) => {
+export const getCurrentUser = asyncHandler(async (req, res) => {
     return res.status(200).json(
       new ApiResponse(
         200,
@@ -204,12 +169,8 @@ export const getCurrentUser =
     );
   });
 
-// ==========================
 // LOGOUT
-// ==========================
-
-export const logoutUser =
-  asyncHandler(async (req, res) => {
+export const logoutUser = asyncHandler(async (req, res) => {
     res.clearCookie("token", {
       httpOnly: true,
 
