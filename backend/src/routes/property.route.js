@@ -8,24 +8,11 @@ const router = express.Router();
 
 // CREATE PROPERTY
 router.post("/create",verifyJWT,authorizeRoles("seller"),
-
   upload.fields([
-    {
-      name: "images",
-      maxCount: 5,
-    },
-
-    {
-      name: "propertyProof",
-      maxCount: 1,
-    },
-
-    {
-      name: "identityId",
-      maxCount: 1,
-    },
+    {name: "images",maxCount: 5},
+    {name: "propertyProof",maxCount: 1},
+    {name: "identityId",maxCount: 1,},
   ]),
-
   createProperty
 );
 
@@ -36,7 +23,13 @@ router.get("/",getAllProperties);
 router.get("/:id",getSingleProperty);
 
 // UPDATE
-router.put("/:id",verifyJWT,authorizeRoles("seller","admin"),updateProperty);
+router.put("/:id",verifyJWT,authorizeRoles("seller","admin"),
+upload.fields([
+{name:"images",maxCount:5,},
+{name:"propertyProof",maxCount:1,},
+{name:"identityId",maxCount:1,},]),
+updateProperty
+);
 
 // DELETE
 router.delete("/:id",verifyJWT,authorizeRoles("seller","admin"),deleteProperty);

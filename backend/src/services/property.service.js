@@ -20,10 +20,13 @@ export const getSinglePropertyService =
   };
 
 // UPDATE PROPERTY
-export const updatePropertyService = async (propertyId,updateData) => {
-    return await 
-    Property.findByIdAndUpdate(propertyId,updateData,{new: true,runValidators: true,});
-  };
+export const updatePropertyService=async(propertyId,updateData)=>{
+
+return await Property.findByIdAndUpdate(
+    propertyId,{$set:updateData},
+    {new:true,runValidators:true,})
+    .populate("seller","userName email fullName profileImage");
+};
 
 // DELETE PROPERTY
 export const deletePropertyService = async (propertyId) => {

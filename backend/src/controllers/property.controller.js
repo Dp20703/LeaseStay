@@ -3,10 +3,10 @@ import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import uploadToCloudinary from "../utils/uploadToCloudinary.js";
 import {createPropertyService, getAllPropertiesService,getSinglePropertyService,updatePropertyService,deletePropertyService,} from "../services/property.service.js";
+import Property from "../models/property.model.js";
 
 // CREATE PROPERTY
-export const createProperty =
-  asyncHandler(async (req, res) => {
+export const createProperty = asyncHandler(async (req, res) => {
     const {
       title,
       description,
@@ -23,12 +23,7 @@ export const createProperty =
     } = req.body;
 
     // AMENITIES
-    const amenities =
-      req.body.amenities
-        ? JSON.parse(
-            req.body.amenities
-          )
-        : [];
+    const amenities = req.body.amenities ? JSON.parse(req.body.amenities): [];
 
     // REQUIRED VALIDATION
     if (!title ||!description ||!location ||!address ||!zipCode ||!propertyType ||!category ||!size ||!price ||!bedrooms ||!bathrooms ||!propertyIdentityType)
@@ -36,20 +31,14 @@ export const createProperty =
       throw new ApiError(400,"All fields are required");
     }
     // IMAGE FILES
-    const imageFiles =
-      req.files?.images || [];
+    const imageFiles = req.files?.images || [];
 
-    if (!imageFiles.length) {
-      throw new ApiError(400,"Property images required");
-    }
+    if (!imageFiles.length) {throw new ApiError(400,"Property images required");}
 
     // PROPERTY PROOF
-    const propertyProofFile =
-      req.files?.propertyProof?.[0];
+    const propertyProofFile = req.files?.propertyProof?.[0];
 
-    if (!propertyProofFile) {
-      throw new ApiError(400,"Property proof required");
-    }
+    if (!propertyProofFile) {throw new ApiError(400,"Property proof required");}
 
     // OPTIONAL IDENTITY FILE
     const identityIdFile =req.files?.identityId?.[0];
@@ -58,10 +47,7 @@ export const createProperty =
     const uploadedImages =
       await Promise.all(
         imageFiles.map((file) =>
-          uploadToCloudinary(
-            file.buffer,
-            "LeaseStay/properties"
-          )
+          uploadToCloudinary(file.buffer,"LeaseStay/properties")
         )
       );
 
@@ -140,7 +126,6 @@ export const getAllProperties = asyncHandler(async (req, res) => {
       new ApiResponse(200,"Properties fetched successfully",properties)
     );});
 
-    
 // GET SINGLE PROPERTY
 export const getSingleProperty =asyncHandler(async (req, res) =>{
     const { id } = req.params;
@@ -151,6 +136,115 @@ export const getSingleProperty =asyncHandler(async (req, res) =>{
 
     return res.status(200).json(new ApiResponse(200,"Property fetched successfully",property));
   });
+
+// UPDATE PROPERTY
+export const updateProperty=asyncHandler(async(req,res)=>{
+
+const{id}=req.params;
+
+const property=await Property.findById(id);
+
+if(!property){throw new ApiError(404,"Property not found")}
+
+// OWNER CHECK
+if(
+property.seller.toString()!==req.user._id.toString()&&
+req.user.role!=="admin"
+){
+throw new ApiError(403,"Unauthorized access");
+}
+
+    // UPDATE DATA
+    const updateData={
+    title:req.body.title||property.title,
+
+    description:req.body.description||property.description,
+
+    location:req.body.location||property.location,
+
+    address:req.body.address||property.address,
+
+    zipCode:req.body.zipCode||property.zipCode,
+
+    propertyType:req.body.propertyType||property.propertyType,
+
+    category:req.body.category||property.category,
+
+    size:req.body.size
+    ?Number(req.body.size)
+    :property.size,
+
+    price:req.body.price
+    ?Number(req.body.price)
+    :property.price,
+
+    bedrooms:req.body.bedrooms
+    ?Number(req.body.bedrooms)
+    :property.bedrooms,
+
+    bathrooms:req.body.bathrooms
+    ?Number(req.body.bathrooms)
+    :property.bathrooms,
+
+    propertyIdentityType:
+    req.body.propertyIdentityType||
+    property.propertyIdentityType,
+
+    amenities:req.body.amenities
+    ?JSON.parse(req.body.amenities)
+    :property.amenities,
+    };
+
+    // IMAGE UPDATE
+    const imageFiles=req.files?.images||[];
+
+    if(imageFiles.length){
+
+        const uploadedImages = await Promise.all(
+            imageFiles.map((file)=>uploadToCloudinary(file.buffer,"LeaseStay/properties")
+        ));
+
+        updateData.images = uploadedImages.map((img)=>img.secure_url);
+
+    }
+    else{
+        updateData.images=property.images;
+    }
+
+    // PROPERTY PROOF UPDATE
+    const propertyProofFile=req.files?.propertyProof?.[0];
+
+    if(propertyProofFile){
+
+        const uploadedProof=await uploadToCloudinary(propertyProofFile.buffer,"LeaseStay/propertyProofs");
+
+        updateData.propertyProof=uploadedProof.secure_url;
+
+    }
+    else{
+        updateData.propertyProof=property.propertyProof;
+    }
+
+    // IDENTITY ID UPDATE
+    const identityIdFile=req.files?.identityId?.[0];
+
+    if(identityIdFile){
+
+        const uploadedIdentity=await uploadToCloudinary(identityIdFile.buffer,"LeaseStay/identityIds");
+
+        updateData.identityId=uploadedIdentity.secure_url;
+
+    }
+    else{
+        updateData.identityId=property.identityId;
+    }
+
+    // UPDATE PROPERTY
+    const updatedProperty=await updatePropertyService(id,updateData);
+
+    return res.status(200).json(new ApiResponse(200,"Property updated successfully",updatedProperty)
+    );
+});
 
 // DELETE PROPERTY
 export const deleteProperty = asyncHandler(async (req, res) => {
