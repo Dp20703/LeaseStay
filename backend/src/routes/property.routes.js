@@ -1,5 +1,5 @@
 import express from "express";
-import {createProperty,getAllProperties,getSingleProperty,updateProperty,deleteProperty,
+import {createProperty,getAllProperties,getSingleProperty,updateProperty,deleteProperty,getSellerProperties
 } from "../controllers/property.controller.js";
 import upload from "../config/multer.config.js";
 import {verifyJWT} from "../middlewares/auth.middleware.js";
@@ -21,6 +21,9 @@ router.get("/",getAllProperties);
 
 // GET SINGLE
 router.get("/:id",getSingleProperty);
+
+// GET SELLER PROPERTIES
+router.get("/seller/my-properties",verifyJWT,authorizeRoles("seller"),getSellerProperties);
 
 // UPDATE
 router.put("/:id",verifyJWT,authorizeRoles("seller","admin"),

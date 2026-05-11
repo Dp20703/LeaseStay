@@ -2,7 +2,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import uploadToCloudinary from "../utils/uploadToCloudinary.js";
-import {createPropertyService, getAllPropertiesService,getSinglePropertyService,updatePropertyService,deletePropertyService,} from "../services/property.service.js";
+import {createPropertyService, getAllPropertiesService,getSinglePropertyService,updatePropertyService,deletePropertyService,getSellerPropertiesService} from "../services/property.service.js";
 import Property from "../models/property.model.js";
 
 // CREATE PROPERTY
@@ -136,6 +136,18 @@ export const getSingleProperty =asyncHandler(async (req, res) =>{
 
     return res.status(200).json(new ApiResponse(200,"Property fetched successfully",property));
   });
+
+// GET SELLER PROPERTIES
+export const getSellerProperties= asyncHandler(async(req,res)=>{
+
+const properties=await getSellerPropertiesService(req.user._id);
+
+return res.status(200).json(new ApiResponse(
+200,"Seller properties fetched successfully",
+properties
+)
+);
+});
 
 // UPDATE PROPERTY
 export const updateProperty=asyncHandler(async(req,res)=>{

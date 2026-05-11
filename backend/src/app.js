@@ -10,6 +10,8 @@ import cookieParser from "cookie-parser";
 import { errorMiddleware } from "./middleware/error.middleware.js";
 import { notFoundMiddleware } from "./middleware/notFound.middleware.js";
 import authRoutes from "./routes/auth.routes.js";
+import propertyRoutes from "./routes/property.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
 
 const app = express();
 
@@ -43,7 +45,8 @@ app.get("/", (req, res) => {
 
 // Routes Here
 app.use("/api/auth", authRoutes);
-// app.use("/api/properties", propertyRoutes);
+app.use("/api/properties", propertyRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);

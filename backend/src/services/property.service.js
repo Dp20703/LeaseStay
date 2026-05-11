@@ -19,6 +19,13 @@ export const getSinglePropertyService =
     .populate("seller","userName email fullName profileImage");
   };
 
+// GET SELLER PROPERTIES
+export const getSellerPropertiesService=async(sellerId)=>{
+    return await Property
+    .find({seller:sellerId,})
+    .populate("seller","userName email fullName profileImage")
+    .sort({createdAt:-1,});};
+
 // UPDATE PROPERTY
 export const updatePropertyService=async(propertyId,updateData)=>{
 
