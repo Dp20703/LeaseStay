@@ -98,9 +98,9 @@ const Navbar = () => {
             </>
           )}
 
-          {/* Owner */}
+          {/* seller */}
 
-          {user?.role === "owner" && (
+          {user?.role === "seller" && (
             <NavLink to="/dashboard" className="ls-btn-primary">
               Dashboard
             </NavLink>
@@ -229,7 +229,7 @@ const Navbar = () => {
                   Wishlist
                 </NavLink>
 
-                {user.role === "owner" && (
+                {user.role === "seller" && (
                   <NavLink
                     to="/dashboard"
                     className="ls-nav-link"

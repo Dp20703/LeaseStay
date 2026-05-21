@@ -1,5 +1,3 @@
-// src/services/authService.ts
-
 import api from "@/services/axios"
 
 /* ─────────────────────────────────────────────
@@ -21,14 +19,9 @@ export type LoginData = {
    Register
 ───────────────────────────────────────────── */
 
-export const registerUser = async (
-  data: RegisterData
-) => {
+export const registerUser = async (data: RegisterData) => {
 
-  const response = await api.post(
-    "/auth/register",
-    data
-  )
+  const response = await api.post("/auth/register",data)
 
   return response.data
 }
@@ -37,14 +30,9 @@ export const registerUser = async (
    Login
 ───────────────────────────────────────────── */
 
-export const loginUser = async (
-  data: LoginData
-) => {
+export const loginUser = async (data: LoginData) => {
 
-  const response = await api.post(
-    "/auth/login",
-    data
-  )
+  const response = await api.post("/auth/login",data)
 
   return response.data
 }
@@ -66,9 +54,7 @@ export const getCurrentUser = async () => {
 
 export const logoutUser = async () => {
 
-  const response = await api.post(
-    "/auth/logout"
-  )
+  const response = await api.post("/auth/logout")
 
   return response.data
 }

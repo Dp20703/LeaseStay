@@ -49,15 +49,12 @@ export const registerUserService =
       })
 
     // REMOVE PASSWORD
-    return await User.findById(
-      user._id
-    ).select("-password")
+    return await User.findById(user._id).select("-password")
   }
 
 // LOGIN
 
-export const loginUserService =
-  async (email, password) => {
+export const loginUserService = async (email, password) => {
 
     // FIND USER
 

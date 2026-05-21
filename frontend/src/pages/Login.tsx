@@ -82,7 +82,7 @@ const Login = () => {
 
       const response = await loginUser(formData);
 
-      login(response.token, response.user);
+      login(response.data.token, response.data.user);
 
       toast.success("Login successful");
 
