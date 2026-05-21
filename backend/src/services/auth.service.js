@@ -1,8 +1,8 @@
-import User from "../models/user.model.js";
-
-import ApiError from "../utils/ApiError.js";
+import User from "../models/user.model.js"
+import ApiError from "../utils/ApiError.js"
 
 // REGISTER
+
 export const registerUserService =
   async ({
     userName,
@@ -14,83 +14,81 @@ export const registerUserService =
     lastName,
     licenseId,
   }) => {
-    const [
-      existingEmail,
-      existingUsername,
-    ] = await Promise.all([
-      User.findOne({ email }),
 
-      User.findOne({ userName }),
-    ]);
+    const [existingEmail,existingUsername] =
+     await Promise.all([
+      User.findOne({ email }),
+      userName? User.findOne({userName,}): null,
+    ])
+
+    // EMAIL EXISTS
 
     if (existingEmail) {
-      throw new ApiError(
-        409,
-        "Email already exists"
-      );
+      throw new ApiError(409,"Email already exists")
     }
+
+    // USERNAME EXISTS
 
     if (existingUsername) {
-      throw new ApiError(
-        409,
-        "Username already taken"
-      );
+      throw new ApiError(409,"Username already taken")
     }
+
+    // CREATE USER
 
     const user = await User.create({
-      userName,
-      email,
-      password,
-      phone,
-      role,
-      licenseId,
+        userName,
+        email,
+        password,
+        phone,
+        role,
+        licenseId,
+        fullName: {
+          firstName,
+          lastName,
+        },
+      })
 
-      fullName: {
-        firstName,
-        lastName,
-      },
-    });
-
+    // REMOVE PASSWORD
     return await User.findById(
       user._id
-    ).select("-password");
-  };
+    ).select("-password")
+  }
 
 // LOGIN
+
 export const loginUserService =
   async (email, password) => {
-    const user =
-      await User.findOne({
-        email,
-      }).select("+password");
+
+    // FIND USER
+
+    const user = await User.findOne({email,}).select("+password")
 
     if (!user) {
-      throw new ApiError(
-        401,
-        "Invalid email or password"
-      );
+      throw new ApiError(401,"Invalid email or password")
     }
+
+    // BLOCKED USER
+
+    if (user.isBlocked) {
+      throw new ApiError(403,"Your account has been blocked")
+    }
+
+    // GOOGLE USER
 
     if (user.isGoogleUser) {
-      throw new ApiError(
-        401,
-        "Please login using Google"
-      );
+      throw new ApiError(401,"Please login using Google")
     }
 
-    const isPasswordCorrect =
-      await user.comparePassword(
-        password
-      );
+    // PASSWORD CHECK
+
+    const isPasswordCorrect =await user.comparePassword(password)
 
     if (!isPasswordCorrect) {
-      throw new ApiError(
-        401,
-        "Invalid email or password"
-      );
+      throw new ApiError(401,"Invalid email or password")
     }
 
-    user.password = undefined;
+    // REMOVE PASSWORD
 
-    return user;
-  };
+    user.password = undefined
+    return user
+  }

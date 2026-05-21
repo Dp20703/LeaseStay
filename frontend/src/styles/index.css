@@ -1,0 +1,532 @@
+/* ============================================================
+   LeaseStay — Global Styles
+   Stack: Tailwind CSS + Custom Design System
+   ============================================================ */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ──────────────────────────────────────────────────────────
+   Base Layer
+────────────────────────────────────────────────────────── */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    @apply box-border;
+  }
+
+  html,
+  body,
+  #root {
+    @apply min-h-screen;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background-light
+           dark:bg-background-dark
+           text-text-light
+           dark:text-text-dark
+           font-sans
+           antialiased;
+  }
+
+  a {
+    @apply no-underline text-inherit;
+  }
+
+  img {
+    @apply max-w-full block;
+  }
+
+  button {
+    @apply cursor-pointer;
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    @apply font-sans;
+  }
+
+  textarea {
+    resize: none;
+  }
+
+  /* Scrollbar */
+
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #111827;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+  }
+
+  /* Selection */
+
+  ::selection {
+    background: #4f46e5;
+    color: white;
+  }
+
+  /* Focus Ring */
+
+  :focus-visible {
+    outline: 2px solid #4f46e5;
+    outline-offset: 2px;
+  }
+
+  /* Remove mobile tap highlight */
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   Components Layer
+────────────────────────────────────────────────────────── */
+
+@layer components {
+  /* ── Layout ─────────────────────────────────────────── */
+
+  .ls-page {
+    @apply min-h-screen
+           bg-background-light
+           dark:bg-background-dark
+           text-text-light 
+           dark:text-text-dark;
+  }
+
+  .ls-container {
+    @apply max-w-7xl mx-auto px-4;
+  }
+
+  .ls-section {
+    @apply py-16;
+  }
+
+  .ls-section-title {
+    @apply text-3xl md:text-4xl
+           font-bold
+           text-text-light
+           dark:text-text-dark;
+  }
+
+  .ls-section-subtitle {
+    @apply mt-3
+           text-text-muted
+           dark:text-text-darkMuted;
+  }
+
+  /* ── Cards ─────────────────────────────────────────── */
+
+  .ls-card {
+    @apply bg-card-light
+           dark:bg-card-dark
+           border
+           border-border-light
+           dark:border-border-dark
+           rounded-2xl
+           shadow-soft;
+  }
+
+  .ls-card-hover {
+    @apply transition-all duration-300
+           hover:-translate-y-1
+           hover:shadow-lg;
+  }
+
+  /* ── Sidebars ─────────────────────────────────────────── */
+
+  .ls-sidebar-title {
+    @apply text-lg font-semibold text-text-light dark:text-text-dark mb-6;
+  }
+
+  .ls-sidebar {
+    @apply ls-card p-6 sticky top-24 h-fit;
+  }
+
+  .ls-sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-normal text-text-muted dark:text-text-darkMuted hover:bg-surface-light dark:hover:bg-surface-dark hover:text-primary dark:hover:text-primary;
+  }
+
+  .ls-sidebar-link.active {
+    @apply bg-primary text-white hover:bg-primary hover:text-white;
+  }
+
+  /* ── Buttons ───────────────────────────────────────── */
+
+  .ls-btn {
+    @apply inline-flex
+           items-center
+           justify-center
+           gap-2
+           px-5
+           py-2.5
+           rounded-xl
+           text-sm
+           font-medium
+           transition-all
+           duration-200;
+  }
+
+  .ls-btn-primary {
+    @apply ls-btn
+           bg-primary
+           hover:bg-primary-dark
+           text-white;
+  }
+
+  .ls-btn-secondary {
+    @apply ls-btn
+           bg-slate-100
+           hover:bg-slate-200
+           dark:bg-slate-800
+           dark:hover:bg-slate-700
+           text-text-light
+           dark:text-text-dark;
+  }
+
+  .ls-btn-outline {
+    @apply ls-btn
+           border
+           border-border-light
+           dark:border-border-dark
+           hover:bg-slate-100
+           dark:hover:bg-slate-800;
+  }
+
+  .ls-btn-danger {
+    @apply ls-btn
+           bg-red-500
+           hover:bg-red-600
+           text-white;
+  }
+
+  .ls-btn-success {
+    @apply ls-btn
+           bg-green-500
+           hover:bg-green-600
+           text-white;
+  }
+
+  /* ── Inputs ────────────────────────────────────────── */
+
+  .ls-label {
+    @apply block
+           mb-2
+           text-sm
+           font-medium
+           text-text-light
+           dark:text-text-dark;
+  }
+
+  .ls-input {
+    @apply w-full
+           h-12
+           px-4
+           rounded-xl
+           border
+           border-border-light
+           dark:border-border-dark
+           bg-white
+           dark:bg-slate-900
+           text-text-light
+           dark:text-text-dark
+           placeholder:text-text-muted
+           dark:placeholder:text-text-darkMuted
+           focus:outline-none
+           focus:ring-2
+           focus:ring-primary
+           transition-all;
+  }
+
+  .ls-textarea {
+    @apply ls-input
+           h-32
+           py-3;
+  }
+
+  .ls-select {
+    @apply ls-input
+           appearance-none;
+  }
+
+  /* ── Navbar ────────────────────────────────────────── */
+
+  .ls-navbar {
+    @apply sticky
+           top-0
+           z-50
+           border-b
+           border-border-light
+           dark:border-border-dark
+           bg-white/80
+           dark:bg-slate-900/80
+           backdrop-blur-md;
+  }
+
+  .ls-navbar-inner {
+    @apply h-16
+           flex
+           items-center
+           justify-between
+           max-w-7xl
+           mx-auto
+           px-4;
+  }
+
+  .ls-nav-links {
+    @apply flex
+           items-center
+           gap-5;
+  }
+
+  .ls-nav-link {
+    @apply text-sm
+           font-medium
+           text-text-muted
+           dark:text-text-darkMuted
+           transition-colors
+           hover:text-primary;
+  }
+
+  .ls-nav-link.active {
+    @apply text-primary;
+  }
+
+  /* ── Property Cards ────────────────────────────────── */
+
+  .ls-property-image {
+    @apply w-full
+           h-64
+           object-cover
+           rounded-t-2xl;
+  }
+
+  .ls-property-body {
+    @apply p-5;
+  }
+
+  .ls-property-title {
+    @apply text-xl
+           font-semibold
+           text-text-light
+           dark:text-text-dark;
+  }
+
+  .ls-property-location {
+    @apply mt-2
+           text-sm
+           text-text-muted
+           dark:text-text-darkMuted;
+  }
+
+  .ls-property-price {
+    @apply mt-4
+           text-2xl
+           font-bold
+           text-primary;
+  }
+
+  /* ── Badge ─────────────────────────────────────────── */
+
+  .ls-badge {
+    @apply inline-flex
+           items-center
+           px-3
+           py-1
+           rounded-full
+           text-xs
+           font-medium;
+  }
+
+  .ls-badge-success {
+    @apply ls-badge
+           bg-green-100
+           text-green-700
+           dark:bg-green-900/40
+           dark:text-green-400;
+  }
+
+  .ls-badge-warning {
+    @apply ls-badge
+           bg-yellow-100
+           text-yellow-700
+           dark:bg-yellow-900/40
+           dark:text-yellow-400;
+  }
+
+  .ls-badge-danger {
+    @apply ls-badge
+           bg-red-100
+           text-red-700
+           dark:bg-red-900/40
+           dark:text-red-400;
+  }
+
+  /* ── Modal ─────────────────────────────────────────── */
+
+  .ls-overlay {
+    @apply fixed
+           inset-0
+           z-50
+           flex
+           items-center
+           justify-center
+           bg-black/60
+           backdrop-blur-sm;
+  }
+
+  .ls-modal {
+    @apply w-full
+           max-w-lg
+           mx-4
+           rounded-2xl
+           border
+           border-border-light
+           dark:border-border-dark
+           bg-card-light
+           dark:bg-card-dark
+           shadow-2xl;
+  }
+
+  .ls-modal-header {
+    @apply px-6
+           py-4
+           border-b
+           border-border-light
+           dark:border-border-dark
+           flex
+           items-center
+           justify-between;
+  }
+
+  .ls-modal-body {
+    @apply p-6;
+  }
+
+  .ls-modal-footer {
+    @apply px-6
+           py-4
+           border-t
+           border-border-light
+           dark:border-border-dark
+           flex
+           justify-end
+           gap-3;
+  }
+
+  /* ── Table ─────────────────────────────────────────── */
+
+  .ls-table-wrapper {
+    @apply overflow-x-auto
+           rounded-2xl
+           border
+           border-border-light
+           dark:border-border-dark;
+  }
+
+  .ls-table {
+    @apply w-full
+           border-collapse;
+  }
+
+  .ls-table thead {
+    @apply bg-slate-100
+           dark:bg-slate-800;
+  }
+
+  .ls-table thead th {
+    @apply px-5
+           py-4
+           text-left
+           text-xs
+           uppercase
+           tracking-wider
+           text-text-muted
+           dark:text-text-darkMuted;
+  }
+
+  .ls-table tbody td {
+    @apply px-5
+           py-4
+           border-t
+           border-border-light
+           dark:border-border-dark;
+  }
+
+  .ls-table tbody tr:hover {
+    @apply bg-slate-50
+           dark:bg-slate-800/50;
+  }
+
+  /* ── Loader ────────────────────────────────────────── */
+
+  .ls-loader-screen {
+    @apply fixed
+           inset-0
+           z-50
+           flex
+           items-center
+           justify-center
+           bg-background-light
+           dark:bg-background-dark;
+  }
+
+  .ls-spinner {
+    @apply w-10
+           h-10
+           rounded-full
+           border-4
+           border-primary
+           border-t-transparent
+           animate-spin;
+  }
+
+  /* ── Empty State ───────────────────────────────────── */
+
+  .ls-empty {
+    @apply py-16
+           text-center
+           text-text-muted
+           dark:text-text-darkMuted;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────
+   Custom Utilities
+────────────────────────────────────────────────────────── */
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(to right, #4f46e5, #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+  }
+}
