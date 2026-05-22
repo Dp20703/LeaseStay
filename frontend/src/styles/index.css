@@ -163,11 +163,30 @@
   }
 
   .ls-sidebar {
-    @apply ls-card p-6 sticky top-24 h-fit;
+    @apply ls-card
+         p-6
+         h-fit
+         lg:sticky
+         lg:top-24;
   }
 
   .ls-sidebar-link {
-    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-normal text-text-muted dark:text-text-darkMuted hover:bg-surface-light dark:hover:bg-surface-dark hover:text-primary dark:hover:text-primary;
+    @apply flex
+         items-center
+         gap-3
+         px-4
+         py-3
+         rounded-xl
+         text-sm
+         font-medium
+         transition-all
+         duration-200
+         text-text-muted
+         dark:text-text-darkMuted
+         hover:bg-surface-light
+         dark:hover:bg-surface-dark
+         hover:text-primary
+         dark:hover:text-primary;
   }
 
   .ls-sidebar-link.active {

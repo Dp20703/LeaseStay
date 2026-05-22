@@ -4,7 +4,7 @@ import { FaEnvelope, FaLock } from "react-icons/fa";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { toast } from "react-toastify";
 import { loginUser } from "@/services/authService";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import api from "@/services/axios";
 
 type LoginFormData = {
@@ -203,6 +203,7 @@ const Login = () => {
                       onChange={handleChange}
                       placeholder="Enter your password"
                       className="ls-input pl-12"
+                      autoComplete="current-password"
                     />
                   </div>
 

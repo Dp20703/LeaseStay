@@ -34,7 +34,7 @@ type AuthProviderProps = {
    Context
 ───────────────────────────────────────────── */
 
-const AuthContext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 /* ─────────────────────────────────────────────
    Provider
@@ -109,18 +109,4 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
-};
-
-/* ─────────────────────────────────────────────
-   Hook
-───────────────────────────────────────────── */
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error("useAuth must be used inside AuthProvider");
-  }
-
-  return context;
 };

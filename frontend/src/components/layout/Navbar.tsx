@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import {
   FaHeart,
   FaUserCircle,
@@ -8,8 +9,6 @@ import {
   FaSun,
   FaTimes,
 } from "react-icons/fa";
-
-import { useAuth } from "@/context/AuthContext";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
