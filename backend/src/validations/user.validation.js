@@ -6,28 +6,28 @@ export const updateProfileValidation = [
   body("firstName")
     .optional()
     .trim()
-    .isLength({ min: 2, max: 20 })
-    .withMessage("First name must be between 2 and 20 characters"),
+    .isLength({ min: 2, max: 30 })
+    .withMessage("First name must be between 2 and 30 characters"),
 
   body("lastName")
     .optional()
     .trim()
-    .isLength({ max: 20 })
+    .isLength({ max: 30 })
     .withMessage("Last name too long"),
 
   body("userName")
     .optional()
     .trim()
     .toLowerCase()
-    .isLength({ min: 3, max: 20 })
-    .withMessage("Username must be between 3 and 20 characters")
+    .isLength({ min: 3, max: 30 })
+    .withMessage("Username must be between 3 and 30 characters")
     .matches(/^[a-z0-9_]+$/)
     .withMessage(
       "Username can only contain lowercase letters, numbers and underscore",
     ),
 
   body("phone")
-    .optional()
+    .optional({ values: "falsy" })
     .trim()
     .matches(/^[0-9]{10}$/)
     .withMessage("Phone number must be 10 digits"),

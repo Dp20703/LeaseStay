@@ -1,43 +1,77 @@
 import { toast } from "react-toastify";
-import api from "@/services/axios";
+
 import { FaEdit } from "react-icons/fa";
+
+import api from "@/services/axios";
 
 type ProfileEditCardProps = {
   user: any;
+
   setUser: any;
+
   logout: () => void;
 
   isEditing: boolean;
-  setIsEditing: any;
+
+  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
 
   loading: boolean;
-  setLoading: any;
+
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 
   formData: any;
-  setFormData: any;
+
+  setFormData: React.Dispatch<React.SetStateAction<any>>;
 };
 
 const ProfileEditCard = ({
+  user,
+
   setUser,
+
   logout,
 
   isEditing,
+
   setIsEditing,
 
   loading,
+
   setLoading,
 
   formData,
+
   setFormData,
 }: ProfileEditCardProps) => {
+  // RESET FORM
+
+  const resetFormData = () => ({
+    firstName: user?.fullName?.firstName || "",
+
+    lastName: user?.fullName?.lastName || "",
+
+    userName: user?.userName || "",
+
+    email: user?.email || "",
+
+    phone: user?.phone || "",
+
+    profileImage: null as File | null,
+  });
+
+  // HANDLE CHANGE
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
     setFormData((prev: any) => ({
       ...prev,
+
       [name]: value,
     }));
   };
+
+  // HANDLE SAVE
 
   const handleSave = async () => {
     try {
@@ -59,13 +93,37 @@ const ProfileEditCard = ({
 
       const response = await api.patch(
         "/users/update-profile",
+
         updatedFormData,
-        { headers: { "Content-Type": "multipart/form-data" } },
+
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
       );
 
-      setUser(response?.data?.data);
+      // UPDATE USER
 
-      toast.success("Profile updated successfully");
+      setUser(response.data.data);
+
+      // RESET FORM WITH NEW DATA
+
+      setFormData({
+        firstName: response.data.data.fullName?.firstName || "",
+
+        lastName: response.data.data.fullName?.lastName || "",
+
+        userName: response.data.data?.userName || "",
+
+        email: response.data.data?.email || "",
+
+        phone: response.data.data?.phone || "",
+
+        profileImage: null,
+      });
+
+      toast.success(response.data.message || "Profile updated successfully");
 
       setIsEditing(false);
     } catch (error: any) {
@@ -75,10 +133,18 @@ const ProfileEditCard = ({
     }
   };
 
+  // HANDLE CANCEL
+
+  const handleCancel = () => {
+    setFormData(resetFormData());
+
+    setIsEditing(false);
+  };
+
   return (
     <div className="lg:col-span-2">
       <div className="ls-card p-8">
-        {/* Header */}
+        {/* HEADER */}
 
         <div className="flex items-center justify-between">
           <div>
@@ -100,9 +166,11 @@ const ProfileEditCard = ({
           )}
         </div>
 
-        {/* Form */}
+        {/* FORM */}
 
         <div className="grid md:grid-cols-2 gap-6 mt-10">
+          {/* FIRST NAME */}
+
           <div>
             <label className="ls-label">First Name</label>
 
@@ -113,8 +181,11 @@ const ProfileEditCard = ({
               onChange={handleChange}
               disabled={!isEditing}
               className="ls-input mt-2"
+              placeholder={isEditing ? "Enter your firstname" : ""}
             />
           </div>
+
+          {/* LAST NAME */}
 
           <div>
             <label className="ls-label">Last Name</label>
@@ -126,8 +197,11 @@ const ProfileEditCard = ({
               onChange={handleChange}
               disabled={!isEditing}
               className="ls-input mt-2"
+              placeholder={isEditing ? "Enter your lastname" : ""}
             />
           </div>
+
+          {/* USERNAME */}
 
           <div>
             <label className="ls-label">Username</label>
@@ -139,8 +213,11 @@ const ProfileEditCard = ({
               onChange={handleChange}
               disabled={!isEditing}
               className="ls-input mt-2"
+              placeholder={isEditing ? "Enter your username" : ""}
             />
           </div>
+
+          {/* EMAIL */}
 
           <div>
             <label className="ls-label">Email</label>
@@ -153,6 +230,8 @@ const ProfileEditCard = ({
             />
           </div>
 
+          {/* PHONE */}
+
           <div className="md:col-span-2">
             <label className="ls-label">Phone</label>
 
@@ -163,11 +242,12 @@ const ProfileEditCard = ({
               onChange={handleChange}
               disabled={!isEditing}
               className="ls-input mt-2"
+              placeholder={isEditing ? "Enter your phone number" : ""}
             />
           </div>
         </div>
 
-        {/* Actions */}
+        {/* ACTIONS */}
 
         {isEditing && (
           <div className="flex flex-wrap gap-4 mt-10">
@@ -180,7 +260,8 @@ const ProfileEditCard = ({
             </button>
 
             <button
-              onClick={() => setIsEditing(false)}
+              onClick={handleCancel}
+              disabled={loading}
               className="ls-btn-outline"
             >
               Cancel
@@ -188,7 +269,7 @@ const ProfileEditCard = ({
           </div>
         )}
 
-        {/* Logout */}
+        {/* LOGOUT */}
 
         <div className="pt-10 mt-10 border-t border-border-light dark:border-border-dark">
           <button onClick={logout} className="ls-btn-danger">

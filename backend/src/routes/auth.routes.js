@@ -1,5 +1,5 @@
 import express from "express";
-import {upload} from "../config/multer.config.js";
+import { upload } from "../config/multer.config.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import {
   registerUser,
@@ -7,6 +7,8 @@ import {
   logoutUser,
   getCurrentUser,
   googleAuth,
+  forgotPassword,
+  resetPassword,
 } from "../controllers/auth.controller.js";
 
 const router = express.Router();
@@ -29,5 +31,11 @@ router.post("/logout", verifyJWT, logoutUser);
 
 // CURRENT USER
 router.get("/me", verifyJWT, getCurrentUser);
+
+// FORGOT PASSWORD
+router.post("/forgot-password", forgotPassword);
+
+// RESET PASSWORD
+router.patch("/reset-password/:token", resetPassword);
 
 export default router;

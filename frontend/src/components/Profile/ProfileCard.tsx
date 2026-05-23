@@ -1,11 +1,4 @@
-import {
-  FaCamera,
-  FaEnvelope,
-  FaPhone,
-  FaShieldAlt,
-  FaEdit,
-  FaUser,
-} from "react-icons/fa";
+import { FaCamera, FaEnvelope, FaPhone, FaShieldAlt } from "react-icons/fa";
 
 type ProfileCardProps = {
   user: any;

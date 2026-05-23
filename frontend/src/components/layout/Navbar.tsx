@@ -123,7 +123,9 @@ const Navbar = () => {
           {user ? (
             <>
               <div className="flex items-center gap-3">
-                <FaUserCircle className="text-3xl text-primary" />
+                <NavLink to="/profile" className="ls-nav-link">
+                  <FaUserCircle className="text-3xl text-primary" />
+                </NavLink>
 
                 <div className="flex flex-col">
                   <span className="text-sm font-medium">{user?.userName}</span>

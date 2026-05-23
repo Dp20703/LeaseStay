@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 
 import { FaHeart, FaHome, FaUser } from "react-icons/fa";
+import { FcSettings } from "react-icons/fc";
 
 const UserSidebar = () => {
   return (
@@ -24,6 +25,11 @@ const UserSidebar = () => {
           <FaHome />
 
           <span>My Properties</span>
+        </NavLink>
+        <NavLink to="/account-settings" className="ls-sidebar-link">
+          <FcSettings />
+
+          <span>Change Setting</span>
         </NavLink>
       </div>
     </aside>

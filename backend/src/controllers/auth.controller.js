@@ -10,6 +10,9 @@ import ApiResponse from "../utils/errors/ApiResponse.js";
 import asyncHandler from "../utils/handlers/asyncHandler.js";
 import welcomeEmailTemplate from "../templates/welcomeEmail.template.js";
 import sellerWelcomeTemplate from "../templates/sellerWelcome.template.js";
+import crypto from "crypto";
+import generateResetToken from "../utils/auth/generateResetToken.js";
+import resetWelcomeTemplate from "../templates/resetPassword.template.js";
 import {
   registerUserService,
   loginUserService,
@@ -130,7 +133,10 @@ export const googleAuth = asyncHandler(async (req, res) => {
   // FIND USER
 
   let user = await User.findOne({ email });
-  console.log("Existing-user:", user);
+
+  if (user?.isDeleted) {
+    throw new ApiError(403, "This account has been deleted");
+  }
 
   let isNewUser = false;
 
@@ -192,4 +198,77 @@ export const logoutUser = asyncHandler(async (req, res) => {
   });
 
   return res.status(200).json(new ApiResponse(200, "Logout successful"));
+});
+
+// FORGOT PASSWORD
+
+export const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  // GENERATE TOKEN
+  const { resetToken, hashedToken } = generateResetToken();
+
+  // SAVE HASHED TOKEN
+
+  user.passwordResetToken = hashedToken;
+
+  user.passwordResetExpires = Date.now() + 15 * 60 * 1000;
+
+  await user.save();
+
+  // RESET URL
+  const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+
+  // EMAIL
+  await sendMail({
+    to: user.email,
+    subject: "Reset Your LeaseStay Password",
+    html: resetWelcomeTemplate(resetUrl),
+  });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Password reset email sent"));
+});
+
+// RESET PASSWORD
+
+export const resetPassword = asyncHandler(async (req, res) => {
+  const { password } = req.body;
+
+  // HASH TOKEN
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(req.params.token)
+    .digest("hex");
+
+  // FIND USER
+  const user = await User.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    throw new ApiError(400, "Invalid or expired token");
+  }
+
+  // UPDATE PASSWORD
+
+  user.password = password;
+
+  user.passwordResetToken = null;
+
+  user.passwordResetExpires = null;
+
+  await user.save();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Password reset successful"));
 });

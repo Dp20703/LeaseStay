@@ -3,6 +3,7 @@ import ApiResponse from "../utils/errors/ApiResponse.js";
 import {
   changeEmailService,
   changePasswordService,
+  deleteAccountService,
   deleteProfileImageService,
   updateProfileService,
 } from "../services/user.service.js";

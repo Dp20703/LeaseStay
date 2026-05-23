@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
       minlength: 3,
-      maxlength: 20,
+      maxlength: 30,
     },
 
     fullName: {
@@ -64,6 +64,16 @@ const userSchema = new mongoose.Schema(
     isGoogleUser: {
       type: Boolean,
       default: false,
+    },
+
+    passwordResetToken: {
+      type: String,
+      default: null,
+    },
+
+    passwordResetExpires: {
+      type: Date,
+      default: null,
     },
 
     /* ─────────────────────────────────────
