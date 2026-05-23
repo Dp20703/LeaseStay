@@ -1,5 +1,5 @@
-import dotenv from 'dotenv'
-dotenv.config()
+import dotenv from "dotenv";
+dotenv.config();
 
 import express from "express";
 import cors from "cors";
@@ -12,6 +12,7 @@ import { notFoundMiddleware } from "./middlewares/notFound.middleware.js";
 import authRoutes from "./routes/auth.routes.js";
 import propertyRoutes from "./routes/property.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
+import userRoutes from "./routes/user.routes.js";
 
 const app = express();
 
@@ -19,7 +20,7 @@ app.use(
   cors({
     origin: process.env.CLIENT_URL,
     credentials: true,
-  })
+  }),
 );
 
 app.use(helmet());
@@ -47,6 +48,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/users", userRoutes);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
