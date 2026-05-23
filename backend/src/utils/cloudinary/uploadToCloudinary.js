@@ -1,5 +1,5 @@
 import streamifier from "streamifier";
-import cloudinary from "../config/cloudinary.config.js";
+import cloudinary from "../../config/cloudinary.config.js";
 
 const uploadToCloudinary = (fileBuffer, folder = "LeaseStay") => {
   return new Promise((resolve, reject) => {

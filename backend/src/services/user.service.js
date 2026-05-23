@@ -1,9 +1,7 @@
 import User from "../models/user.model.js";
-import cloudinary from "../config/cloudinary.config.js";
-import ApiError from "../utils/ApiError.js";
-import uploadToCloudinary from "../utils/uploadToCloudinary.js";
-import extractCloudinaryPublicId from "../utils/extractCloudinaryPublicId.js";
-import deleteFromCloudinary from "../utils/deleteFromCloudinary.js";
+import ApiError from "../utils/errors/ApiError.js";
+import uploadToCloudinary from "../utils/cloudinary/uploadToCloudinary.js";
+import deleteFromCloudinary from "../utils/cloudinary/deleteFromCloudinary.js";
 
 // UPDATE PROFILE
 

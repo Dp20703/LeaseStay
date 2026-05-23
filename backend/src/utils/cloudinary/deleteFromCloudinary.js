@@ -1,4 +1,4 @@
-import cloudinary from "../config/cloudinary.config.js";
+import cloudinary from "../../config/cloudinary.config.js";
 import extractCloudinaryPublicId from "./extractCloudinaryPublicId.js";
 
 // DELETE FROM CLOUDINARY

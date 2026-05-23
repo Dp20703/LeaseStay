@@ -2,18 +2,18 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 import { OAuth2Client } from "google-auth-library";
 import cloudinary from "../config/cloudinary.config.js";
-import { sendMail } from "../utils/mail.js";
-import ApiError from "../utils/ApiError.js";
-import sendToken from "../utils/sendToken.js";
-import ApiResponse from "../utils/ApiResponse.js";
-import asyncHandler from "../utils/asyncHandler.js";
+import generateUniqueUsername from "../utils/auth/generateUniqueUsername.js";
+import sendToken from "../utils/auth/sendToken.js";
+import { sendMail } from "../utils/mail/mail.js";
+import ApiError from "../utils/errors/ApiError.js";
+import ApiResponse from "../utils/errors/ApiResponse.js";
+import asyncHandler from "../utils/handlers/asyncHandler.js";
 import welcomeEmailTemplate from "../templates/welcomeEmail.template.js";
 import sellerWelcomeTemplate from "../templates/sellerWelcome.template.js";
 import {
   registerUserService,
   loginUserService,
 } from "../services/auth.service.js";
-import generateUniqueUsername from "../utils/generateUniqueUsername.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -112,7 +112,7 @@ export const googleAuth = asyncHandler(async (req, res) => {
   const { credential } = req.body;
 
   if (!credential) {
-    throw new ApiError(400, "Credential missing");
+    throw new APi(400, "Credential missing");
   }
 
   // VERIFY GOOGLE TOKEN

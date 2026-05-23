@@ -1,6 +1,5 @@
 import { validationResult } from "express-validator";
-
-import ApiError from "../utils/ApiError.js";
+import ApiError from "../utils/errors/ApiError.js";
 
 // VALIDATE REQUEST
 

@@ -1,6 +1,4 @@
-const sellerWelcomeTemplate = (
-  name
-) => {
+const sellerWelcomeTemplate = (name) => {
   return `
   
   <div style="font-family:Arial;padding:20px;">

@@ -1,6 +1,6 @@
 import User from "../models/user.model.js";
 import Property from "../models/property.model.js";
-import ApiError from "../utils/ApiError.js";
+import ApiError from "../utils/errors/ApiError.js";
 
 // FETCH ALL USERS
 export const fetchAllUsersService=async()=>{
