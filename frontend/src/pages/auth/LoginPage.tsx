@@ -17,7 +17,7 @@ type LoginErrors = {
   password?: string;
 };
 
-const Login = () => {
+const LoginPage = () => {
   const navigate = useNavigate();
 
   const { login } = useAuth();
@@ -274,4 +274,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

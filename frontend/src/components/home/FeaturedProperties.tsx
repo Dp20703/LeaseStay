@@ -12,9 +12,9 @@ const properties = [
 
     price: 25000,
 
-    beds: 3,
+    bedrooms: 3,
 
-    baths: 2,
+    bathrooms: 2,
 
     type: "Apartment",
   },
@@ -30,9 +30,9 @@ const properties = [
 
     price: 55000,
 
-    beds: 4,
+    bedrooms: 4,
 
-    baths: 3,
+    bathrooms: 3,
 
     type: "Villa",
   },
@@ -48,9 +48,9 @@ const properties = [
 
     price: 75000,
 
-    beds: 2,
+    bedrooms: 2,
 
-    baths: 2,
+    bathrooms: 2,
 
     type: "Office",
   },

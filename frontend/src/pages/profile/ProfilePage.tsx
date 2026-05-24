@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import ProfileCard from "@/components/profile/ProfileCard";
 import ProfileEditCard from "@/components/profile/ProfileEditCard";
 
-const Profile = () => {
+const ProfilePage = () => {
   const { user, setUser, logout } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -49,4 +49,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProfilePage;

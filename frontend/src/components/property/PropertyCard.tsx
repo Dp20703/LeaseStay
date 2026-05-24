@@ -1,24 +1,7 @@
 import { Link } from "react-router-dom";
-
 import { FaBed, FaBath, FaHeart, FaMapMarkerAlt } from "react-icons/fa";
+import type { PropertyCardProps } from "./property-card.types";
 
-type PropertyCardProps = {
-  _id: string;
-
-  title: string;
-
-  location: string;
-
-  image: string;
-
-  price: number;
-
-  beds: number;
-
-  baths: number;
-
-  type?: string;
-};
 
 const PropertyCard = ({
   _id,
@@ -26,8 +9,8 @@ const PropertyCard = ({
   location,
   image,
   price,
-  beds,
-  baths,
+  bedrooms,
+  bathrooms,
   type,
 }: PropertyCardProps) => {
   return (
@@ -87,13 +70,13 @@ const PropertyCard = ({
           <div className="flex items-center gap-2">
             <FaBed />
 
-            <span>{beds} Beds</span>
+            <span>{bedrooms} Beds</span>
           </div>
 
           <div className="flex items-center gap-2">
             <FaBath />
 
-            <span>{baths} Baths</span>
+            <span>{bathrooms} Baths</span>
           </div>
         </div>
 

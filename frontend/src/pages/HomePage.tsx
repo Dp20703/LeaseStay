@@ -5,7 +5,7 @@ import FeaturedProperties from "@/components/home/FeaturedProperties";
 import CTASection from "@/components/home/CTASection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 
-const Home = () => {
+const HomePage = () => {
   return (
     <div className="flex flex-col gap-24 pb-24">
       <HeroSection />
@@ -23,4 +23,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;

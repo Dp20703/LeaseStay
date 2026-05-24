@@ -368,40 +368,134 @@
            text-primary;
   }
 
-  /* ── Badge ─────────────────────────────────────────── */
+  /* ── Base Badge ─────────────────────────────────────────── */
 
   .ls-badge {
     @apply inline-flex
-           items-center
-           px-3
-           py-1
-           rounded-full
-           text-xs
-           font-medium;
+         items-center
+         gap-1
+         px-3
+         py-1
+         rounded-full
+         text-xs
+         font-semibold
+         tracking-wide;
   }
+
+  /* ── Primary ─────────────────────────────────────────── */
+
+  .ls-badge-primary {
+    @apply ls-badge
+         bg-primary/10
+         text-primary;
+  }
+
+  /* ── Secondary ───────────────────────────────────────── */
+
+  .ls-badge-secondary {
+    @apply ls-badge
+         bg-secondary/10
+         text-secondary;
+  }
+
+  /* ── Success ─────────────────────────────────────────── */
 
   .ls-badge-success {
     @apply ls-badge
-           bg-green-100
-           text-green-700
-           dark:bg-green-900/40
-           dark:text-green-400;
+         bg-green-100
+         text-green-700
+         dark:bg-green-900/40
+         dark:text-green-400;
   }
+
+  /* ── Warning ─────────────────────────────────────────── */
 
   .ls-badge-warning {
     @apply ls-badge
-           bg-yellow-100
-           text-yellow-700
-           dark:bg-yellow-900/40
-           dark:text-yellow-400;
+         bg-yellow-100
+         text-yellow-700
+         dark:bg-yellow-900/40
+         dark:text-yellow-400;
   }
+
+  /* ── Danger ─────────────────────────────────────────── */
 
   .ls-badge-danger {
     @apply ls-badge
-           bg-red-100
-           text-red-700
-           dark:bg-red-900/40
-           dark:text-red-400;
+         bg-red-100
+         text-red-700
+         dark:bg-red-900/40
+         dark:text-red-400;
+  }
+
+  /* ── Info ───────────────────────────────────────────── */
+
+  .ls-badge-info {
+    @apply ls-badge
+         bg-sky-100
+         text-sky-700
+         dark:bg-sky-900/40
+         dark:text-sky-400;
+  }
+
+  /* ── Purple ─────────────────────────────────────────── */
+
+  .ls-badge-purple {
+    @apply ls-badge
+         bg-purple-100
+         text-purple-700
+         dark:bg-purple-900/40
+         dark:text-purple-400;
+  }
+
+  /* ── Pink ───────────────────────────────────────────── */
+
+  .ls-badge-pink {
+    @apply ls-badge
+         bg-pink-100
+         text-pink-700
+         dark:bg-pink-900/40
+         dark:text-pink-400;
+  }
+
+  /* ── Orange ─────────────────────────────────────────── */
+
+  .ls-badge-orange {
+    @apply ls-badge
+         bg-orange-100
+         text-orange-700
+         dark:bg-orange-900/40
+         dark:text-orange-400;
+  }
+
+  /* ── Neutral ────────────────────────────────────────── */
+
+  .ls-badge-neutral {
+    @apply ls-badge
+         bg-gray-100
+         text-gray-700
+         dark:bg-gray-800
+         dark:text-gray-300;
+  }
+
+  /* ── Outline Variant ───────────────────────────────── */
+
+  .ls-badge-outline {
+    @apply ls-badge
+         border
+         border-border-light
+         dark:border-border-dark
+         bg-transparent;
+  }
+
+  /* ── Gradient Variant ──────────────────────────────── */
+
+  .ls-badge-gradient {
+    @apply ls-badge
+         bg-gradient-to-r
+         from-primary
+         to-secondary
+         text-white;
   }
 
   /* ── Modal ─────────────────────────────────────────── */
@@ -531,6 +625,12 @@
            text-text-muted
            dark:text-text-darkMuted;
   }
+}
+
+/* ── Divider ───────────────────────────────────── */
+
+.ls-divider {
+  @apply flex-1 h-px bg-border-light dark:bg-border-dark;
 }
 
 /* ──────────────────────────────────────────────────────────

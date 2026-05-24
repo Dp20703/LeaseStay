@@ -1,46 +1,33 @@
 import { toast } from "react-toastify";
-
 import { FaEdit } from "react-icons/fa";
-
 import api from "@/services/axios";
+import type { User } from "@/types/entities/user.types";
+import type { ProfileFormData } from "@/types/forms/profile-form.types";
 
 type ProfileEditCardProps = {
-  user: any;
-
-  setUser: any;
-
+  user: User;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
   logout: () => void;
-
   isEditing: boolean;
-
   setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
-
   loading: boolean;
-
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-
-  formData: any;
-
-  setFormData: React.Dispatch<React.SetStateAction<any>>;
+  formData: ProfileFormData;
+  setFormData: React.Dispatch<React.SetStateAction<ProfileFormData>>;
 };
 
 const ProfileEditCard = ({
   user,
-
   setUser,
 
   logout,
-
   isEditing,
-
   setIsEditing,
 
   loading,
-
   setLoading,
 
   formData,
-
   setFormData,
 }: ProfileEditCardProps) => {
   // RESET FORM
@@ -64,7 +51,7 @@ const ProfileEditCard = ({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    setFormData((prev: any) => ({
+    setFormData((prev) => ({
       ...prev,
 
       [name]: value,

@@ -1,11 +1,13 @@
+import type { User } from "@/types/entities/user.types";
+import type { ProfileFormData } from "@/types/forms/profile-form.types";
 import { FaCamera, FaEnvelope, FaPhone, FaShieldAlt } from "react-icons/fa";
 
 type ProfileCardProps = {
-  user: any;
+  user: User;
   isEditing: boolean;
   previewImage: string | null;
   setPreviewImage: (value: string) => void;
-  setFormData: any;
+  setFormData: ProfileFormData;
 };
 
 const ProfileCard = ({
