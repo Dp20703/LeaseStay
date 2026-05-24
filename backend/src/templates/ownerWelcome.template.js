@@ -1,10 +1,10 @@
-const sellerWelcomeTemplate = (name) => {
+const ownerWelcomeTemplate = (name) => {
   return `
   
   <div style="font-family:Arial;padding:20px;">
 
     <h2>
-      Welcome Seller to LeaseStay 🏠
+      Welcome Owner to LeaseStay 🏠
     </h2>
 
     <p>
@@ -12,7 +12,7 @@ const sellerWelcomeTemplate = (name) => {
     </p>
 
     <p>
-      Your seller account has been
+      Your owner account has been
       created successfully.
     </p>
 
@@ -34,4 +34,4 @@ const sellerWelcomeTemplate = (name) => {
   `;
 };
 
-export default sellerWelcomeTemplate;
+export default ownerWelcomeTemplate;

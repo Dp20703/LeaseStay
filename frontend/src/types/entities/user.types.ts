@@ -4,7 +4,7 @@ export type User = {
   userName: string;
   email: string;
   phone?: string;
-  role: "user" | "seller" | "admin";
+  role: "user" | "owner" | "admin";
   isGoogleUser: boolean;
   isVerified: boolean;
   isBlocked: boolean;

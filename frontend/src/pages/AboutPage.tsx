@@ -76,7 +76,7 @@ const AboutPage = () => {
             <h3 className="text-2xl font-semibold mb-4">Verified & Secure</h3>
 
             <p className="text-text-muted dark:text-text-darkMuted leading-7">
-              LeaseStay ensures property and seller verification for safer
+              LeaseStay ensures property and owner verification for safer
               transactions and trustworthy rental experiences.
             </p>
           </div>

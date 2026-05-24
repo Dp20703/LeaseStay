@@ -9,7 +9,7 @@ import ApiError from "../utils/errors/ApiError.js";
 import ApiResponse from "../utils/errors/ApiResponse.js";
 import asyncHandler from "../utils/handlers/asyncHandler.js";
 import welcomeEmailTemplate from "../templates/welcomeEmail.template.js";
-import sellerWelcomeTemplate from "../templates/sellerWelcome.template.js";
+import ownerWelcomeTemplate from "../templates/ownerWelcome.template.js";
 import crypto from "crypto";
 import generateResetToken from "../utils/auth/generateResetToken.js";
 import resetWelcomeTemplate from "../templates/resetPassword.template.js";
@@ -17,6 +17,7 @@ import {
   registerUserService,
   loginUserService,
 } from "../services/auth.service.js";
+import { ROLES } from "../constants/role.constants.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -27,9 +28,9 @@ export const registerUser = asyncHandler(async (req, res) => {
 
   let licenseId = "";
 
-  // SELLER FILE
+  // OWNER FILE
 
-  if (role === "seller") {
+  if (role === ROLES.OWNER) {
     const licenseFile = req.files?.licenseId?.[0];
 
     if (!licenseFile) {
@@ -75,15 +76,15 @@ export const registerUser = asyncHandler(async (req, res) => {
   // EMAIL
 
   const template =
-    role === "seller"
-      ? sellerWelcomeTemplate(user.fullName?.firstName)
+    role === ROLES.OWNER
+      ? ownerWelcomeTemplate(user.fullName?.firstName)
       : welcomeEmailTemplate(user.fullName?.firstName);
 
   await sendMail({
     to: user.email,
     subject:
-      role === "seller"
-        ? "Welcome Seller to LeaseStay"
+      role === ROLES.OWNER
+        ? "Welcome Owner to LeaseStay"
         : "Welcome to LeaseStay",
     html: template,
   });

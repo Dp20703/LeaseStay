@@ -625,12 +625,12 @@
            text-text-muted
            dark:text-text-darkMuted;
   }
-}
 
-/* ── Divider ───────────────────────────────────── */
+  /* ── Divider ───────────────────────────────────── */
 
-.ls-divider {
-  @apply flex-1 h-px bg-border-light dark:bg-border-dark;
+  .ls-divider {
+    @apply flex-1 h-px bg-border-light dark:bg-border-dark;
+  }
 }
 
 /* ──────────────────────────────────────────────────────────

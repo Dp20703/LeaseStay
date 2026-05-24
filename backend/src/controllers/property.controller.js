@@ -8,7 +8,6 @@ import {
   getSinglePropertyService,
   updatePropertyService,
   deletePropertyService,
-  getSellerPropertiesService,
 } from "../services/property.service.js";
 import Property from "../models/property.model.js";
 
@@ -120,7 +119,7 @@ export const createProperty = asyncHandler(async (req, res) => {
 
     identityId,
 
-    seller: req.user._id,
+    owner: req.user._id,
   });
 
   return res
@@ -152,18 +151,14 @@ export const getSingleProperty = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Property fetched successfully", property));
 });
 
-// GET SELLER PROPERTIES
-export const getSellerProperties = asyncHandler(async (req, res) => {
-  const properties = await getSellerPropertiesService(req.user._id);
+// GET OWNER PROPERTIES
+export const getOwnerProperties = asyncHandler(async (req, res) => {
+  const properties = await getOwnerPropertiesService(req.user._id);
 
   return res
     .status(200)
     .json(
-      new ApiResponse(
-        200,
-        "Seller properties fetched successfully",
-        properties,
-      ),
+      new ApiResponse(200, "Owner properties fetched successfully", properties),
     );
 });
 
@@ -179,7 +174,7 @@ export const updateProperty = asyncHandler(async (req, res) => {
 
   // OWNER CHECK
   if (
-    property.seller.toString() !== req.user._id.toString() &&
+    property.owner.toString() !== req.user._id.toString() &&
     req.user.role !== "admin"
   ) {
     throw new ApiError(403, "Unauthorized access");
@@ -284,7 +279,7 @@ export const deleteProperty = asyncHandler(async (req, res) => {
 
   // OWNER CHECK
   if (
-    property.seller._id.toString() !== req.user._id.toString() &&
+    property.owner._id.toString() !== req.user._id.toString() &&
     req.user.role !== "admin"
   ) {
     throw new ApiError(403, "Unauthorized access");

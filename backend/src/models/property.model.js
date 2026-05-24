@@ -87,15 +87,12 @@ const propertySchema = new mongoose.Schema(
     status: {
       type: String,
       enum: ["Active", "Inactive"],
-
       default: "Active",
     },
 
-    seller: {
+    owner: {
       type: mongoose.Schema.Types.ObjectId,
-
       ref: "User",
-
       required: true,
     },
   },

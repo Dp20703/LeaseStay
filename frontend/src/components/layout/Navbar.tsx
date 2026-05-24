@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+
 import {
   FaHeart,
   FaUserCircle,
@@ -97,9 +98,9 @@ const Navbar = () => {
             </>
           )}
 
-          {/* seller */}
+          {/* owner */}
 
-          {user?.role === "seller" && (
+          {user?.role === "owner" && (
             <NavLink to="/dashboard" className="ls-btn-primary">
               Dashboard
             </NavLink>
@@ -230,7 +231,7 @@ const Navbar = () => {
                   Wishlist
                 </NavLink>
 
-                {user.role === "seller" && (
+                {user.role === "owner" && (
                   <NavLink
                     to="/dashboard"
                     className="ls-nav-link"

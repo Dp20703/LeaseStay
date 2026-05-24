@@ -5,7 +5,7 @@ export const createPropertyService = async (propertyData) => {
   const property = await Property.create(propertyData);
 
   return await Property.findById(property._id).populate(
-    "seller",
+    "owner",
     "userName email fullName profileImage",
   );
 };
@@ -13,22 +13,22 @@ export const createPropertyService = async (propertyData) => {
 // GET ALL PROPERTIES
 export const getAllPropertiesService = async () => {
   return await Property.find()
-    .populate("seller", "userName email fullName profileImage")
+    .populate("owner", "userName email fullName profileImage")
     .sort({ createdAt: -1 });
 };
 
 // GET SINGLE PROPERTY
 export const getSinglePropertyService = async (propertyId) => {
   return await Property.findById(propertyId).populate(
-    "seller",
+    "owner",
     "userName email fullName profileImage",
   );
 };
 
-// GET SELLER PROPERTIES
-export const getSellerPropertiesService = async (sellerId) => {
-  return await Property.find({ seller: sellerId })
-    .populate("seller", "userName email fullName profileImage")
+// GET OWNER PROPERTIES
+export const getOwnerPropertiesService = async (ownerId) => {
+  return await Property.find({ owner: ownerId })
+    .populate("owner", "userName email fullName profileImage")
     .sort({ createdAt: -1 });
 };
 
@@ -38,7 +38,7 @@ export const updatePropertyService = async (propertyId, updateData) => {
     propertyId,
     { $set: updateData },
     { new: true, runValidators: true },
-  ).populate("seller", "userName email fullName profileImage");
+  ).populate("owner", "userName email fullName profileImage");
 };
 
 // DELETE PROPERTY

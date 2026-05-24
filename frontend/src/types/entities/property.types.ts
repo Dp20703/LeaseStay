@@ -41,7 +41,7 @@ export type PropertyType = {
 
   status: PropertyStatus;
 
-  seller: User | string;
+  owner: User | string;
 
   createdAt: string;
 

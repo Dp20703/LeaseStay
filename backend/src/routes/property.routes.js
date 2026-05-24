@@ -2,13 +2,14 @@ import express from "express";
 import { upload } from "../config/multer.config.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import authorizeRoles from "../middlewares/authorizeRoles.js";
+import { ROLES } from "../constants/role.constants.js";
 import {
   createProperty,
   getAllProperties,
   getSingleProperty,
   updateProperty,
   deleteProperty,
-  getSellerProperties,
+  getOwnerProperties,
 } from "../controllers/property.controller.js";
 
 const router = express.Router();
@@ -17,7 +18,7 @@ const router = express.Router();
 router.post(
   "/create",
   verifyJWT,
-  authorizeRoles("seller"),
+  authorizeRoles(ROLES.OWNER),
   upload.fields([
     { name: "images", maxCount: 5 },
     { name: "propertyProof", maxCount: 1 },
@@ -32,19 +33,19 @@ router.get("/", getAllProperties);
 // GET SINGLE
 router.get("/:id", getSingleProperty);
 
-// GET SELLER PROPERTIES
+// GET OWNER PROPERTIES
 router.get(
-  "/seller/my-properties",
+  "/owner/my-properties",
   verifyJWT,
-  authorizeRoles("seller"),
-  getSellerProperties,
+  authorizeRoles(ROLES.OWNER),
+  getOwnerProperties,
 );
 
 // UPDATE
 router.put(
   "/:id",
   verifyJWT,
-  authorizeRoles("seller", "admin"),
+  authorizeRoles(ROLES.OWNER, ROLES.ADMIN),
   upload.fields([
     { name: "images", maxCount: 5 },
     { name: "propertyProof", maxCount: 1 },
@@ -57,7 +58,7 @@ router.put(
 router.delete(
   "/:id",
   verifyJWT,
-  authorizeRoles("seller", "admin"),
+  authorizeRoles(ROLES.OWNER, "admin"),
   deleteProperty,
 );
 

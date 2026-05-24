@@ -6,14 +6,14 @@ const faqs = [
     question: "How do I list my property on LeaseStay?",
 
     answer:
-      "You can register as a seller, verify your account, and create property listings from your dashboard.",
+      "You can register as a owner, verify your account, and create property listings from your dashboard.",
   },
 
   {
     question: "Are properties verified?",
 
     answer:
-      "Yes. LeaseStay verifies seller information and property documents for improved trust and security.",
+      "Yes. LeaseStay verifies owner information and property documents for improved trust and security.",
   },
 
   {

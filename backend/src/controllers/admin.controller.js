@@ -2,8 +2,8 @@ import asyncHandler from "../utils/handlers/asyncHandler.js";
 import ApiResponse from "../utils/errors/ApiResponse.js";
 import {
   fetchAllUsersService,
-  fetchAllSellersService,
   fetchAllPropertiesService,
+  fetchAllOwnersService,
 } from "../services/admin.service.js";
 
 // FETCH ALL USERS
@@ -15,13 +15,13 @@ export const fetchAllUsers = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Users fetched successfully", users));
 });
 
-// FETCH ALL SELLERS
-export const fetchAllSellers = asyncHandler(async (req, res) => {
-  const sellers = await fetchAllSellersService();
+// FETCH ALL OWNERS
+export const fetchAllOwners = asyncHandler(async (req, res) => {
+  const owners = await fetchAllOwnersService();
 
   return res
     .status(200)
-    .json(new ApiResponse(200, "Sellers fetched successfully", sellers));
+    .json(new ApiResponse(200, "Owners fetched successfully", owners));
 });
 
 // FETCH ALL PROPERTIES

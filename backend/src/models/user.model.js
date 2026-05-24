@@ -91,12 +91,12 @@ const userSchema = new mongoose.Schema(
 
     role: {
       type: String,
-      enum: ["user", "seller", "admin"],
+      enum: ["user", "owner", "admin"],
       default: "user",
     },
 
     /* ─────────────────────────────────────
-         Seller
+         Owner
       ───────────────────────────────────── */
 
     licenseId: {
@@ -104,7 +104,7 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
-    isSellerApproved: {
+    isOwnerVerified: {
       type: Boolean,
       default: false,
     },
