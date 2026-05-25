@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { FaBed, FaBath, FaHeart, FaMapMarkerAlt } from "react-icons/fa";
 import type { PropertyCardProps } from "./property-card.types";
 
-
 const PropertyCard = ({
   _id,
   title,

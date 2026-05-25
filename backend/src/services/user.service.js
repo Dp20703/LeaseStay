@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 import ApiError from "../utils/errors/ApiError.js";
 import uploadToCloudinary from "../utils/cloudinary/uploadToCloudinary.js";
 import deleteFromCloudinary from "../utils/cloudinary/deleteFromCloudinary.js";
+import { CLOUDINARY_FOLDERS } from "../constants/cloudinary.constants.js";
 
 // UPDATE PROFILE
 
@@ -52,7 +53,7 @@ export const updateProfileService = async ({ userId, body, file }) => {
     // UPLOAD NEW IMAGE
     const uploadedImage = await uploadToCloudinary(
       file.buffer,
-      "LeaseStay/profileImages",
+      CLOUDINARY_FOLDERS.PROFILE_IMAGES,
     );
 
     user.profileImage = uploadedImage.secure_url;

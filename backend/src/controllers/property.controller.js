@@ -10,6 +10,8 @@ import {
   deletePropertyService,
 } from "../services/property.service.js";
 import Property from "../models/property.model.js";
+import { CLOUDINARY_FOLDERS } from "../constants/cloudinary.constants.js";
+import { ROLES } from "../constants/role.constants.js";
 
 // CREATE PROPERTY
 export const createProperty = asyncHandler(async (req, res) => {
@@ -31,23 +33,6 @@ export const createProperty = asyncHandler(async (req, res) => {
   // AMENITIES
   const amenities = req.body.amenities ? JSON.parse(req.body.amenities) : [];
 
-  // REQUIRED VALIDATION
-  if (
-    !title ||
-    !description ||
-    !location ||
-    !address ||
-    !zipCode ||
-    !propertyType ||
-    !category ||
-    !size ||
-    !price ||
-    !bedrooms ||
-    !bathrooms ||
-    !propertyIdentityType
-  ) {
-    throw new ApiError(400, "All fields are required");
-  }
   // IMAGE FILES
   const imageFiles = req.files?.images || [];
 
@@ -68,7 +53,7 @@ export const createProperty = asyncHandler(async (req, res) => {
   // UPLOAD PROPERTY IMAGES
   const uploadedImages = await Promise.all(
     imageFiles.map((file) =>
-      uploadToCloudinary(file.buffer, "LeaseStay/properties"),
+      uploadToCloudinary(file.buffer, CLOUDINARY_FOLDERS.PROPERTY_IMAGES),
     ),
   );
 
@@ -77,7 +62,7 @@ export const createProperty = asyncHandler(async (req, res) => {
   // UPLOAD PROPERTY PROOF
   const uploadedProof = await uploadToCloudinary(
     propertyProofFile.buffer,
-    "LeaseStay/propertyProofs",
+    CLOUDINARY_FOLDERS.PROPERTY_PROOF,
   );
 
   // OPTIONAL IDENTITY UPLOAD
@@ -85,9 +70,8 @@ export const createProperty = asyncHandler(async (req, res) => {
   if (identityIdFile) {
     const uploadedIdentity = await uploadToCloudinary(
       identityIdFile.buffer,
-      "LeaseStay/identityIds",
+      CLOUDINARY_FOLDERS.OWNER_IDENTITYIDS,
     );
-
     identityId = uploadedIdentity.secure_url;
   }
 
@@ -100,25 +84,15 @@ export const createProperty = asyncHandler(async (req, res) => {
     zipCode,
     propertyType,
     category,
-
     size: Number(size),
-
     price: Number(price),
-
     bedrooms: Number(bedrooms),
-
     bathrooms: Number(bathrooms),
-
     propertyIdentityType,
-
     amenities,
-
     images: imageUrls,
-
     propertyProof: uploadedProof.secure_url,
-
     identityId,
-
     owner: req.user._id,
   });
 
@@ -134,6 +108,105 @@ export const getAllProperties = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, "Properties fetched successfully", properties));
+});
+
+// SEARCH PROPERTIES
+export const searchProperties = asyncHandler(async (req, res) => {
+  const {
+    location,
+    category,
+    propertyType,
+    minPrice,
+    maxPrice,
+    bedrooms,
+    bathrooms,
+    page = 1,
+    limit = 10,
+    search,
+  } = req.query;
+
+  const query = {
+    status: "Active",
+  };
+
+  // TEXT SEARCH
+  if (search) {
+    query.$or = [
+      {
+        title: {
+          $regex: search,
+          $options: "i",
+        },
+      },
+      {
+        description: {
+          $regex: search,
+          $options: "i",
+        },
+      },
+    ];
+  }
+
+  // LOCATION
+  if (location) {
+    query.location = {
+      $regex: location,
+      $options: "i",
+    };
+  }
+
+  // CATEGORY
+  if (category) {
+    query.category = category;
+  }
+
+  // PROPERTY TYPE
+  if (propertyType) {
+    query.propertyType = propertyType;
+  }
+
+  // BEDROOMS
+  if (bedrooms) {
+    query.bedrooms = Number(bedrooms);
+  }
+
+  // BATHROOMS
+  if (bathrooms) {
+    query.bathrooms = Number(bathrooms);
+  }
+
+  // PRICE FILTER
+  if (minPrice || maxPrice) {
+    query.price = {};
+
+    if (minPrice) {
+      query.price.$gte = Number(minPrice);
+    }
+
+    if (maxPrice) {
+      query.price.$lte = Number(maxPrice);
+    }
+  }
+
+  const skip = (page - 1) * limit;
+
+  const properties = await Property.find(query)
+    .populate("owner", "userName fullName profileImage")
+    .skip(skip)
+    .limit(Number(limit))
+    .sort({ createdAt: -1 })
+    .lean();
+
+  const total = await Property.countDocuments(query);
+
+  return res.status(200).json(
+    new ApiResponse(200, "Properties fetched successfully", {
+      properties,
+      total,
+      page: Number(page),
+      totalPages: Math.ceil(total / limit),
+    }),
+  );
 });
 
 // GET SINGLE PROPERTY
@@ -220,7 +293,7 @@ export const updateProperty = asyncHandler(async (req, res) => {
   if (imageFiles.length) {
     const uploadedImages = await Promise.all(
       imageFiles.map((file) =>
-        uploadToCloudinary(file.buffer, "LeaseStay/properties"),
+        uploadToCloudinary(file.buffer, CLOUDINARY_FOLDERS.PROPERTY_IMAGES),
       ),
     );
 
@@ -235,7 +308,7 @@ export const updateProperty = asyncHandler(async (req, res) => {
   if (propertyProofFile) {
     const uploadedProof = await uploadToCloudinary(
       propertyProofFile.buffer,
-      "LeaseStay/propertyProofs",
+      CLOUDINARY_FOLDERS.PROPERTY_PROOF,
     );
 
     updateData.propertyProof = uploadedProof.secure_url;
@@ -249,7 +322,7 @@ export const updateProperty = asyncHandler(async (req, res) => {
   if (identityIdFile) {
     const uploadedIdentity = await uploadToCloudinary(
       identityIdFile.buffer,
-      "LeaseStay/identityIds",
+      CLOUDINARY_FOLDERS.OWNER_IDENTITYIDS,
     );
 
     updateData.identityId = uploadedIdentity.secure_url;
@@ -280,7 +353,7 @@ export const deleteProperty = asyncHandler(async (req, res) => {
   // OWNER CHECK
   if (
     property.owner._id.toString() !== req.user._id.toString() &&
-    req.user.role !== "admin"
+    req.user.role !== ROLES.ADMIN
   ) {
     throw new ApiError(403, "Unauthorized access");
   }

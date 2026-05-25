@@ -5,6 +5,7 @@ import App from "@/App.tsx";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { PropertyProvider } from "./context/PropertyContext";
 import "react-toastify/dist/ReactToastify.css";
 
 createRoot(document.getElementById("root")!).render(
@@ -12,7 +13,9 @@ createRoot(document.getElementById("root")!).render(
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <BrowserRouter>
         <AuthProvider>
-          <App />
+          <PropertyProvider>
+            <App />
+          </PropertyProvider>
         </AuthProvider>
       </BrowserRouter>
     </GoogleOAuthProvider>

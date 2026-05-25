@@ -3,6 +3,7 @@ import { upload } from "../config/multer.config.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import authorizeRoles from "../middlewares/authorizeRoles.js";
 import { ROLES } from "../constants/role.constants.js";
+import validate from "../middlewares/validate.middleware.js";
 import {
   createProperty,
   getAllProperties,
@@ -10,7 +11,14 @@ import {
   updateProperty,
   deleteProperty,
   getOwnerProperties,
+  searchProperties,
 } from "../controllers/property.controller.js";
+import {
+  createPropertyValidation,
+  propertyIdValidation,
+  searchPropertyValidation,
+  updatePropertyValidation,
+} from "../validations/property.validation.js";
 
 const router = express.Router();
 
@@ -24,14 +32,16 @@ router.post(
     { name: "propertyProof", maxCount: 1 },
     { name: "identityId", maxCount: 1 },
   ]),
+  createPropertyValidation,
+  validate,
   createProperty,
 );
 
 // GET ALL
 router.get("/", getAllProperties);
 
-// GET SINGLE
-router.get("/:id", getSingleProperty);
+// SEARCH PROPERTIES
+router.get("/search/all", searchPropertyValidation, validate, searchProperties);
 
 // GET OWNER PROPERTIES
 router.get(
@@ -40,6 +50,9 @@ router.get(
   authorizeRoles(ROLES.OWNER),
   getOwnerProperties,
 );
+
+// GET SINGLE
+router.get("/:id", propertyIdValidation, validate, getSingleProperty);
 
 // UPDATE
 router.put(
@@ -51,6 +64,8 @@ router.put(
     { name: "propertyProof", maxCount: 1 },
     { name: "identityId", maxCount: 1 },
   ]),
+  updatePropertyValidation,
+  validate,
   updateProperty,
 );
 
@@ -59,6 +74,8 @@ router.delete(
   "/:id",
   verifyJWT,
   authorizeRoles(ROLES.OWNER, "admin"),
+  propertyIdValidation,
+  validate,
   deleteProperty,
 );
 

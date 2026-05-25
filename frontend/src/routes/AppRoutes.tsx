@@ -14,13 +14,16 @@ import ForgotPasswordPage from "@/pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/auth/ResetPasswordPage";
 import ProfilePage from "@/pages/profile/ProfilePage";
 import SettingsPage from "@/pages/profile/SettingsPage";
-import PropertiesPage from "@/pages/property/PropertiesPage";
 import NotFoundPage from "@/pages/NotFoundPage";
-import WishListPage from "@/pages/property/WishListPage";
 import TermsConditionsPage from "@/pages/legal/TermsConditionsPage";
 import PrivacyPolicyPage from "@/pages/legal/PrivacyPolicyPage";
 import FaqPage from "@/pages/support/FaqPage";
 import CookiesPolicyPage from "@/pages/legal/CookiesPolicyPage";
+import PropertyDetailsPage from "@/pages/property/PropertyDetailsPage";
+import PropertiesPage from "@/pages/property/PropertiesPage";
+import SearchPropertiesPage from "@/pages/property/SearchPropertiesPage";
+import WishListPage from "@/pages/property/WishListPage";
+import CreatePropertyPage from "@/pages/property/CreatePropertyPage";
 
 const AppRoutes = () => {
   return (
@@ -53,6 +56,15 @@ const AppRoutes = () => {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/account-settings" element={<SettingsPage />} />
           <Route path="/wishlist" element={<WishListPage />} />
+
+          <Route path="/properties" element={<PropertiesPage />} />
+          <Route path="/properties/search" element={<SearchPropertiesPage />} />
+          <Route path="/properties/:id" element={<PropertyDetailsPage />} />
+
+          <Route
+            path="/dashboard/properties/create"
+            element={<CreatePropertyPage />}
+          />
         </Route>
       </Route>
     </Routes>

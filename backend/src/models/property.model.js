@@ -69,8 +69,9 @@ const propertySchema = new mongoose.Schema(
       },
     ],
 
-    propertyIdentityType: {
+    propertyType: {
       type: String,
+      enum: ["Apartment", "Villa", "House"],
       required: true,
     },
 
@@ -86,8 +87,8 @@ const propertySchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["Active", "Inactive"],
-      default: "Active",
+      enum: ["Apartment", "Villa", "House", "Studio", "PG", "Office"],
+      default: "Pending",
     },
 
     owner: {
@@ -101,6 +102,16 @@ const propertySchema = new mongoose.Schema(
     timestamps: true,
   },
 );
+propertySchema.index({ location: 1 });
+propertySchema.index({ category: 1 });
+propertySchema.index({ propertyType: 1 });
+propertySchema.index({ price: 1 });
+propertySchema.index({ owner: 1 });
+propertySchema.index({
+  title: "text",
+  description: "text",
+  location: "text",
+});
 
 const Property = mongoose.model("Property", propertySchema);
 

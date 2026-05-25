@@ -18,6 +18,8 @@ import {
   loginUserService,
 } from "../services/auth.service.js";
 import { ROLES } from "../constants/role.constants.js";
+import uploadToCloudinary from "../utils/cloudinary/uploadToCloudinary.js";
+import { CLOUDINARY_FOLDERS } from "../constants/cloudinary.constants.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -37,20 +39,10 @@ export const registerUser = asyncHandler(async (req, res) => {
       throw new ApiError(400, "License document required");
     }
 
-    const uploadedFile = await new Promise((resolve, reject) => {
-      cloudinary.uploader
-        .upload_stream(
-          { folder: "LeaseStay/licenses", resource_type: "auto" },
-          (error, result) => {
-            if (error) {
-              reject(error);
-            } else {
-              resolve(result);
-            }
-          },
-        )
-        .end(licenseFile.buffer);
-    });
+    const uploadedFile = await uploadToCloudinary(
+      licenseFile.buffer,
+      CLOUDINARY_FOLDERS.LICENSES,
+    );
     licenseId = uploadedFile.secure_url;
   }
 

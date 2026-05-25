@@ -1,19 +1,7 @@
+import COOKIE_OPTIONS from "../../constants/cookie.constants.js";
+
 const sendToken = (res, token) => {
-  const cookieOptions = {
-    httpOnly: true,
-
-    secure:
-      process.env.NODE_ENV === "production",
-
-    sameSite:
-      process.env.NODE_ENV === "production"
-        ? "none"
-        : "lax",
-
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  };
-
-  res.cookie("token", token, cookieOptions);
+  res.cookie("token", token, COOKIE_OPTIONS);
 };
 
 export default sendToken;
