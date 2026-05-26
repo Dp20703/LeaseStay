@@ -4,20 +4,15 @@ const BASE_URL = import.meta.env.VITE_API_URL;
 
 const api = axios.create({
   baseURL: BASE_URL,
-
   withCredentials: true,
-
-  headers: {
-    "Content-Type": "application/json",
-  },
+  headers: {"Content-Type": "application/json"},
 });
 
 /* ─────────────────────────────────────────────
    REQUEST INTERCEPTOR
 ───────────────────────────────────────────── */
 
-api.interceptors.request.use(
-  (config) => {
+api.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
 
     if (token) {
@@ -26,7 +21,6 @@ api.interceptors.request.use(
 
     return config;
   },
-
   (error) => Promise.reject(error),
 );
 
@@ -34,18 +28,13 @@ api.interceptors.request.use(
    RESPONSE INTERCEPTOR
 ───────────────────────────────────────────── */
 
-api.interceptors.response.use(
-  (response) => response,
-
+api.interceptors.response.use((response) => response,
   (error) => {
     if (error.response?.status === 401) {
       console.log("Unauthorized");
-
       localStorage.removeItem("token");
-
       window.location.href = "/login";
     }
-
     return Promise.reject(error);
   },
 );

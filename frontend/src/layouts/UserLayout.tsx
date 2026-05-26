@@ -5,7 +5,7 @@ import Footer from "@/components/layout/Footer";
 
 const UserLayout = () => {
   return (
-    <div className="ls-page flex flex-col min-h-screen">
+    <div className="ls-page flex flex-col">
       {/* Navbar */}
 
       <Navbar />

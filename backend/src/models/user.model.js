@@ -99,14 +99,37 @@ const userSchema = new mongoose.Schema(
          Owner
       ───────────────────────────────────── */
 
-    licenseId: {
+    verificationDocuments: [
+      {
+        type: {
+          type: String,
+          enum: ["aadhaar", "passport", "driving_license"],
+        },
+
+        url: String,
+        publicId: String,
+        uploadedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+
+    ownerVerificationStatus: {
       type: String,
-      default: "",
+      enum: ["not_applied", "pending", "approved", "rejected"],
+      default: "not_applied",
     },
 
-    isOwnerVerified: {
-      type: Boolean,
-      default: false,
+    ownerVerifiedAt: Date,
+
+    ownerVerifiedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+
+    ownerVerificationRejectedReason: {
+      type: String,
     },
 
     /* ─────────────────────────────────────

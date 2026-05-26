@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const propertySchema = new mongoose.Schema(
   {
+    slug: {
+      type: String,
+      unique: true,
+    },
     title: {
       type: String,
       required: true,
@@ -23,11 +27,6 @@ const propertySchema = new mongoose.Schema(
     },
 
     zipCode: {
-      type: String,
-      required: true,
-    },
-
-    propertyType: {
       type: String,
       required: true,
     },
@@ -65,29 +64,58 @@ const propertySchema = new mongoose.Schema(
 
     images: [
       {
-        type: String,
+        url: String,
+        publicId: String,
       },
     ],
 
+    thumbnail: {
+      url: String,
+
+      publicId: String,
+    },
+
     propertyType: {
       type: String,
-      enum: ["Apartment", "Villa", "House"],
+      enum: ["Apartment", "Villa", "House", "Studio", "PG", "Office"],
       required: true,
     },
 
-    propertyProof: {
-      type: String,
-      required: true,
+    propertyDocuments: [
+      {
+        type: {
+          type: String,
+          enum: [
+            "sale_deed",
+            "tax_receipt",
+            "electricity_bill",
+            "rental_agreement",
+          ],
+        },
+
+        url: String,
+        publicId: String,
+        uploadedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+
+    verifiedAt: Date,
+
+    verifiedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
 
-    identityId: {
+    verificationRejectedReason: {
       type: String,
-      default: "",
     },
 
     status: {
       type: String,
-      enum: ["Apartment", "Villa", "House", "Studio", "PG", "Office"],
+      enum: ["draft", "Pending", "Approved", "Rejected", "Hidden", "Inactive"],
       default: "Pending",
     },
 
@@ -95,6 +123,22 @@ const propertySchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+    },
+
+    availabilityStatus: {
+      type: String,
+      enum: ["available", "occupied", "reserved"],
+      default: "available",
+    },
+
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+
+    deletedAt: {
+      type: Date,
+      default: null,
     },
   },
 

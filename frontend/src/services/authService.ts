@@ -1,14 +1,9 @@
 import api from "@/services/axios"
+import type { RegisterFormData } from "@/types/forms/register-form.types";
 
 /* ─────────────────────────────────────────────
    Types
 ───────────────────────────────────────────── */
-
-export type RegisterData = {
-  name: string
-  email: string
-  password: string
-}
 
 export type LoginData = {
   email: string
@@ -19,12 +14,22 @@ export type LoginData = {
    Register
 ───────────────────────────────────────────── */
 
-export const registerUser = async (data: RegisterData) => {
+export const registerUser = async (data: RegisterFormData) => {
 
-  const response = await api.post("/auth/register",data)
+  const formData = new FormData();
 
-  return response.data
-}
+  formData.append("userName",data.userName);
+  formData.append("email",data.email);
+  formData.append("password",data.password);
+  formData.append("phone",data.phone);
+  formData.append("role",data.role);
+  formData.append("fullName[firstName]",data.firstName);
+  formData.append("fullName[lastName]",data.lastName);
+
+  const response = await api.post("/auth/register",formData );
+
+  return response.data;
+};
 
 /* ─────────────────────────────────────────────
    Login
