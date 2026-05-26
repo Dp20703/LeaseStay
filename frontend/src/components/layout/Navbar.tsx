@@ -10,6 +10,7 @@ import {
   FaSun,
   FaTimes,
 } from "react-icons/fa";
+import { ROLES } from "@/constants/role.constants";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -100,8 +101,8 @@ const Navbar = () => {
 
           {/* owner */}
 
-          {user?.role === "owner" && (
-            <NavLink to="/dashboard" className="ls-btn-primary">
+          {user?.role === ROLES.OWNER && (
+            <NavLink to="/owner/dashboard" className="ls-btn-primary">
               Dashboard
             </NavLink>
           )}

@@ -42,6 +42,7 @@ const ForgotPasswordPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="ls-input mt-2"
+              placeholder="Enter your email"
               required
             />
           </div>

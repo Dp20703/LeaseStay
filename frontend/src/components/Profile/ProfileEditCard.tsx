@@ -168,7 +168,7 @@ const ProfileEditCard = ({
               onChange={handleChange}
               disabled={!isEditing}
               className="ls-input mt-2"
-              placeholder={isEditing ? "Enter your firstname" : ""}
+              placeholder={isEditing ? "Enter your firstname" : "NA"}
             />
           </div>
 
@@ -184,7 +184,7 @@ const ProfileEditCard = ({
               onChange={handleChange}
               disabled={!isEditing}
               className="ls-input mt-2"
-              placeholder={isEditing ? "Enter your lastname" : ""}
+              placeholder={isEditing ? "Enter your lastname" : "NA"}
             />
           </div>
 
@@ -200,7 +200,7 @@ const ProfileEditCard = ({
               onChange={handleChange}
               disabled={!isEditing}
               className="ls-input mt-2"
-              placeholder={isEditing ? "Enter your username" : ""}
+              placeholder={isEditing ? "Enter your username" : "NA"}
             />
           </div>
 
@@ -229,7 +229,7 @@ const ProfileEditCard = ({
               onChange={handleChange}
               disabled={!isEditing}
               className="ls-input mt-2"
-              placeholder={isEditing ? "Enter your phone number" : ""}
+              placeholder={isEditing ? "Enter your phone number" : "NA"}
             />
           </div>
         </div>

@@ -35,6 +35,10 @@ const GoogleAuthButton = () => {
   return (
     <div className="flex justify-center">
       <GoogleLogin
+        text="continue_with"
+        shape="pill"
+        theme="outline"
+        size="large"
         onSuccess={handleGoogleSuccess}
         onError={() => toast.error("Google login failed")}
       />

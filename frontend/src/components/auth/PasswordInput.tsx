@@ -32,6 +32,7 @@ const PasswordInput = ({
           onChange={onChange}
           className={`ls-input pl-11 pr-12 ${error ? "border-red-500" : ""}`}
           autoComplete="current-password"
+          placeholder="Enter your password"
         />
 
         <button

@@ -1,6 +1,5 @@
 import PropertyCard from "@/components/property/PropertyCard2";
 import { useProperty } from "@/hooks/useProperty";
-import { useEffect } from "react";
 
 const PropertiesPage = () => {
   const { properties, loading } = useProperty();

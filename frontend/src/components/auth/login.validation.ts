@@ -7,7 +7,7 @@ export const validateLoginForm = (data: LoginFormData) => {
 
   if (!data.email.trim()) {
     errors.email = "Email is required";
-  } else if (!/^\\S+@\\S+\\.\\S+$/.test(data.email)) {
+  } else if (!/^\S+@\S+\.\S+$/.test(data.email)) {
     errors.email = "Invalid email address";
   }
 

@@ -11,6 +11,7 @@ import type {
 import AuthHeader from "./AuthHeader";
 import RegisterInput from "./RegisterInput";
 import PasswordInput from "./PasswordInput";
+import GoogleAuthButton from "./GoogleAuthButton";
 import { validateRegisterForm } from "./RegisterValidation";
 
 const RegisterForm = () => {
@@ -182,6 +183,24 @@ const RegisterForm = () => {
         >
           {loading ? "Creating Account..." : "Create Account"}
         </button>
+
+        {/* DIVIDER */}
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-border-light dark:border-border-dark" />
+          </div>
+
+          <div className="relative flex justify-center text-sm">
+            <span className="bg-card-light dark:bg-card-dark px-4 text-text-muted">
+              OR
+            </span>
+          </div>
+        </div>
+
+        {/* GOOGLE */}
+
+        <GoogleAuthButton />
 
         {/* LOGIN */}
 
