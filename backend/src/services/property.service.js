@@ -29,72 +29,50 @@ const parseAmenities = (value) => {
 
 export const createPropertyService = async ({ body, files, ownerId }) => {
   const user = await User.findById(ownerId);
+
   if (!user) {
     throw new ApiError(404, "User not found");
   }
 
-  const verificationDocuments = [];
-  if (files?.verificationDocuments?.length) {
-    for (const file of files.verificationDocuments) {
-      const uploadedDoc = await uploadToCloudinary(
-        file,
-        CLOUDINARY_FOLDERS.OWNER_IDENTITYIDS,
-      );
+  /* MUST BE VERIFIED OWNER */
 
-      verificationDocuments.push({
-        type: body.documentType,
-        url: uploadedDoc.secure_url,
-        publicId: uploadedDoc.publicId,
-      });
-    }
+  if (user.role !== ROLES.OWNER) {
+    throw new ApiError(403, "Only verified owners can create properties");
   }
 
-  if (verificationDocuments.length) {
-    user.role = ROLES.OWNER;
-    user.ownerVerificationStatus = "pending";
-    user.ownerVerificationRejectedReason = undefined;
-    user.verificationDocuments = [
-      ...(user.verificationDocuments || []),
-      ...verificationDocuments,
-    ];
-    await user.save();
+  if (user.ownerVerificationStatus !== "approved") {
+    throw new ApiError(403, "Owner verification pending");
   }
 
-  if (user.role !== ROLES.OWNER && !verificationDocuments.length) {
-    throw new ApiError(
-      403,
-      "Only owners can create properties. Submit owner verification documents to become an owner.",
-    );
-  }
   const images = [];
   let thumbnail = {};
 
   if (files?.images?.length) {
     for (const file of files.images) {
-      const uploadedImage = await uploadToCloudinary(
+      const { url, publicId } = await uploadToCloudinary(
         file,
         CLOUDINARY_FOLDERS.PROPERTY_IMAGES,
       );
 
-      images.push(uploadedImage);
+      images.push({ url, publicId });
     }
 
-    thumbnail = images[0];
+    thumbnail = images[0].url;
   }
 
   const propertyDocuments = [];
 
   if (files?.propertyDocuments?.length) {
     for (const file of files.propertyDocuments) {
-      const uploadedDocument = await uploadToCloudinary(
+      const { url, publicId } = await uploadToCloudinary(
         file,
         CLOUDINARY_FOLDERS.PROPERTY_DOCUMENTS,
       );
 
       propertyDocuments.push({
         type: body.documentType,
-        url: uploadedDocument.url,
-        publicId: uploadedDocument.publicId,
+        url,
+        publicId,
       });
     }
   }
@@ -113,40 +91,29 @@ export const createPropertyService = async ({ body, files, ownerId }) => {
 };
 
 export const getAllPropertiesService = async (queryString) => {
-  const resultPerPage = Number(queryString.limit) || 10;
-  const currentPage = Number(queryString.page) || 1;
-  const searchQuery = {
-    ...queryString,
-    keyword: queryString.search || queryString.keyword,
-  };
+  const resultPerPage = 10;
 
-  const countQuery = new QueryBuilder(
-    Property.find({ status: PROPERTY_STATUS.APPROVED }),
-    searchQuery,
-  )
-    .search()
-    .filter();
+  const totalProperties = await Property.countDocuments({ status: "Approved" });
 
-  const total = await countQuery.query.countDocuments();
-
-  const propertiesQuery = new QueryBuilder(
-    Property.find({ status: PROPERTY_STATUS.APPROVED }),
-    searchQuery,
+  const queryBuilder = new QueryBuilder(
+    Property.find({ status: "Approved" }),
+    queryString,
   )
     .search()
     .filter()
     .sort()
     .paginate(resultPerPage);
 
-  const properties = await propertiesQuery.query
-    .populate("owner", "userName fullName profileImage")
-    .lean();
+  const properties = await queryBuilder.query;
 
   return {
     properties,
-    total,
-    page: currentPage,
-    totalPages: Math.ceil(total / resultPerPage),
+    pagination: {
+      totalProperties,
+      currentPage: Number(queryString.page) || 1,
+      resultPerPage,
+      totalPages: Math.ceil(totalProperties / resultPerPage),
+    },
   };
 };
 
@@ -345,7 +312,7 @@ export const deletePropertyImageService = async ({
     throw new ApiError(403, "Unauthorized access");
   }
 
-  const image = property.images.id(imageId);
+  const image = property.images.find((img) => img._id.toString() === imageId);
 
   if (!image) {
     throw new ApiError(404, "Property image not found");
@@ -380,10 +347,6 @@ export const deletePropertyService = async ({ propertyId, user }) => {
     await Promise.all(
       property.images.map((image) => deleteFromCloudinary(image.publicId)),
     );
-  }
-
-  if (property.thumbnail?.publicId) {
-    await deleteFromCloudinary(property.thumbnail.publicId);
   }
 
   if (property.propertyDocuments?.length) {

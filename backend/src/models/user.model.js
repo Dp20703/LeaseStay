@@ -174,13 +174,27 @@ const userSchema = new mongoose.Schema(
   },
 );
 
+userSchema.index({
+  email: 1,
+});
+
+userSchema.index({
+  userName: 1,
+});
+
+userSchema.index({
+  role: 1,
+});
+
 /* ─────────────────────────────────────────────
   Soft Delete Middleware
 ───────────────────────────────────────────── */
-userSchema.pre(/^find/, function (next) {
-  this.find({ isDeleted: false });
-
-  next();
+userSchema.pre(/^find/, function () {
+  if (!this.getOptions().includeDeleted) {
+    this.find({
+      isDeleted: false,
+    });
+  }
 });
 
 /* ─────────────────────────────────────────────

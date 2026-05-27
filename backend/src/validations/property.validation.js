@@ -1,5 +1,8 @@
 import { body, param, query } from "express-validator";
-import { PROPERTY_TYPES } from "../constants/property.constants.js";
+import {
+  PROPERTY_DOCUMENTS,
+  PROPERTY_TYPES,
+} from "../constants/property.constants.js";
 
 export const propertyIdValidation = [
   param("id").isMongoId().withMessage("Invalid property id"),
@@ -21,6 +24,8 @@ export const availabilityValidation = [
 export const createPropertyValidation = [
   body("title")
     .trim()
+    .escape()
+    .escape()
     .notEmpty()
     .withMessage("Title is required")
     .isLength({ min: 5, max: 120 })
@@ -28,17 +33,25 @@ export const createPropertyValidation = [
 
   body("description")
     .trim()
+    .escape()
     .notEmpty()
     .withMessage("Description is required")
     .isLength({ min: 20, max: 2000 })
     .withMessage("Description must be between 20 and 2000 characters"),
 
-  body("location").trim().notEmpty().withMessage("Location is required"),
+  body("location")
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage("Location is required")
+    .isLength({ min: 10, max: 120 })
+    .withMessage("Location must be between 10 and 120 characters"),
 
-  body("address").trim().notEmpty().withMessage("Address is required"),
+  body("address").trim().escape().notEmpty().withMessage("Address is required"),
 
   body("zipCode")
     .trim()
+    .escape()
     .notEmpty()
     .withMessage("Zip code is required")
     .isLength({ min: 4, max: 10 })
@@ -46,6 +59,7 @@ export const createPropertyValidation = [
 
   body("propertyType")
     .trim()
+    .escape()
     .notEmpty()
     .withMessage("Property type is required")
     .isIn(PROPERTY_TYPES)
@@ -53,6 +67,7 @@ export const createPropertyValidation = [
 
   body("category")
     .trim()
+    .escape()
     .notEmpty()
     .withMessage("Category is required")
     .isIn(["Rent", "Sale"])
@@ -67,6 +82,7 @@ export const createPropertyValidation = [
     .withMessage("Size must be greater than 0"),
 
   body("price")
+    .toFloat()
     .notEmpty()
     .withMessage("Price is required")
     .isNumeric()
@@ -76,6 +92,7 @@ export const createPropertyValidation = [
 
   body("bedrooms")
     .notEmpty()
+    .toInt()
     .withMessage("Bedrooms is required")
     .isNumeric()
     .withMessage("Bedrooms must be numeric")
@@ -84,6 +101,7 @@ export const createPropertyValidation = [
 
   body("bathrooms")
     .notEmpty()
+    .toInt()
     .withMessage("Bathrooms is required")
     .isNumeric()
     .withMessage("Bathrooms must be numeric")
@@ -103,8 +121,23 @@ export const createPropertyValidation = [
 
   body("documentType")
     .optional()
-    .isIn(["sale_deed", "tax_receipt", "electricity_bill", "rental_agreement"])
+    .isIn(PROPERTY_DOCUMENTS)
     .withMessage("Invalid document type"),
+
+  body("images").custom((value, { req }) => {
+    if (!req.files?.images?.length) {
+      throw new Error("Property images are required");
+    }
+
+    return true;
+  }),
+  body("propertyDocuments").custom((value, { req }) => {
+    if (!req.files?.propertyDocuments?.length) {
+      throw new Error("Property document is required");
+    }
+
+    return true;
+  }),
 ];
 
 export const updatePropertyValidation = [
@@ -113,30 +146,35 @@ export const updatePropertyValidation = [
   body("title")
     .optional()
     .trim()
+    .escape()
     .isLength({ min: 5, max: 120 })
     .withMessage("Title must be between 5 and 120 characters"),
 
   body("description")
     .optional()
     .trim()
+    .escape()
     .isLength({ min: 20, max: 2000 })
     .withMessage("Description must be between 20 and 2000 characters"),
 
   body("location")
     .optional()
     .trim()
+    .escape()
     .notEmpty()
     .withMessage("Location cannot be empty"),
 
   body("address")
     .optional()
     .trim()
+    .escape()
     .notEmpty()
     .withMessage("Address cannot be empty"),
 
   body("zipCode")
     .optional()
     .trim()
+    .escape()
     .isLength({ min: 4, max: 10 })
     .withMessage("Invalid zip code"),
 
@@ -152,6 +190,7 @@ export const updatePropertyValidation = [
 
   body("size")
     .optional()
+    .isInt()
     .isNumeric()
     .withMessage("Size must be numeric")
     .custom((value) => value > 0)
@@ -159,6 +198,7 @@ export const updatePropertyValidation = [
 
   body("price")
     .optional()
+    .toFloat()
     .isNumeric()
     .withMessage("Price must be numeric")
     .custom((value) => value > 0)
@@ -166,6 +206,7 @@ export const updatePropertyValidation = [
 
   body("bedrooms")
     .optional()
+    .toInt()
     .isNumeric()
     .withMessage("Bedrooms must be numeric")
     .custom((value) => value >= 0)
@@ -173,6 +214,7 @@ export const updatePropertyValidation = [
 
   body("bathrooms")
     .optional()
+    .toInt()
     .isNumeric()
     .withMessage("Bathrooms must be numeric")
     .custom((value) => value >= 0)
@@ -234,4 +276,6 @@ export const searchPropertyValidation = [
     .optional()
     .isIn(PROPERTY_TYPES)
     .withMessage("Invalid property type"),
+
+  query("sort").optional().isIn(["price", "-price", "createdAt", "-createdAt"]),
 ];

@@ -158,10 +158,12 @@ propertySchema.index({
 
 // SOFT DELETE
 
-propertySchema.pre(/^find/, function (next) {
-  this.find({ isDeleted: false });
-
-  next();
+propertySchema.pre(/^find/, function () {
+  if (!this.getOptions().includeDeleted) {
+    this.find({
+      isDeleted: false,
+    });
+  }
 });
 
 const Property = mongoose.model("Property", propertySchema);

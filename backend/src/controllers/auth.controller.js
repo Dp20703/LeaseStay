@@ -8,47 +8,14 @@ import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import welcomeEmailTemplate from "../templates/welcome.template.js";
-import ownerWelcomeTemplate from "../templates/ownerWelcome.template.js";
 import crypto from "crypto";
 import generateResetToken from "../helpers/auth/generateResetToken.js";
 import resetWelcomeTemplate from "../templates/resetPassword.template.js";
+import COOKIE_OPTIONS from "../constants/cookie.constants.js";
 import {
   registerUserService,
   loginUserService,
 } from "../services/auth.service.js";
-import { ROLES } from "../constants/role.constants.js";
-import uploadToCloudinary from "../helpers/cloudinary/uploadToCloudinary.js";
-import { CLOUDINARY_FOLDERS } from "../constants/cloudinary.constants.js";
-import COOKIE_OPTIONS from "../constants/cookie.constants.js";
-
-const VALID_OWNER_DOCUMENT_TYPES = ["aadhaar", "passport", "driving_license"];
-
-const parseVerificationDocuments = async (files, documentType) => {
-  const documents = [];
-
-  if (!files?.verificationDocuments?.length) {
-    return documents;
-  }
-
-  if (!documentType || !VALID_OWNER_DOCUMENT_TYPES.includes(documentType)) {
-    throw new ApiError(400, "Invalid document type");
-  }
-
-  for (const file of files.verificationDocuments) {
-    const uploadedDoc = await uploadToCloudinary(
-      file.buffer,
-      CLOUDINARY_FOLDERS.OWNER_IDENTITYIDS,
-    );
-
-    documents.push({
-      type: documentType,
-      url: uploadedDoc.secure_url,
-      publicId: uploadedDoc.public_id,
-    });
-  }
-
-  return documents;
-};
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -142,7 +109,11 @@ export const googleAuth = asyncHandler(async (req, res) => {
       email,
       googleId: sub,
       isGoogleUser: true,
-      profileImage: picture,
+      profileImage: {
+        url: picture,
+        publicId: "",
+        uploadedAt: new Date(),
+      },
       isVerified: email_verified,
       userName: await generateUniqueUsername(email?.split("@")[0]),
       fullName: { firstName: name, lastName: "" },

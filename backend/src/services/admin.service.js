@@ -20,6 +20,7 @@ export const fetchAllOwnersService = async () => {
 // FETCH ALL PROPERTIES
 export const fetchAllPropertiesService = async () => {
   return await Property.find()
+    .lean()
     .populate("owner", "userName email fullName profileImage")
     .sort({ createdAt: -1 });
 };

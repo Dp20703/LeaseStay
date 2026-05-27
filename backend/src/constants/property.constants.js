@@ -15,5 +15,11 @@ export const PROPERTY_TYPES = [
   "PG",
   "Office",
 ];
+export const PROPERTY_DOCUMENTS = [
+  "sale_deed",
+  "tax_receipt",
+  "electricity_bill",
+  "rental_agreement",
+];
 
 export const PROPERTY_CATEGORIES = ["Rent", "Sale"];

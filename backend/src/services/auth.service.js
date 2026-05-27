@@ -67,6 +67,12 @@ export const loginUserService = async (email, password) => {
     throw new ApiError(401, "Please login using Google");
   }
 
+  /* DELETED ACCOUNT */
+
+  if (user.isDeleted) {
+    throw new ApiError(403, "This account has been deleted");
+  }
+
   // PASSWORD CHECK
 
   const isPasswordCorrect = await user.comparePassword(password);

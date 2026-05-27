@@ -39,6 +39,9 @@ export const verifyJWT = async (req, res, next) => {
 
     next();
   } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      return next(new ApiError(401, "Token expired"));
+    }
     next(new ApiError(401, error.message || "Unauthorized access"));
   }
 };

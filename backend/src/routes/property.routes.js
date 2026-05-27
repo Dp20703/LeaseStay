@@ -47,10 +47,10 @@ router.get(
 router.post(
   "/",
   verifyJWT,
+  authorizeRoles(ROLES.OWNER),
   upload.fields([
     { name: "images", maxCount: 10 },
     { name: "propertyDocuments", maxCount: 5 },
-    { name: "verificationDocuments", maxCount: 5 },
   ]),
   validate(createPropertyValidation),
   createProperty,

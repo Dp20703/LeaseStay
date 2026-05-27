@@ -68,6 +68,18 @@ class QueryBuilder {
       delete queryObj.maxPrice;
     }
 
+    if (queryObj.availabilityStatus) {
+      filterQuery.availabilityStatus = queryObj.availabilityStatus;
+
+      delete queryObj.availabilityStatus;
+    }
+
+    if (queryObj.status) {
+      filterQuery.status = queryObj.status;
+
+      delete queryObj.status;
+    }
+
     this.query = this.query.find({
       ...queryObj,
       ...filterQuery,
