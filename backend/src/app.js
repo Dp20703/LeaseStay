@@ -8,7 +8,6 @@ import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import cookieParser from "cookie-parser";
 import compression from "compression";
-import mongoSanitize from "express-mongo-sanitize";
 
 import authRoutes from "./routes/auth.routes.js";
 import propertyRoutes from "./routes/property.routes.js";
@@ -24,7 +23,6 @@ const app = express();
 
 app.use(helmet());
 app.use(compression());
-app.use(mongoSanitize());
 
 /* LOGGGING */
 app.use(morgan("dev"));

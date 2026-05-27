@@ -36,9 +36,8 @@ export const registerUser = async (data: RegisterFormData) => {
 ───────────────────────────────────────────── */
 
 export const loginUser = async (data: LoginData) => {
-
   const response = await api.post("/auth/login",data)
-
+  
   return response.data
 }
 

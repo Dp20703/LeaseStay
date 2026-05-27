@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaEnvelope } from "react-icons/fa";
 import type { AxiosError } from "axios";
-import { loginUser } from "@/services/authService";
 import { useAuth } from "@/hooks/useAuth";
 import type { LoginFormData, LoginFormErrors } from "@/types/auth/auth.types";
 import AuthHeader from "./AuthHeader";
@@ -59,22 +58,13 @@ const LoginForm = () => {
     try {
       setLoading(true);
 
-      const response = await loginUser(formData);
+      login(formData);
 
-      login(
-        response.data.token,
-
-        response.data.user,
-      );
-
-      toast.success(response.message);
+      toast.success("Login Successfull");
 
       navigate("/");
     } catch (error) {
-      const err = error as AxiosError<{
-        message: string;
-      }>;
-
+      const err = error as AxiosError<{ message: string }>;
       toast.error(err.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);

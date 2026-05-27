@@ -1,12 +1,12 @@
 class QueryBuilder {
-  constructor(query, queryString) {
-    this.query = query;
+  constructor(mongooseQuery, queryString) {
+    this.mongooseQuery = mongooseQuery;
     this.queryString = queryString;
   }
 
   search() {
     if (this.queryString.keyword) {
-      this.query = this.query.find({
+      this.mongooseQuery = this.mongooseQuery.find({
         $text: {
           $search: this.queryString.keyword,
         },
@@ -17,7 +17,9 @@ class QueryBuilder {
   }
 
   filter() {
-    const queryObj = { ...this.queryString };
+    const queryObj = {
+      ...this.queryString,
+    };
 
     const excludedFields = ["keyword", "search", "page", "limit", "sort"];
 
@@ -25,33 +27,50 @@ class QueryBuilder {
 
     const filterQuery = {};
 
+    /* LOCATION */
+
     if (queryObj.location) {
       filterQuery.location = {
         $regex: queryObj.location,
+
         $options: "i",
       };
+
       delete queryObj.location;
     }
+
+    /* CATEGORY */
 
     if (queryObj.category) {
       filterQuery.category = queryObj.category;
       delete queryObj.category;
     }
 
+    /* PROPERTY TYPE */
+
     if (queryObj.propertyType) {
       filterQuery.propertyType = queryObj.propertyType;
+
       delete queryObj.propertyType;
     }
 
+    /* BEDROOMS */
+
     if (queryObj.bedrooms) {
       filterQuery.bedrooms = Number(queryObj.bedrooms);
+
       delete queryObj.bedrooms;
     }
 
+    /* BATHROOMS */
+
     if (queryObj.bathrooms) {
       filterQuery.bathrooms = Number(queryObj.bathrooms);
+
       delete queryObj.bathrooms;
     }
+
+    /* PRICE */
 
     if (queryObj.minPrice || queryObj.maxPrice) {
       filterQuery.price = {};
@@ -68,19 +87,22 @@ class QueryBuilder {
       delete queryObj.maxPrice;
     }
 
+    /* AVAILABILITY */
+
     if (queryObj.availabilityStatus) {
       filterQuery.availabilityStatus = queryObj.availabilityStatus;
 
       delete queryObj.availabilityStatus;
     }
 
+    /* STATUS */
+
     if (queryObj.status) {
       filterQuery.status = queryObj.status;
-
       delete queryObj.status;
     }
 
-    this.query = this.query.find({
+    this.mongooseQuery = this.mongooseQuery.find({
       ...queryObj,
       ...filterQuery,
     });
@@ -90,9 +112,9 @@ class QueryBuilder {
 
   sort() {
     if (this.queryString.sort) {
-      this.query = this.query.sort(this.queryString.sort);
+      this.mongooseQuery = this.mongooseQuery.sort(this.queryString.sort);
     } else {
-      this.query = this.query.sort("-createdAt");
+      this.mongooseQuery = this.mongooseQuery.sort("-createdAt");
     }
 
     return this;
@@ -103,7 +125,7 @@ class QueryBuilder {
 
     const skip = resultPerPage * (currentPage - 1);
 
-    this.query = this.query.limit(resultPerPage).skip(skip);
+    this.mongooseQuery = this.mongooseQuery.limit(resultPerPage).skip(skip);
 
     return this;
   }

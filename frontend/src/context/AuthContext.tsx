@@ -1,7 +1,6 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
-
-import { getCurrentUser } from "@/services/authService";
+import { getCurrentUser, loginUser } from "@/services/authService";
 
 /* ─────────────────────────────────────────────
    Types
@@ -80,10 +79,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
      Login
   ───────────────────────────────────────── */
 
-  const login = (token: string, userData: User) => {
-    localStorage.setItem("token", token);
+  const login = async (userData: User) => {
+    const response = await loginUser(userData);
+    console.log("res:", response);
+    localStorage.setItem("token", response.data.token);
 
-    setUser(userData);
+    setUser(response.data.user);
   };
 
   /* ─────────────────────────────────────────

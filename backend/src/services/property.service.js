@@ -93,7 +93,10 @@ export const createPropertyService = async ({ body, files, ownerId }) => {
 export const getAllPropertiesService = async (queryString) => {
   const resultPerPage = 10;
 
-  const totalProperties = await Property.countDocuments({ status: "Approved" });
+  const totalProperties = await Property.countDocuments({
+    status: "Approved",
+    isDeleted: false,
+  });
 
   const queryBuilder = new QueryBuilder(
     Property.find({ status: "Approved" }),
@@ -104,7 +107,7 @@ export const getAllPropertiesService = async (queryString) => {
     .sort()
     .paginate(resultPerPage);
 
-  const properties = await queryBuilder.query;
+  const properties = await queryBuilder.mongooseQuery.lean();
 
   return {
     properties,
