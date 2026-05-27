@@ -1,6 +1,6 @@
-import asyncHandler from "../utils/handlers/asyncHandler.js";
-import ApiResponse from "../utils/errors/ApiResponse.js";
-import ApiError from "../utils/errors/ApiError.js";
+import asyncHandler from "../utils/asyncHandler.js";
+import ApiResponse from "../utils/ApiResponse.js";
+import ApiError from "../utils/ApiError.js";
 import {
   fetchAllUsersService,
   fetchAllPropertiesService,

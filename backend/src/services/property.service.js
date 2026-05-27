@@ -4,8 +4,8 @@ import { ROLES } from "../constants/role.constants.js";
 import User from "../models/user.model.js";
 import Property from "../models/property.model.js";
 import ApiError from "../utils/ApiError.js";
-import deleteFromCloudinary from "../utils/cloudinary/deleteFromCloudinary.js";
-import uploadToCloudinary from "../utils/cloudinary/uploadToCloudinary.js";
+import deleteFromCloudinary from "../helpers/cloudinary/deleteFromCloudinary.js";
+import uploadToCloudinary from "../helpers/cloudinary/uploadToCloudinary.js";
 import QueryBuilder from "../utils/queryBuilder.js";
 import { generateSlug } from "../helpers/slug/generateSlug.js";
 

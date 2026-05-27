@@ -1,5 +1,5 @@
-import asyncHandler from "../utils/handlers/asyncHandler.js";
-import ApiResponse from "../utils/errors/ApiResponse.js";
+import asyncHandler from "../utils/asyncHandler.js";
+import ApiResponse from "../utils/ApiResponse.js";
 import {
   changeEmailService,
   changePasswordService,

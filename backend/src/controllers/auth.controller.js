@@ -1,23 +1,23 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 import { OAuth2Client } from "google-auth-library";
-import generateUniqueUsername from "../utils/auth/generateUniqueUsername.js";
-import sendToken from "../utils/auth/sendToken.js";
-import { sendMail } from "../utils/mail/mail.js";
-import ApiError from "../utils/errors/ApiError.js";
-import ApiResponse from "../utils/errors/ApiResponse.js";
-import asyncHandler from "../utils/handlers/asyncHandler.js";
-import welcomeEmailTemplate from "../templates/welcomeEmail.template.js";
+import generateUniqueUsername from "../helpers/auth/generateUniqueUsername.js";
+import sendToken from "../helpers/auth/sendToken.js";
+import { sendMail } from "../helpers/mail/sendMail.js";
+import ApiError from "../utils/ApiError.js";
+import ApiResponse from "../utils/ApiResponse.js";
+import asyncHandler from "../utils/asyncHandler.js";
+import welcomeEmailTemplate from "../templates/welcome.template.js";
 import ownerWelcomeTemplate from "../templates/ownerWelcome.template.js";
 import crypto from "crypto";
-import generateResetToken from "../utils/auth/generateResetToken.js";
+import generateResetToken from "../helpers/auth/generateResetToken.js";
 import resetWelcomeTemplate from "../templates/resetPassword.template.js";
 import {
   registerUserService,
   loginUserService,
 } from "../services/auth.service.js";
 import { ROLES } from "../constants/role.constants.js";
-import uploadToCloudinary from "../utils/cloudinary/uploadToCloudinary.js";
+import uploadToCloudinary from "../helpers/cloudinary/uploadToCloudinary.js";
 import { CLOUDINARY_FOLDERS } from "../constants/cloudinary.constants.js";
 import COOKIE_OPTIONS from "../constants/cookie.constants.js";
 

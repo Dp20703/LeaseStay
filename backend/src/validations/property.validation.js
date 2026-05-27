@@ -1,5 +1,5 @@
 import { body, param, query } from "express-validator";
-import { PROPERTY_TYPES } from "../constants/property.constants";
+import { PROPERTY_TYPES } from "../constants/property.constants.js";
 
 export const propertyIdValidation = [
   param("id").isMongoId().withMessage("Invalid property id"),

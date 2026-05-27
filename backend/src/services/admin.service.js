@@ -1,6 +1,6 @@
 import User from "../models/user.model.js";
 import Property from "../models/property.model.js";
-import ApiError from "../utils/errors/ApiError.js";
+import ApiError from "../utils/ApiError.js";
 import { ROLES } from "../constants/role.constants.js";
 
 // FETCH ALL USERS
@@ -33,7 +33,7 @@ export const getPendingOwnerVerificationsService = async () => {
 
 // APPROVE OWNER VERIFICATION
 
-export const approveOwnerService = async (userId, adminId) => {
+export const approveOwnerVerificationService = async (userId, adminId) => {
   const user = await User.findById(userId);
 
   if (!user) {

@@ -1,5 +1,5 @@
 import { body } from "express-validator";
-import { OWNER_VERIFICATION_DOCUMENTS } from "../constants/auth.constants";
+import { OWNER_VERIFICATION_DOCUMENTS } from "../constants/auth.constants.js";
 
 // UPDATE PROFILE
 
