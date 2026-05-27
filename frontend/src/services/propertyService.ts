@@ -20,6 +20,7 @@ const propertyAPI = {
   // GET ALL
   getAllProperties: async () => {
     const response = await api.get("/properties/");
+    console.log("getAllProperties Property API res:",response)
     return response.data;
   },
 

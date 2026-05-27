@@ -1,25 +1,28 @@
 import multer from "multer";
 
+import ApiError from "../utils/ApiError.js";
+
 const storage = multer.memoryStorage();
 
 const allowedMimeTypes = [
-  "application/pdf",
   "image/jpeg",
   "image/png",
   "image/webp",
+  "application/pdf",
 ];
+
+const fileFilter = (req, file, cb) => {
+  if (allowedMimeTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new ApiError(400, "Invalid file type"));
+  }
+};
 
 export const upload = multer({
   storage,
+  fileFilter,
   limits: {
     fileSize: 5 * 1024 * 1024,
-  },
-
-  fileFilter: (req, file, cb) => {
-    if (allowedMimeTypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error("Invalid file type"));
-    }
   },
 });

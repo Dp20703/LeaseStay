@@ -1,4 +1,13 @@
 export const PROPERTY_STATUS = {
-  ACTIVE: "Active",
+  DRAFT: "draft",
+
+  PENDING: "Pending",
+
+  APPROVED: "Approved",
+
+  REJECTED: "Rejected",
+
+  HIDDEN: "Hidden",
+
   INACTIVE: "Inactive",
 };

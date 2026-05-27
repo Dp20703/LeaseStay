@@ -1,5 +1,7 @@
 export const CLOUDINARY_FOLDERS = {
   PROFILE_IMAGES: "LeaseStay/profileImages",
+  
+  PROPERTY_DOCUMENTS: "LeaseStay/propertyDocuments",
 
   PROPERTY_IMAGES: "LeaseStay/propertyImages",
   
@@ -8,6 +10,8 @@ export const CLOUDINARY_FOLDERS = {
   LICENSES: "LeaseStay/licenses",
 
   OWNER_IDENTITYIDS: "LeaseStay/identityIds",
+
+  
 
 
 };

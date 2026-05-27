@@ -6,10 +6,11 @@ interface PropertyCardProps {
 }
 
 const PropertyCard = ({ property }: PropertyCardProps) => {
+  console.log("property:", property);
   return (
     <div className="ls-card overflow-hidden rounded-3xl">
       <img
-        src={property.images?.[0]}
+        src={property.thumbnail.url}
         alt={property.title}
         className="h-64 w-full object-cover"
       />

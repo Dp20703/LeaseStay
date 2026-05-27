@@ -7,21 +7,29 @@ import helmet from "helmet";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import cookieParser from "cookie-parser";
-import { errorMiddleware } from "./middlewares/error.middleware.js";
-import { notFoundMiddleware } from "./middlewares/notFound.middleware.js";
+import compression from "compression";
+import mongoSanitize from "express-mongo-sanitize";
+
 import authRoutes from "./routes/auth.routes.js";
 import propertyRoutes from "./routes/property.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import userRoutes from "./routes/user.routes.js";
 
+import { errorMiddleware } from "./middlewares/error.middleware.js";
+import { notFoundMiddleware } from "./middlewares/notFound.middleware.js";
+
 const app = express();
 
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+/* SECURITY */
+
 app.use(helmet());
+app.use(compression());
+app.use(mongoSanitize());
+
+/* LOGGGING */
 app.use(morgan("dev"));
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+
+/* RATE LIMIT */
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -31,6 +39,21 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
+/* CORS */
+
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  }),
+);
+
+/* BODY */
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
@@ -38,13 +61,17 @@ app.get("/", (req, res) => {
   });
 });
 
-// Routes Here
-app.use("/api/auth", authRoutes);
-app.use("/api/properties", propertyRoutes);
-app.use("/api/admin", adminRoutes);
-app.use("/api/users", userRoutes);
+/* ROUTES */
 
-app.use(notFoundMiddleware);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/properties", propertyRoutes);
+app.use("/api/v1/admin", adminRoutes);
+app.use("/api/v1/users", userRoutes);
+
+/* ERROR */
 app.use(errorMiddleware);
+
+/* NOT FOUND */
+app.use(notFoundMiddleware);
 
 export default app;

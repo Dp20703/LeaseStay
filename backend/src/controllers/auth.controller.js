@@ -26,24 +26,40 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // REGISTER USER
 
 export const registerUser = asyncHandler(async (req, res) => {
-  const { userName, email, password, phone, role, fullName } = req.body;
+  const { userName, email, password, phone, role, fullName, documentType } =
+    req.body;
 
-  let licenseId = "";
+  let verificationDocuments = [];
 
-  // OWNER FILE
+  // OWNER VERIFICATION DOCUMENTS
 
   if (role === ROLES.OWNER) {
-    const licenseFile = req.files?.licenseId?.[0];
+    const documentFile = req.files?.verificationDocument?.[0];
 
-    if (!licenseFile) {
-      throw new ApiError(400, "License document required");
+    if (!documentFile) {
+      throw new ApiError(
+        400,
+        "Verification document required for owner registration",
+      );
     }
 
-    const uploadedFile = await uploadToCloudinary(
-      licenseFile.buffer,
-      CLOUDINARY_FOLDERS.LICENSES,
+    if (
+      !documentType ||
+      !["aadhaar", "passport", "driving_license"].includes(documentType)
+    ) {
+      throw new ApiError(400, "Invalid document type");
+    }
+
+    const uploadedDoc = await uploadToCloudinary(
+      documentFile.buffer,
+      CLOUDINARY_FOLDERS.OWNER_IDENTITYIDS,
     );
-    licenseId = uploadedFile.secure_url;
+
+    verificationDocuments.push({
+      type: documentType,
+      url: uploadedDoc.secure_url,
+      publicId: uploadedDoc.public_id,
+    });
   }
 
   // CREATE USER
@@ -54,7 +70,7 @@ export const registerUser = asyncHandler(async (req, res) => {
     password,
     phone,
     role,
-    licenseId,
+    verificationDocuments,
     firstName: fullName?.firstName,
     lastName: fullName?.lastName,
   });

@@ -1,13 +1,15 @@
-import asyncHandler from "../utils/handlers/asyncHandler.js";
-import ApiError from "../utils/errors/ApiError.js";
-import ApiResponse from "../utils/errors/ApiResponse.js";
+import asyncHandler from "../utils/asyncHandler.js";
+import ApiError from "../utils/ApiError.js";
+import ApiResponse from "../utils/ApiResponse.js";
 import uploadToCloudinary from "../utils/cloudinary/uploadToCloudinary.js";
+import generateSlug from "../utils/slug/generateSlug.js";
 import {
   createPropertyService,
   getAllPropertiesService,
   getSinglePropertyService,
   updatePropertyService,
   deletePropertyService,
+  getOwnerPropertiesService,
 } from "../services/property.service.js";
 import Property from "../models/property.model.js";
 import { CLOUDINARY_FOLDERS } from "../constants/cloudinary.constants.js";
@@ -15,85 +17,10 @@ import { ROLES } from "../constants/role.constants.js";
 
 // CREATE PROPERTY
 export const createProperty = asyncHandler(async (req, res) => {
-  const {
-    title,
-    description,
-    location,
-    address,
-    zipCode,
-    propertyType,
-    category,
-    size,
-    price,
-    bedrooms,
-    bathrooms,
-    propertyIdentityType,
-  } = req.body;
-
-  // AMENITIES
-  const amenities = req.body.amenities ? JSON.parse(req.body.amenities) : [];
-
-  // IMAGE FILES
-  const imageFiles = req.files?.images || [];
-
-  if (!imageFiles.length) {
-    throw new ApiError(400, "Property images required");
-  }
-
-  // PROPERTY PROOF
-  const propertyProofFile = req.files?.propertyProof?.[0];
-
-  if (!propertyProofFile) {
-    throw new ApiError(400, "Property proof required");
-  }
-
-  // OPTIONAL IDENTITY FILE
-  const identityIdFile = req.files?.identityId?.[0];
-
-  // UPLOAD PROPERTY IMAGES
-  const uploadedImages = await Promise.all(
-    imageFiles.map((file) =>
-      uploadToCloudinary(file.buffer, CLOUDINARY_FOLDERS.PROPERTY_IMAGES),
-    ),
-  );
-
-  const imageUrls = uploadedImages.map((img) => img.secure_url);
-
-  // UPLOAD PROPERTY PROOF
-  const uploadedProof = await uploadToCloudinary(
-    propertyProofFile.buffer,
-    CLOUDINARY_FOLDERS.PROPERTY_PROOF,
-  );
-
-  // OPTIONAL IDENTITY UPLOAD
-  let identityId = "";
-  if (identityIdFile) {
-    const uploadedIdentity = await uploadToCloudinary(
-      identityIdFile.buffer,
-      CLOUDINARY_FOLDERS.OWNER_IDENTITYIDS,
-    );
-    identityId = uploadedIdentity.secure_url;
-  }
-
-  // CREATE PROPERTY
   const property = await createPropertyService({
-    title,
-    description,
-    location,
-    address,
-    zipCode,
-    propertyType,
-    category,
-    size: Number(size),
-    price: Number(price),
-    bedrooms: Number(bedrooms),
-    bathrooms: Number(bathrooms),
-    propertyIdentityType,
-    amenities,
-    images: imageUrls,
-    propertyProof: uploadedProof.secure_url,
-    identityId,
-    owner: req.user._id,
+    body: req.body,
+    files: req.files,
+    ownerId: req.user._id,
   });
 
   return res
@@ -103,7 +30,7 @@ export const createProperty = asyncHandler(async (req, res) => {
 
 // GET ALL PROPERTIES
 export const getAllProperties = asyncHandler(async (req, res) => {
-  const properties = await getAllPropertiesService();
+  const properties = await getAllPropertiesService(req.query);
 
   return res
     .status(200)
@@ -126,7 +53,7 @@ export const searchProperties = asyncHandler(async (req, res) => {
   } = req.query;
 
   const query = {
-    status: "Active",
+    status: "Approved",
   };
 
   // TEXT SEARCH
@@ -256,36 +183,27 @@ export const updateProperty = asyncHandler(async (req, res) => {
   // UPDATE DATA
   const updateData = {
     title: req.body.title || property.title,
-
     description: req.body.description || property.description,
-
     location: req.body.location || property.location,
-
     address: req.body.address || property.address,
-
     zipCode: req.body.zipCode || property.zipCode,
-
     propertyType: req.body.propertyType || property.propertyType,
-
     category: req.body.category || property.category,
-
     size: req.body.size ? Number(req.body.size) : property.size,
-
     price: req.body.price ? Number(req.body.price) : property.price,
-
     bedrooms: req.body.bedrooms ? Number(req.body.bedrooms) : property.bedrooms,
-
     bathrooms: req.body.bathrooms
       ? Number(req.body.bathrooms)
       : property.bathrooms,
-
-    propertyIdentityType:
-      req.body.propertyIdentityType || property.propertyIdentityType,
-
     amenities: req.body.amenities
       ? JSON.parse(req.body.amenities)
       : property.amenities,
   };
+
+  // UPDATE SLUG IF TITLE CHANGED
+  if (req.body.title && req.body.title !== property.title) {
+    updateData.slug = generateSlug(req.body.title);
+  }
 
   // IMAGE UPDATE
   const imageFiles = req.files?.images || [];
@@ -297,37 +215,50 @@ export const updateProperty = asyncHandler(async (req, res) => {
       ),
     );
 
-    updateData.images = uploadedImages.map((img) => img.secure_url);
+    updateData.images = uploadedImages.map((img) => ({
+      url: img.secure_url,
+      publicId: img.public_id,
+    }));
+
+    // UPDATE THUMBNAIL TO FIRST IMAGE
+    if (updateData.images.length > 0) {
+      updateData.thumbnail = {
+        url: updateData.images[0].url,
+        publicId: updateData.images[0].publicId,
+      };
+    }
   } else {
     updateData.images = property.images;
+    updateData.thumbnail = property.thumbnail;
   }
 
-  // PROPERTY PROOF UPDATE
-  const propertyProofFile = req.files?.propertyProof?.[0];
+  // PROPERTY DOCUMENTS UPDATE
+  const documentFiles = req.files?.propertyDocuments || [];
 
-  if (propertyProofFile) {
-    const uploadedProof = await uploadToCloudinary(
-      propertyProofFile.buffer,
-      CLOUDINARY_FOLDERS.PROPERTY_PROOF,
+  if (documentFiles.length) {
+    const uploadedDocs = await Promise.all(
+      documentFiles.map((file) =>
+        uploadToCloudinary(file.buffer, CLOUDINARY_FOLDERS.PROPERTY_DOCUMENTS),
+      ),
     );
 
-    updateData.propertyProof = uploadedProof.secure_url;
+    updateData.propertyDocuments = uploadedDocs.map((doc) => ({
+      type: "rental_agreement",
+      url: doc.secure_url,
+      publicId: doc.public_id,
+    }));
   } else {
-    updateData.propertyProof = property.propertyProof;
+    updateData.propertyDocuments = property.propertyDocuments;
   }
 
-  // IDENTITY ID UPDATE
-  const identityIdFile = req.files?.identityId?.[0];
+  // UPDATE STATUS IF PROVIDED
+  if (req.body.status) {
+    updateData.status = req.body.status;
+  }
 
-  if (identityIdFile) {
-    const uploadedIdentity = await uploadToCloudinary(
-      identityIdFile.buffer,
-      CLOUDINARY_FOLDERS.OWNER_IDENTITYIDS,
-    );
-
-    updateData.identityId = uploadedIdentity.secure_url;
-  } else {
-    updateData.identityId = property.identityId;
+  // UPDATE AVAILABILITY STATUS IF PROVIDED
+  if (req.body.availabilityStatus) {
+    updateData.availabilityStatus = req.body.availabilityStatus;
   }
 
   // UPDATE PROPERTY

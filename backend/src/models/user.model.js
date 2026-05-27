@@ -163,6 +163,15 @@ const userSchema = new mongoose.Schema(
 );
 
 /* ─────────────────────────────────────────────
+  Soft Delete Middleware
+───────────────────────────────────────────── */
+userSchema.pre(/^find/, function (next) {
+  this.find({ isDeleted: false });
+
+  next();
+});
+
+/* ─────────────────────────────────────────────
    Hash Password
 ───────────────────────────────────────────── */
 

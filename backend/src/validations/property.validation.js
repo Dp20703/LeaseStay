@@ -78,11 +78,6 @@ export const createPropertyValidation = [
     .custom((value) => value >= 0)
     .withMessage("Bathrooms cannot be negative"),
 
-  body("propertyIdentityType")
-    .trim()
-    .notEmpty()
-    .withMessage("Property identity type is required"),
-
   body("amenities")
     .optional()
     .custom((value) => {
@@ -171,8 +166,13 @@ export const updatePropertyValidation = [
 
   body("status")
     .optional()
-    .isIn(["Active", "Inactive", "Pending"])
+    .isIn(["draft", "Pending", "Approved", "Rejected", "Hidden", "Inactive"])
     .withMessage("Invalid status"),
+
+  body("availabilityStatus")
+    .optional()
+    .isIn(["available", "occupied", "reserved"])
+    .withMessage("Invalid availability status"),
 ];
 
 // SEARCH PROPERTY VALIDATION

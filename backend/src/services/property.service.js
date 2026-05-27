@@ -1,48 +1,88 @@
+import { CLOUDINARY_FOLDERS } from "../constants/cloudinary.constants.js";
 import Property from "../models/property.model.js";
 import deleteFromCloudinary from "../utils/cloudinary/deleteFromCloudinary.js";
+import QueryBuilder from "../utils/queryBuilder.js";
+import generateSlug from "../helpers/slug/generateSlug.js";
 
 // CREATE PROPERTY
-export const createPropertyService = async (propertyData) => {
-  const property = await Property.create(propertyData);
 
-  return await Property.findById(property._id).populate(
-    "owner",
-    "userName email fullName profileImage",
-  );
+export const createPropertyService = async ({ body, files, ownerId }) => {
+  const images = [];
+
+  let thumbnail = {};
+
+  // UPLOAD IMAGES
+
+  if (files?.images?.length) {
+    for (const file of files.images) {
+      const uploadedImage = await uploadToCloudinary(
+        file,
+        CLOUDINARY_FOLDERS.PROPERTY_IMAGES,
+      );
+
+      images.push(uploadedImage);
+    }
+
+    thumbnail = images[0];
+  }
+
+  // PROPERTY DOCUMENTS
+
+  const propertyDocuments = [];
+
+  if (files?.propertyDocuments?.length) {
+    for (const file of files.propertyDocuments) {
+      const uploadedDocument = await uploadToCloudinary(
+        file,
+        CLOUDINARY_FOLDERS.PROPERTY_DOCUMENTS,
+      );
+
+      propertyDocuments.push({
+        type: body.documentType,
+        url: uploadedDocument.url,
+        publicId: uploadedDocument.publicId,
+      });
+    }
+  }
+
+  // CREATE PROPERTY
+
+  const property = await Property.create({
+    ...body,
+    slug: generateSlug(body.title),
+    images,
+    thumbnail,
+    propertyDocuments,
+    owner: ownerId,
+  });
+
+  return property;
 };
 
 // GET ALL PROPERTIES
-export const getAllPropertiesService = async (page = 1, limit = 10) => {
-  const skip = (page - 1) * limit;
+export const getAllPropertiesService = async (queryString) => {
+  const resultPerPage = 10;
 
-  const properties = await Property.find(
-    { status: "Active" },
-    "-propertyProof -identityId",
+  const queryBuilder = new QueryBuilder(
+    Property.find({ status: "Approved" }),
+    queryString,
   )
-    .lean()
-    .populate("owner", "userName fullName profileImage")
-    .skip(skip)
-    .limit(limit)
-    .sort({ createdAt: -1 });
+    .search()
+    .filter()
+    .sort()
+    .paginate(resultPerPage);
 
-  const total = await Property.countDocuments({
-    status: "Active",
-  });
+  const properties = await queryBuilder.query;
 
-  return {
-    properties,
-    total,
-    page,
-    totalPages: Math.ceil(total / limit),
-  };
+  return properties;
 };
 
 // GET SINGLE PROPERTY
 export const getSinglePropertyService = async (propertyId) => {
-  return await Property.findById(
-    propertyId,
-    "-propertyProof -identityId",
-  ).populate("owner", "userName email fullName profileImage");
+  return await Property.findById(propertyId).populate(
+    "owner",
+    "userName email fullName profileImage",
+  );
 };
 
 // GET OWNER PROPERTIES

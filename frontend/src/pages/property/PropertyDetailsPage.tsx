@@ -20,7 +20,7 @@ const PropertyDetailsPage = () => {
   return (
     <section className="ls-container py-10 space-y-8">
       <img
-        src={property.images?.[0]}
+        src={property.thumbnail.url}
         alt={property.title}
         className="h-[500px] w-full rounded-3xl object-cover"
       />

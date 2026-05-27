@@ -42,7 +42,7 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
       setLoading(true);
 
       const response = await propertyAPI.getAllProperties();
-
+      console.log("getAllProperties res:", response);
       setProperties(response.data.properties);
     } catch (error) {
       console.log(error);

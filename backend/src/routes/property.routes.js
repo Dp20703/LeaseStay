@@ -1,9 +1,9 @@
 import express from "express";
 import { upload } from "../config/multer.config.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import authorizeRoles from "../middlewares/authorizeRoles.js";
 import { ROLES } from "../constants/role.constants.js";
 import validate from "../middlewares/validate.middleware.js";
+import { authorizeRoles } from "../middlewares/role.middleware.js";
 import {
   createProperty,
   getAllProperties,
@@ -28,12 +28,10 @@ router.post(
   verifyJWT,
   authorizeRoles(ROLES.OWNER),
   upload.fields([
-    { name: "images", maxCount: 5 },
-    { name: "propertyProof", maxCount: 1 },
-    { name: "identityId", maxCount: 1 },
+    { name: "images", maxCount: 10 },
+    { name: "propertyDocuments", maxCount: 5 },
   ]),
-  createPropertyValidation,
-  validate,
+  validate(createPropertyValidation),
   createProperty,
 );
 
@@ -61,8 +59,7 @@ router.put(
   authorizeRoles(ROLES.OWNER, ROLES.ADMIN),
   upload.fields([
     { name: "images", maxCount: 5 },
-    { name: "propertyProof", maxCount: 1 },
-    { name: "identityId", maxCount: 1 },
+    { name: "propertyDocuments", maxCount: 5 },
   ]),
   updatePropertyValidation,
   validate,
