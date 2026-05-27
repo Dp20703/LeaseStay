@@ -1,9 +1,9 @@
 import express from "express";
-import { upload } from "../config/multer.config.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { ROLES } from "../constants/role.constants.js";
 import validate from "../middlewares/validate.middleware.js";
+import { upload } from "../config/multer.config.js";
 import { authorizeRoles } from "../middlewares/role.middleware.js";
+import { ROLES } from "../constants/role.constants.js";
 import {
   createProperty,
   getAllProperties,
@@ -11,69 +11,96 @@ import {
   updateProperty,
   deleteProperty,
   getOwnerProperties,
-  searchProperties,
+  getFeaturedProperties,
+  getRecommendedProperties,
+  changeAvailabilityStatus,
+  addPropertyImages,
+  deletePropertyImage,
 } from "../controllers/property.controller.js";
+
 import {
   createPropertyValidation,
-  propertyIdValidation,
-  searchPropertyValidation,
   updatePropertyValidation,
+  propertyIdValidation,
+  propertyImageIdValidation,
+  availabilityValidation,
+  searchPropertyValidation,
 } from "../validations/property.validation.js";
 
 const router = express.Router();
 
-// CREATE PROPERTY
-router.post(
-  "/create",
-  verifyJWT,
-  authorizeRoles(ROLES.OWNER),
-  upload.fields([
-    { name: "images", maxCount: 10 },
-    { name: "propertyDocuments", maxCount: 5 },
-  ]),
-  validate(createPropertyValidation),
-  createProperty,
-);
+/* PUBLIC */
 
-// GET ALL
-router.get("/", getAllProperties);
+router.get("/", validate(searchPropertyValidation), getAllProperties);
+router.get("/featured", getFeaturedProperties);
+router.get("/recommended", getRecommendedProperties);
 
-// SEARCH PROPERTIES
-router.get("/search/all", searchPropertyValidation, validate, searchProperties);
+/* OWNER */
 
-// GET OWNER PROPERTIES
 router.get(
-  "/owner/my-properties",
+  "/owner/me",
   verifyJWT,
   authorizeRoles(ROLES.OWNER),
   getOwnerProperties,
 );
 
-// GET SINGLE
-router.get("/:id", propertyIdValidation, validate, getSingleProperty);
+router.post(
+  "/",
+  verifyJWT,
+  upload.fields([
+    { name: "images", maxCount: 10 },
+    { name: "propertyDocuments", maxCount: 5 },
+    { name: "verificationDocuments", maxCount: 5 },
+  ]),
+  validate(createPropertyValidation),
+  createProperty,
+);
 
-// UPDATE
-router.put(
+router.patch(
   "/:id",
   verifyJWT,
   authorizeRoles(ROLES.OWNER, ROLES.ADMIN),
   upload.fields([
-    { name: "images", maxCount: 5 },
+    { name: "images", maxCount: 10 },
     { name: "propertyDocuments", maxCount: 5 },
   ]),
-  updatePropertyValidation,
-  validate,
+  validate(updatePropertyValidation),
   updateProperty,
 );
 
-// DELETE
+router.patch(
+  "/:id/availability",
+  verifyJWT,
+  authorizeRoles(ROLES.OWNER),
+  validate([...propertyIdValidation, ...availabilityValidation]),
+  changeAvailabilityStatus,
+);
+
+router.patch(
+  "/:id/images",
+  verifyJWT,
+  authorizeRoles(ROLES.OWNER),
+  validate(propertyIdValidation),
+  upload.array("images", 10),
+  addPropertyImages,
+);
+
+router.delete(
+  "/:id/images/:imageId",
+  verifyJWT,
+  authorizeRoles(ROLES.OWNER),
+  validate(propertyImageIdValidation),
+  deletePropertyImage,
+);
+
 router.delete(
   "/:id",
   verifyJWT,
-  authorizeRoles(ROLES.OWNER, "admin"),
-  propertyIdValidation,
-  validate,
+  authorizeRoles(ROLES.OWNER, ROLES.ADMIN),
+  validate(propertyIdValidation),
   deleteProperty,
 );
+
+router.get("/:slug", getSingleProperty);
 
 export default router;

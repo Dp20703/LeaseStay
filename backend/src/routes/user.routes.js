@@ -8,11 +8,13 @@ import {
   changeEmail,
   deleteProfileImage,
   deleteAccount,
+  applyOwner,
 } from "../controllers/user.controller.js";
 import {
   updateProfileValidation,
   changePasswordValidation,
   changeEmailValidation,
+  applyOwnerValidation,
 } from "../validations/user.validation.js";
 
 const router = express.Router();
@@ -23,8 +25,7 @@ router.patch(
   "/update-profile",
   verifyJWT,
   upload.single("profileImage"),
-  updateProfileValidation,
-  validate,
+  validate(updateProfileValidation),
   updateProfile,
 );
 
@@ -33,8 +34,7 @@ router.patch(
 router.patch(
   "/change-password",
   verifyJWT,
-  changePasswordValidation,
-  validate,
+  validate(changePasswordValidation),
   changePassword,
 );
 
@@ -43,8 +43,7 @@ router.patch(
 router.patch(
   "/change-email",
   verifyJWT,
-  changeEmailValidation,
-  validate,
+  validate(changeEmailValidation),
   changeEmail,
 );
 
@@ -55,5 +54,14 @@ router.delete("/delete-profile-image", verifyJWT, deleteProfileImage);
 // DELETE ACCOUNT
 
 router.delete("/delete-account", verifyJWT, deleteAccount);
+
+// APPLY OWNER
+router.post(
+  "/apply-owner",
+  verifyJWT,
+  upload.single("verificationDocument"),
+  validate(applyOwnerValidation),
+  applyOwner,
+);
 
 export default router;

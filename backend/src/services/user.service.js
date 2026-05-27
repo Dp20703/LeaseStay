@@ -1,8 +1,9 @@
 import User from "../models/user.model.js";
 import ApiError from "../utils/errors/ApiError.js";
-import uploadToCloudinary from "../utils/cloudinary/uploadToCloudinary.js";
+import uploadToCloudinary from "../helpers/cloudinary/uploadToCloudinary.js";
 import deleteFromCloudinary from "../utils/cloudinary/deleteFromCloudinary.js";
 import { CLOUDINARY_FOLDERS } from "../constants/cloudinary.constants.js";
+import { ROLES } from "../constants/role.constants.js";
 
 // UPDATE PROFILE
 
@@ -47,19 +48,34 @@ export const updateProfileService = async ({ userId, body, file }) => {
   }
 
   // PROFILE IMAGE
+
   if (file) {
     const oldImage = user.profileImage;
 
-    // UPLOAD NEW IMAGE
-    const uploadedImage = await uploadToCloudinary(
-      file.buffer,
+    /* UPLOAD NEW IMAGE */
+
+    const { url, publicId } = await uploadToCloudinary(
+      file,
       CLOUDINARY_FOLDERS.PROFILE_IMAGES,
     );
 
-    user.profileImage = uploadedImage.secure_url;
+    /* SAVE NEW IMAGE */
 
-    // DELETE OLD IMAGE
-    await deleteFromCloudinary(oldImage);
+    user.profileImage = {
+      url,
+      publicId,
+      uploadedAt: new Date(),
+    };
+
+    /* DELETE OLD IMAGE */
+
+    if (oldImage?.publicId) {
+      try {
+        await deleteFromCloudinary(oldImage.publicId);
+      } catch (error) {
+        console.log("Old image delete failed:", error.message);
+      }
+    }
   }
 
   // SAVE USER
@@ -151,20 +167,29 @@ export const deleteProfileImageService = async (userId) => {
     throw new ApiError(404, "User not found");
   }
 
-  // DELETE CLOUDINARY IMAGE
-  if (!user.profileImage) {
+  /* PROFILE IMAGE EXISTS */
+
+  if (!user.profileImage?.publicId) {
     throw new ApiError(404, "Profile image not found");
   }
 
+  /* DELETE CLOUDINARY IMAGE */
+
   try {
-    await deleteFromCloudinary(user.profileImage);
+    await deleteFromCloudinary(user.profileImage.publicId);
   } catch (error) {
     console.log("Profile image delete failed:", error.message);
 
     throw new ApiError(500, "Failed to delete profile image");
   }
 
-  user.profileImage = "";
+  /* REMOVE IMAGE FROM DB */
+
+  user.profileImage = {
+    url: "",
+    publicId: "",
+    uploadedAt: null,
+  };
 
   await user.save();
 
@@ -172,7 +197,6 @@ export const deleteProfileImageService = async (userId) => {
 };
 
 // DELETE ACCOUNT
-
 export const deleteAccountService = async (userId) => {
   const user = await User.findById(userId);
 
@@ -180,45 +204,107 @@ export const deleteAccountService = async (userId) => {
     throw new ApiError(404, "User not found");
   }
 
-  // ALREADY DELETED
+  /* ALREADY DELETED */
 
   if (user.isDeleted) {
     throw new ApiError(400, "Account already deleted");
   }
 
-  // STORE TIMESTAMP
-
   const timestamp = Date.now();
 
-  // DELETE PROFILE IMAGE
+  /* DELETE PROFILE IMAGE */
 
-  if (user.profileImage) {
+  if (user.profileImage?.publicId) {
     try {
-      await deleteFromCloudinary(user.profileImage);
+      await deleteFromCloudinary(user.profileImage.publicId);
     } catch (error) {
       console.log("Profile image delete failed:", error.message);
     }
   }
 
-  // SOFT DELETE
+  /* SOFT DELETE */
 
   user.isDeleted = true;
-
   user.deletedAt = new Date();
-
   user.email = `deleted_${timestamp}_${user.email}`;
-
   user.userName = `deleted_${timestamp}`;
-
-  user.profileImage = "";
-
+  user.profileImage = {
+    url: "",
+    publicId: "",
+    uploadedAt: null,
+  };
   user.phone = "";
-
   user.googleId = null;
-
   user.password = null;
 
   await user.save();
 
   return true;
+};
+
+// APPLY OWNER
+
+export const applyOwnerService = async ({ userId, file, documentType }) => {
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  /* ALREADY OWNER */
+
+  if (user.role === ROLES.OWNER) {
+    throw new ApiError(400, "You are already an owner");
+  }
+
+  /* ALREADY APPLIED */
+
+  if (user.ownerVerificationStatus === "pending") {
+    throw new ApiError(400, "Owner verification already pending");
+  }
+
+  /* FILE REQUIRED */
+
+  if (!file) {
+    throw new ApiError(400, "Verification document is required");
+  }
+
+  /* UPLOAD DOCUMENT */
+
+  const { url, publicId } = await uploadToCloudinary(
+    file,
+    CLOUDINARY_FOLDERS.OWNER_VERIFICATION,
+  );
+
+  /* REMOVE OLD DOCS */
+
+  if (user.verificationDocuments?.length) {
+    await Promise.all(
+      user.verificationDocuments.map((doc) =>
+        deleteFromCloudinary(doc.publicId),
+      ),
+    );
+  }
+
+  /* SAVE NEW DOCUMENT */
+
+  user.verificationDocuments = [
+    {
+      documentType,
+      url,
+      publicId,
+      uploadedAt: new Date(),
+    },
+  ];
+
+  /* IMPORTANT */
+
+  user.ownerVerificationStatus = "pending";
+  user.ownerVerificationRejectedReason = "";
+
+  /* DO NOT CHANGE ROLE YET */
+  await user.save();
+  user.password = undefined;
+
+  return user;
 };

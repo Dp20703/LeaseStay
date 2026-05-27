@@ -38,7 +38,7 @@ const propertyAPI = {
     params: URLSearchParams,
   ) => {
     const response = await api.get(
-      `/properties/search/all?${params.toString()}`,
+      `/properties?${params.toString()}`,
     );
 
     return response.data;

@@ -6,6 +6,7 @@ import {
   deleteAccountService,
   deleteProfileImageService,
   updateProfileService,
+  applyOwnerService,
 } from "../services/user.service.js";
 
 // UPDATE PROFILE
@@ -68,4 +69,20 @@ export const deleteAccount = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, "Account deleted successfully"));
+});
+
+// APPLY OWNER
+
+export const applyOwner = asyncHandler(async (req, res) => {
+  const user = await applyOwnerService({
+    userId: req.user._id,
+    file: req.file,
+    documentType: req.body.documentType,
+  });
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, "Owner application submitted successfully", user),
+    );
 });

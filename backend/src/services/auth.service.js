@@ -8,10 +8,8 @@ export const registerUserService = async ({
   email,
   password,
   phone,
-  role,
   firstName,
   lastName,
-  verificationDocuments,
 }) => {
   const [existingEmail, existingUsername] = await Promise.all([
     User.findOne({ email }),
@@ -37,13 +35,7 @@ export const registerUserService = async ({
     email,
     password,
     phone,
-    role,
-    verificationDocuments,
-    ownerVerificationStatus: role === "owner" ? "pending" : "not_applied",
-    fullName: {
-      firstName,
-      lastName,
-    },
+    fullName: { firstName, lastName },
   });
 
   // REMOVE PASSWORD
@@ -53,9 +45,11 @@ export const registerUserService = async ({
 // LOGIN
 
 export const loginUserService = async (email, password) => {
-  // FIND USER
+  const normalizedEmail = email?.trim().toLowerCase();
 
-  const user = await User.findOne({ email }).select("+password");
+  const user = await User.findOne({ email: normalizedEmail }).select(
+    "+password",
+  );
 
   if (!user) {
     throw new ApiError(401, "Invalid email or password");

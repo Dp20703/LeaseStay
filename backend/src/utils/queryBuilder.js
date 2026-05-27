@@ -19,11 +19,59 @@ class QueryBuilder {
   filter() {
     const queryObj = { ...this.queryString };
 
-    const excludedFields = ["keyword", "page", "limit", "sort"];
+    const excludedFields = ["keyword", "search", "page", "limit", "sort"];
 
     excludedFields.forEach((field) => delete queryObj[field]);
 
-    this.query = this.query.find(queryObj);
+    const filterQuery = {};
+
+    if (queryObj.location) {
+      filterQuery.location = {
+        $regex: queryObj.location,
+        $options: "i",
+      };
+      delete queryObj.location;
+    }
+
+    if (queryObj.category) {
+      filterQuery.category = queryObj.category;
+      delete queryObj.category;
+    }
+
+    if (queryObj.propertyType) {
+      filterQuery.propertyType = queryObj.propertyType;
+      delete queryObj.propertyType;
+    }
+
+    if (queryObj.bedrooms) {
+      filterQuery.bedrooms = Number(queryObj.bedrooms);
+      delete queryObj.bedrooms;
+    }
+
+    if (queryObj.bathrooms) {
+      filterQuery.bathrooms = Number(queryObj.bathrooms);
+      delete queryObj.bathrooms;
+    }
+
+    if (queryObj.minPrice || queryObj.maxPrice) {
+      filterQuery.price = {};
+
+      if (queryObj.minPrice) {
+        filterQuery.price.$gte = Number(queryObj.minPrice);
+      }
+
+      if (queryObj.maxPrice) {
+        filterQuery.price.$lte = Number(queryObj.maxPrice);
+      }
+
+      delete queryObj.minPrice;
+      delete queryObj.maxPrice;
+    }
+
+    this.query = this.query.find({
+      ...queryObj,
+      ...filterQuery,
+    });
 
     return this;
   }

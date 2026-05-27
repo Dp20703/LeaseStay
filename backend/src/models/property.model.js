@@ -71,7 +71,6 @@ const propertySchema = new mongoose.Schema(
 
     thumbnail: {
       url: String,
-
       publicId: String,
     },
 
@@ -155,6 +154,14 @@ propertySchema.index({
   title: "text",
   description: "text",
   location: "text",
+});
+
+// SOFT DELETE
+
+propertySchema.pre(/^find/, function (next) {
+  this.find({ isDeleted: false });
+
+  next();
 });
 
 const Property = mongoose.model("Property", propertySchema);

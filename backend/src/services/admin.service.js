@@ -32,17 +32,15 @@ export const getPendingOwnerVerificationsService = async () => {
 };
 
 // APPROVE OWNER VERIFICATION
-export const approveOwnerVerificationService = async (userId, adminId) => {
+
+export const approveOwnerService = async (userId, adminId) => {
   const user = await User.findById(userId);
 
   if (!user) {
     throw new ApiError(404, "User not found");
   }
 
-  if (user.role !== ROLES.OWNER) {
-    throw new ApiError(400, "User is not an owner");
-  }
-
+  user.role = ROLES.OWNER;
   user.ownerVerificationStatus = "approved";
   user.ownerVerifiedAt = new Date();
   user.ownerVerifiedBy = adminId;

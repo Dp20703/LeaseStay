@@ -9,9 +9,6 @@ export const CLOUDINARY_FOLDERS = {
   
   LICENSES: "LeaseStay/licenses",
 
-  OWNER_IDENTITYIDS: "LeaseStay/identityIds",
-
-  
-
+  OWNER_VERIFICATION: "LeaseStay/identityIds",
 
 };

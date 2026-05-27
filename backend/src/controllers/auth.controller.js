@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 import { OAuth2Client } from "google-auth-library";
-import cloudinary from "../config/cloudinary.config.js";
 import generateUniqueUsername from "../utils/auth/generateUniqueUsername.js";
 import sendToken from "../utils/auth/sendToken.js";
 import { sendMail } from "../utils/mail/mail.js";
@@ -20,47 +19,43 @@ import {
 import { ROLES } from "../constants/role.constants.js";
 import uploadToCloudinary from "../utils/cloudinary/uploadToCloudinary.js";
 import { CLOUDINARY_FOLDERS } from "../constants/cloudinary.constants.js";
+import COOKIE_OPTIONS from "../constants/cookie.constants.js";
+
+const VALID_OWNER_DOCUMENT_TYPES = ["aadhaar", "passport", "driving_license"];
+
+const parseVerificationDocuments = async (files, documentType) => {
+  const documents = [];
+
+  if (!files?.verificationDocuments?.length) {
+    return documents;
+  }
+
+  if (!documentType || !VALID_OWNER_DOCUMENT_TYPES.includes(documentType)) {
+    throw new ApiError(400, "Invalid document type");
+  }
+
+  for (const file of files.verificationDocuments) {
+    const uploadedDoc = await uploadToCloudinary(
+      file.buffer,
+      CLOUDINARY_FOLDERS.OWNER_IDENTITYIDS,
+    );
+
+    documents.push({
+      type: documentType,
+      url: uploadedDoc.secure_url,
+      publicId: uploadedDoc.public_id,
+    });
+  }
+
+  return documents;
+};
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // REGISTER USER
 
 export const registerUser = asyncHandler(async (req, res) => {
-  const { userName, email, password, phone, role, fullName, documentType } =
-    req.body;
-
-  let verificationDocuments = [];
-
-  // OWNER VERIFICATION DOCUMENTS
-
-  if (role === ROLES.OWNER) {
-    const documentFile = req.files?.verificationDocument?.[0];
-
-    if (!documentFile) {
-      throw new ApiError(
-        400,
-        "Verification document required for owner registration",
-      );
-    }
-
-    if (
-      !documentType ||
-      !["aadhaar", "passport", "driving_license"].includes(documentType)
-    ) {
-      throw new ApiError(400, "Invalid document type");
-    }
-
-    const uploadedDoc = await uploadToCloudinary(
-      documentFile.buffer,
-      CLOUDINARY_FOLDERS.OWNER_IDENTITYIDS,
-    );
-
-    verificationDocuments.push({
-      type: documentType,
-      url: uploadedDoc.secure_url,
-      publicId: uploadedDoc.public_id,
-    });
-  }
+  const { userName, email, password, phone, fullName } = req.body;
 
   // CREATE USER
 
@@ -69,8 +64,6 @@ export const registerUser = asyncHandler(async (req, res) => {
     email,
     password,
     phone,
-    role,
-    verificationDocuments,
     firstName: fullName?.firstName,
     lastName: fullName?.lastName,
   });
@@ -83,18 +76,10 @@ export const registerUser = asyncHandler(async (req, res) => {
 
   // EMAIL
 
-  const template =
-    role === ROLES.OWNER
-      ? ownerWelcomeTemplate(user.fullName?.firstName)
-      : welcomeEmailTemplate(user.fullName?.firstName);
-
   await sendMail({
     to: user.email,
-    subject:
-      role === ROLES.OWNER
-        ? "Welcome Owner to LeaseStay"
-        : "Welcome to LeaseStay",
-    html: template,
+    subject: "Welcome to LeaseStay",
+    html: welcomeEmailTemplate(user.fullName?.firstName),
   });
 
   return res
@@ -124,7 +109,7 @@ export const googleAuth = asyncHandler(async (req, res) => {
   const { credential } = req.body;
 
   if (!credential) {
-    throw new APi(400, "Credential missing");
+    throw new ApiError(400, "Credential missing");
   }
 
   // VERIFY GOOGLE TOKEN
@@ -136,7 +121,6 @@ export const googleAuth = asyncHandler(async (req, res) => {
 
   const payload = ticket.getPayload();
 
-  console.log("Payload:", payload);
   const { name, sub, email, picture, email_verified } = payload;
 
   // FIND USER
@@ -200,11 +184,7 @@ export const getCurrentUser = asyncHandler(async (req, res) => {
 // LOGOUT
 
 export const logoutUser = asyncHandler(async (req, res) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-  });
+  res.clearCookie("token", COOKIE_OPTIONS);
 
   return res.status(200).json(new ApiResponse(200, "Logout successful"));
 });

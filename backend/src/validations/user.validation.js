@@ -1,4 +1,5 @@
 import { body } from "express-validator";
+import { OWNER_VERIFICATION_DOCUMENTS } from "../constants/auth.constants";
 
 // UPDATE PROFILE
 
@@ -47,4 +48,13 @@ export const changePasswordValidation = [
 export const changeEmailValidation = [
   body("newEmail").trim().isEmail().withMessage("Invalid email"),
   body("password").notEmpty().withMessage("Password required"),
+];
+
+export const applyOwnerValidation = [
+  body("documentType")
+    .trim()
+    .notEmpty()
+    .withMessage("Document type is required")
+    .isIn(OWNER_VERIFICATION_DOCUMENTS)
+    .withMessage("Invalid document type"),
 ];

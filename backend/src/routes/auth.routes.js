@@ -22,19 +22,13 @@ import {
 const router = express.Router();
 
 // REGISTER
-router.post(
-  "/register",
-  upload.fields([{ name: "verificationDocument", maxCount: 1 }]),
-  registerValidation,
-  validate,
-  registerUser,
-);
+router.post("/register", validate(registerValidation), registerUser);
 
 // LOGIN
-router.post("/login", loginValidation, validate, loginUser);
+router.post("/login", validate(loginValidation), loginUser);
 
 // GOOGLE AUTH
-router.post("/google", googleAuthValidation, validate, googleAuth);
+router.post("/google", validate(googleAuthValidation), googleAuth);
 
 // LOGOUT
 router.post("/logout", verifyJWT, logoutUser);
@@ -45,16 +39,14 @@ router.get("/me", verifyJWT, getCurrentUser);
 // FORGOT PASSWORD
 router.post(
   "/forgot-password",
-  forgotPasswordValidation,
-  validate,
+  validate(forgotPasswordValidation),
   forgotPassword,
 );
 
 // RESET PASSWORD
 router.patch(
   "/reset-password/:token",
-  resetPasswordValidation,
-  validate,
+  validate(resetPasswordValidation),
   resetPassword,
 );
 

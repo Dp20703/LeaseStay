@@ -1,11 +1,23 @@
 import { body, param, query } from "express-validator";
+import { PROPERTY_TYPES } from "../constants/property.constants";
 
-// COMMON PROPERTY ID VALIDATION
 export const propertyIdValidation = [
   param("id").isMongoId().withMessage("Invalid property id"),
 ];
 
-// CREATE PROPERTY VALIDATION
+export const propertyImageIdValidation = [
+  param("id").isMongoId().withMessage("Invalid property id"),
+  param("imageId").isMongoId().withMessage("Invalid property image id"),
+];
+
+export const availabilityValidation = [
+  body("availabilityStatus")
+    .notEmpty()
+    .withMessage("Availability status is required")
+    .isIn(["available", "occupied", "reserved"])
+    .withMessage("Invalid availability status"),
+];
+
 export const createPropertyValidation = [
   body("title")
     .trim()
@@ -36,7 +48,7 @@ export const createPropertyValidation = [
     .trim()
     .notEmpty()
     .withMessage("Property type is required")
-    .isIn(["Apartment", "Villa", "House", "Studio", "PG", "Office"])
+    .isIn(PROPERTY_TYPES)
     .withMessage("Invalid property type"),
 
   body("category")
@@ -81,18 +93,20 @@ export const createPropertyValidation = [
   body("amenities")
     .optional()
     .custom((value) => {
-      try {
-        const parsed = typeof value === "string" ? JSON.parse(value) : value;
+      const parsed = typeof value === "string" ? JSON.parse(value) : value;
 
-        return Array.isArray(parsed);
-      } catch (error) {
-        return false;
-      }
-    })
-    .withMessage("Amenities must be an array"),
+      return (
+        Array.isArray(parsed) &&
+        parsed.every((item) => typeof item === "string")
+      );
+    }),
+
+  body("documentType")
+    .optional()
+    .isIn(["sale_deed", "tax_receipt", "electricity_bill", "rental_agreement"])
+    .withMessage("Invalid document type"),
 ];
 
-// UPDATE PROPERTY VALIDATION
 export const updatePropertyValidation = [
   param("id").isMongoId().withMessage("Invalid property id"),
 
@@ -128,7 +142,7 @@ export const updatePropertyValidation = [
 
   body("propertyType")
     .optional()
-    .isIn(["Apartment", "Villa", "House", "Studio", "PG", "Office"])
+    .isIn(PROPERTY_TYPES)
     .withMessage("Invalid property type"),
 
   body("category")
@@ -173,9 +187,13 @@ export const updatePropertyValidation = [
     .optional()
     .isIn(["available", "occupied", "reserved"])
     .withMessage("Invalid availability status"),
+
+  body("documentType")
+    .optional()
+    .isIn(["sale_deed", "tax_receipt", "electricity_bill", "rental_agreement"])
+    .withMessage("Invalid document type"),
 ];
 
-// SEARCH PROPERTY VALIDATION
 export const searchPropertyValidation = [
   query("page")
     .optional()
@@ -206,4 +224,14 @@ export const searchPropertyValidation = [
     .optional()
     .isNumeric()
     .withMessage("Bathrooms must be numeric"),
+
+  query("category")
+    .optional()
+    .isIn(["Rent", "Sale"])
+    .withMessage("Invalid category"),
+
+  query("propertyType")
+    .optional()
+    .isIn(PROPERTY_TYPES)
+    .withMessage("Invalid property type"),
 ];
