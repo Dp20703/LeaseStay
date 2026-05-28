@@ -84,16 +84,19 @@ const propertySchema = new mongoose.Schema(
       {
         type: {
           type: String,
-          enum: [
-            "sale_deed",
-            "tax_receipt",
-            "electricity_bill",
-            "rental_agreement",
-          ],
+          enum: PROPERTY_DOCUMENTS,
         },
 
-        url: String,
-        publicId: String,
+        url: {
+          type: String,
+          select: false,
+        },
+
+        publicId: {
+          type: String,
+          select: false,
+        },
+
         uploadedAt: {
           type: Date,
           default: Date.now,
@@ -156,8 +159,16 @@ const propertySchema = new mongoose.Schema(
     ],
 
     coordinates: {
-      type: [Number],
-      index: "2dsphere",
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+
+      coordinates: {
+        type: [Number], // [longitude, latitude]
+        default: [0, 0],
+      },
     },
   },
 
@@ -174,6 +185,12 @@ propertySchema.index({
   title: "text",
   description: "text",
   location: "text",
+});
+propertySchema.index({
+  coordinates: "2dsphere",
+});
+propertySchema.index({
+  isFeatured: 1,
 });
 
 // SOFT DELETE

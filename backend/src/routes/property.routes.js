@@ -28,7 +28,6 @@ import {
   createPropertyValidation,
   updatePropertyValidation,
   propertyIdValidation,
-  propertyImageIdValidation,
   availabilityValidation,
   searchPropertyValidation,
 } from "../validations/property.validation.js";
@@ -42,7 +41,7 @@ router.get("/recommended", getRecommendedProperties);
 
 // Owner-only routes for managing properties.
 router.get(
-  "/owner/properties",
+  "/me/properties",
   verifyJWT,
   authorizeRoles(ROLES.OWNER),
   getOwnerProperties,
@@ -66,11 +65,11 @@ router.patch(
   "/:id",
   verifyJWT,
   authorizeRoles(ROLES.OWNER, ROLES.ADMIN),
+  validate(updatePropertyValidation),
   upload.fields([
     { name: "images", maxCount: 10 },
     { name: "propertyDocuments", maxCount: 5 },
   ]),
-  validate(updatePropertyValidation),
   updateProperty,
 );
 
@@ -97,7 +96,7 @@ router.delete(
   "/:id/images/:imageId",
   verifyJWT,
   authorizeRoles(ROLES.OWNER),
-  validate(propertyImageIdValidation),
+  validate(propertyIdValidation),
   deletePropertyImage,
 );
 
@@ -109,9 +108,6 @@ router.delete(
   validate(propertyIdValidation),
   deleteProperty,
 );
-
-// Fetch a single property by slug.
-router.get("/:slug", getSingleProperty);
 
 /* ─────────────────────────────────────────────
    PROPERTY SAVE / WISHLIST
@@ -160,3 +156,9 @@ router.get("/:id/related", getRelatedProperties);
 
 // CONTACT PROPERTY OWNER
 router.post("/:id/contact-owner", verifyJWT, contactPropertyOwner);
+
+/* ─────────────────────────────────────────────
+   SINGLE PROPERTY
+───────────────────────────────────────────── */
+
+router.get("/:slug", getSingleProperty);

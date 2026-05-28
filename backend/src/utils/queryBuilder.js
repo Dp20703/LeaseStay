@@ -6,6 +6,9 @@ class QueryBuilder {
 
   search() {
     if (this.queryString.keyword) {
+      this.mongooseQuery = this.mongooseQuery.find({
+        $text: { $search: this.queryString.keyword },
+      });
       const keyword = this.queryString.keyword;
 
       this.mongooseQuery = this.mongooseQuery.find({

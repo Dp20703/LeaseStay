@@ -142,7 +142,7 @@ export const getSinglePropertyService = async (slug) => {
 
 // Fetch all properties owned by a specific user.
 export const getOwnerPropertiesService = async (ownerId) => {
-  return await Property.find({ owner: ownerId })
+  return await Property.find({ owner: ownerId, isDeleted: false })
     .populate("owner", OWNER_POPULATE)
     .sort({ createdAt: -1 });
 };
@@ -602,7 +602,7 @@ export const contactPropertyOwnerService = async ({
       <p>Hello ${property.owner.fullName?.firstName || property.owner.userName},</p>
       <p>${senderName} is interested in your property <strong>${property.title}</strong>.</p>
       <p><strong>Message:</strong> ${message || "No message provided"}</p>
-      <p>Property link: ${process.env.FRONTEND_URL || "http://localhost:3000"}/properties/${property.slug}</p>
+      <p>Property link: ${process.env.FRONTEND_URL || "http://localhost:5173"}/properties/${property.slug}</p>
     </div>
   `;
 

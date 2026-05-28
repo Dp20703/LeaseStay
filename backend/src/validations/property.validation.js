@@ -23,6 +23,7 @@ export const availabilityValidation = [
 export const createPropertyValidation = [
   body("title")
     .trim()
+    .escape()
     .notEmpty()
     .withMessage("Title is required")
     .isLength({ min: 5, max: 120 })
@@ -30,6 +31,7 @@ export const createPropertyValidation = [
 
   body("description")
     .trim()
+    .escape()
     .notEmpty()
     .withMessage("Description is required")
     .isLength({ min: 20, max: 2000 })
@@ -37,6 +39,7 @@ export const createPropertyValidation = [
 
   body("location")
     .trim()
+    .escape()
     .notEmpty()
     .withMessage("Location is required")
     .isLength({ min: 10, max: 120 })
@@ -110,10 +113,11 @@ export const createPropertyValidation = [
 
       return (
         Array.isArray(parsed) &&
-          parsed.every((item) => typeof item === "string"),
+        parsed.every((item) => typeof item === "string") &&
         parsed.length <= 20
       );
-    }),
+    })
+    .withMessage("Invalid amenities"),
 
   body("documentType")
     .optional()
