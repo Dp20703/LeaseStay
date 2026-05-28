@@ -6,10 +6,31 @@ class QueryBuilder {
 
   search() {
     if (this.queryString.keyword) {
+      const keyword = this.queryString.keyword;
+
       this.mongooseQuery = this.mongooseQuery.find({
-        $text: {
-          $search: this.queryString.keyword,
-        },
+        $or: [
+          {
+            title: {
+              $regex: keyword,
+              $options: "i",
+            },
+          },
+
+          {
+            description: {
+              $regex: keyword,
+              $options: "i",
+            },
+          },
+
+          {
+            location: {
+              $regex: keyword,
+              $options: "i",
+            },
+          },
+        ],
       });
     }
 
@@ -102,10 +123,7 @@ class QueryBuilder {
       delete queryObj.status;
     }
 
-    this.mongooseQuery = this.mongooseQuery.find({
-      ...queryObj,
-      ...filterQuery,
-    });
+    this.mongooseQuery = this.mongooseQuery.find(filterQuery);
 
     return this;
   }

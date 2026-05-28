@@ -3,6 +3,9 @@ import Property from "../models/property.model.js";
 import ApiError from "../utils/ApiError.js";
 import { ROLES } from "../constants/role.constants.js";
 
+// Populate owner
+const OWNER_POPULATE = "userName fullName profileImage";
+
 // FETCH ALL USERS
 export const fetchAllUsersService = async () => {
   return await User.find({ role: ROLES.USER })
@@ -21,7 +24,7 @@ export const fetchAllOwnersService = async () => {
 export const fetchAllPropertiesService = async () => {
   return await Property.find()
     .lean()
-    .populate("owner", "userName email fullName profileImage")
+    .populate("owner", OWNER_POPULATE)
     .sort({ createdAt: -1 });
 };
 
@@ -80,7 +83,7 @@ export const rejectOwnerVerificationService = async (
 // GET PENDING PROPERTY VERIFICATIONS
 export const getPendingPropertyVerificationsService = async () => {
   return await Property.find({ status: "Pending" })
-    .populate("owner", "userName email fullName profileImage")
+    .populate("owner", OWNER_POPULATE)
     .sort({ updatedAt: -1 });
 };
 
@@ -101,7 +104,7 @@ export const approvePropertyVerificationService = async (
 
   await property.save();
 
-  return property.populate("owner", "userName email fullName profileImage");
+  return property.populate("owner", OWNER_POPULATE);
 };
 
 // REJECT PROPERTY VERIFICATION
@@ -123,5 +126,5 @@ export const rejectPropertyVerificationService = async (
 
   await property.save();
 
-  return property.populate("owner", "userName email fullName profileImage");
+  return property.populate("owner", OWNER_POPULATE);
 };

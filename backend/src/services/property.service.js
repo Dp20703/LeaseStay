@@ -9,6 +9,10 @@ import uploadToCloudinary from "../helpers/cloudinary/uploadToCloudinary.js";
 import QueryBuilder from "../utils/queryBuilder.js";
 import { generateSlug } from "../helpers/slug/generateSlug.js";
 
+// Populate owner
+const OWNER_POPULATE = "userName fullName profileImage";
+
+// Normalize amenities input into a consistent array format.
 const parseAmenities = (value) => {
   if (!value) return [];
   if (Array.isArray(value)) return value;
@@ -27,6 +31,7 @@ const parseAmenities = (value) => {
   return [];
 };
 
+// Create a new property listing and upload related files.
 export const createPropertyService = async ({ body, files, ownerId }) => {
   const user = await User.findById(ownerId);
 
@@ -57,7 +62,7 @@ export const createPropertyService = async ({ body, files, ownerId }) => {
       images.push({ url, publicId });
     }
 
-    thumbnail = images[0].url;
+    thumbnail = images[0];
   }
 
   const propertyDocuments = [];
@@ -87,11 +92,16 @@ export const createPropertyService = async ({ body, files, ownerId }) => {
     owner: ownerId,
   });
 
+  await property.populate("owner", OWNER_POPULATE);
+
+  return property;
+
   return property;
 };
 
+// Fetch approved properties with filtering, search, sorting, and pagination.
 export const getAllPropertiesService = async (queryString) => {
-  const resultPerPage = 10;
+  const resultPerPage = Number(queryString.limit) || 10;
 
   const totalProperties = await Property.countDocuments({
     status: "Approved",
@@ -120,24 +130,25 @@ export const getAllPropertiesService = async (queryString) => {
   };
 };
 
-export const searchPropertiesService = getAllPropertiesService;
-
+// Fetch a single approved property by slug.
 export const getSinglePropertyService = async (slug) => {
   return await Property.findOne({
     slug,
     isDeleted: false,
     status: PROPERTY_STATUS.APPROVED,
   })
-    .populate("owner", "userName fullName profileImage")
+    .populate("owner", OWNER_POPULATE)
     .lean();
 };
 
+// Fetch all properties owned by a specific user.
 export const getOwnerPropertiesService = async (ownerId) => {
   return await Property.find({ owner: ownerId })
-    .populate("owner", "userName email fullName profileImage")
+    .populate("owner", OWNER_POPULATE)
     .sort({ createdAt: -1 });
 };
 
+// Fetch featured properties for homepage or curated sections.
 export const getFeaturedPropertiesService = async ({ limit = 6 } = {}) => {
   return await Property.find({
     status: PROPERTY_STATUS.APPROVED,
@@ -148,6 +159,7 @@ export const getFeaturedPropertiesService = async ({ limit = 6 } = {}) => {
     .lean();
 };
 
+// Fetch recommended available properties for users.
 export const getRecommendedPropertiesService = async ({ limit = 6 } = {}) => {
   return await Property.find({
     status: PROPERTY_STATUS.APPROVED,
@@ -159,6 +171,7 @@ export const getRecommendedPropertiesService = async ({ limit = 6 } = {}) => {
     .lean();
 };
 
+// Update a property's details and upload additional media if provided.
 export const updatePropertyService = async ({
   propertyId,
   body,
@@ -223,9 +236,7 @@ export const updatePropertyService = async ({
     "bathrooms",
     "amenities",
     "propertyType",
-    "status",
     "availabilityStatus",
-    "verificationRejectedReason",
   ];
 
   for (const field of updatableFields) {
@@ -240,10 +251,11 @@ export const updatePropertyService = async ({
 
   await property.save();
 
-  await property.populate("owner", "userName email fullName profileImage");
+  await property.populate("owner", OWNER_POPULATE);
   return property;
 };
 
+// Change the availability status of a property.
 export const changePropertyAvailabilityService = async ({
   propertyId,
   availabilityStatus,
@@ -262,10 +274,11 @@ export const changePropertyAvailabilityService = async ({
   property.availabilityStatus = availabilityStatus;
   await property.save();
 
-  await property.populate("owner", "userName email fullName profileImage");
+  await property.populate("owner", OWNER_POPULATE);
   return property;
 };
 
+// Add new images to an existing property listing.
 export const addPropertyImagesService = async ({ propertyId, files, user }) => {
   const property = await Property.findById(propertyId);
 
@@ -296,10 +309,11 @@ export const addPropertyImagesService = async ({ propertyId, files, user }) => {
 
   await property.save();
 
-  await property.populate("owner", "userName email fullName profileImage");
+  await property.populate("owner", OWNER_POPULATE);
   return property;
 };
 
+// Remove a specific image from a property and clean up cloud storage.
 export const deletePropertyImageService = async ({
   propertyId,
   imageId,
@@ -323,7 +337,9 @@ export const deletePropertyImageService = async ({
 
   await deleteFromCloudinary(image.publicId);
 
-  image.remove();
+  property.images = property.images.filter(
+    (img) => img._id.toString() !== imageId,
+  );
 
   if (property.thumbnail?.publicId === image.publicId) {
     property.thumbnail = property.images[0] || {};
@@ -331,10 +347,11 @@ export const deletePropertyImageService = async ({
 
   await property.save();
 
-  await property.populate("owner", "userName email fullName profileImage");
+  await property.populate("owner", OWNER_POPULATE);
   return property;
 };
 
+// Soft-delete a property listing and remove associated media.
 export const deletePropertyService = async ({ propertyId, user }) => {
   const property = await Property.findById(propertyId);
 

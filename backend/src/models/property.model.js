@@ -139,6 +139,26 @@ const propertySchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+
+    isFeatured: {
+      type: Boolean,
+      default: false,
+    },
+    views: {
+      type: Number,
+      default: 0,
+    },
+    savedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+
+    coordinates: {
+      type: [Number],
+      index: "2dsphere",
+    },
   },
 
   {

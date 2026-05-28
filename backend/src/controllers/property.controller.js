@@ -15,6 +15,7 @@ import {
   updatePropertyService,
 } from "../services/property.service.js";
 
+// Create a new property listing.
 export const createProperty = asyncHandler(async (req, res) => {
   const property = await createPropertyService({
     body: req.body,
@@ -27,6 +28,7 @@ export const createProperty = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, "Property created successfully", property));
 });
 
+// Fetch all approved properties with filtering and pagination.
 export const getAllProperties = asyncHandler(async (req, res) => {
   const result = await getAllPropertiesService(req.query);
 
@@ -35,6 +37,7 @@ export const getAllProperties = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Properties fetched successfully", result));
 });
 
+// Fetch a single property by slug.
 export const getSingleProperty = asyncHandler(async (req, res) => {
   const { slug } = req.params;
 
@@ -49,6 +52,7 @@ export const getSingleProperty = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Property fetched successfully", property));
 });
 
+// Fetch all properties owned by the authenticated user.
 export const getOwnerProperties = asyncHandler(async (req, res) => {
   const properties = await getOwnerPropertiesService(req.user._id);
 
@@ -59,6 +63,7 @@ export const getOwnerProperties = asyncHandler(async (req, res) => {
     );
 });
 
+// Update an existing property listing.
 export const updateProperty = asyncHandler(async (req, res) => {
   const property = await updatePropertyService({
     propertyId: req.params.id,
@@ -72,6 +77,7 @@ export const updateProperty = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Property updated successfully", property));
 });
 
+// Change a property's availability status.
 export const changeAvailabilityStatus = asyncHandler(async (req, res) => {
   const property = await changePropertyAvailabilityService({
     propertyId: req.params.id,
@@ -84,6 +90,7 @@ export const changeAvailabilityStatus = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Property availability updated", property));
 });
 
+// Add images to an existing property.
 export const addPropertyImages = asyncHandler(async (req, res) => {
   const property = await addPropertyImagesService({
     propertyId: req.params.id,
@@ -96,6 +103,7 @@ export const addPropertyImages = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Property images added successfully", property));
 });
 
+// Delete a property image.
 export const deletePropertyImage = asyncHandler(async (req, res) => {
   const property = await deletePropertyImageService({
     propertyId: req.params.id,
@@ -110,6 +118,7 @@ export const deletePropertyImage = asyncHandler(async (req, res) => {
     );
 });
 
+// Fetch featured properties.
 export const getFeaturedProperties = asyncHandler(async (req, res) => {
   const properties = await getFeaturedPropertiesService(req.query);
 
@@ -124,6 +133,7 @@ export const getFeaturedProperties = asyncHandler(async (req, res) => {
     );
 });
 
+// Fetch recommended properties.
 export const getRecommendedProperties = asyncHandler(async (req, res) => {
   const properties = await getRecommendedPropertiesService(req.query);
 
@@ -138,6 +148,7 @@ export const getRecommendedProperties = asyncHandler(async (req, res) => {
     );
 });
 
+// Delete a property listing.
 export const deleteProperty = asyncHandler(async (req, res) => {
   const property = await deletePropertyService({
     propertyId: req.params.id,

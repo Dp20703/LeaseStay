@@ -29,21 +29,20 @@ import {
 
 const router = express.Router();
 
-/* PUBLIC */
-
+// Public property routes available to all users.
 router.get("/", validate(searchPropertyValidation), getAllProperties);
 router.get("/featured", getFeaturedProperties);
 router.get("/recommended", getRecommendedProperties);
 
-/* OWNER */
-
+// Owner-only routes for managing properties.
 router.get(
-  "/owner/me",
+  "/owner/properties",
   verifyJWT,
   authorizeRoles(ROLES.OWNER),
   getOwnerProperties,
 );
 
+// Create a new property listing.
 router.post(
   "/",
   verifyJWT,
@@ -56,6 +55,7 @@ router.post(
   createProperty,
 );
 
+// Update existing property details.
 router.patch(
   "/:id",
   verifyJWT,
@@ -68,6 +68,7 @@ router.patch(
   updateProperty,
 );
 
+// Update property availability status.
 router.patch(
   "/:id/availability",
   verifyJWT,
@@ -76,6 +77,7 @@ router.patch(
   changeAvailabilityStatus,
 );
 
+// Manage property images.
 router.patch(
   "/:id/images",
   verifyJWT,
@@ -93,6 +95,7 @@ router.delete(
   deletePropertyImage,
 );
 
+// Delete a property listing.
 router.delete(
   "/:id",
   verifyJWT,
@@ -101,6 +104,7 @@ router.delete(
   deleteProperty,
 );
 
+// Fetch a single property by slug.
 router.get("/:slug", getSingleProperty);
 
 export default router;
