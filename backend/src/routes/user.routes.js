@@ -7,6 +7,7 @@ import {
   changePassword,
   changeEmail,
   deleteProfileImage,
+  getSavedProperties,
   deleteAccount,
   applyOwner,
 } from "../controllers/user.controller.js";
@@ -63,5 +64,19 @@ router.post(
   validate(applyOwnerValidation),
   applyOwner,
 );
+
+/* ─────────────────────────────────────────────
+   SAVED PROPERTIES
+───────────────────────────────────────────── */
+
+// GET SAVED PROPERTIES
+router.get("/saved-properties", verifyJWT, getSavedProperties);
+
+/* ─────────────────────────────────────────────
+   ACCOUNT
+───────────────────────────────────────────── */
+
+// GET USER PROFILE
+// router.get("/me", verifyJWT, getMyProfile);
 
 export default router;

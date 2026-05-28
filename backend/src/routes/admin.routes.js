@@ -12,6 +12,13 @@ import {
   getPendingPropertyVerifications,
   approvePropertyVerification,
   rejectPropertyVerification,
+  getRejectedProperties,
+  getApprovedProperties,
+  hideProperty,
+  restoreProperty,
+  blockUser,
+  unblockUser,
+  getDashboardStats,
 } from "../controllers/admin.controller.js";
 import {
   approveOwnerVerificationValidation,
@@ -87,6 +94,74 @@ router.patch(
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
   rejectPropertyVerification,
+);
+
+/* ─────────────────────────────────────────────
+   PROPERTY MODERATION
+───────────────────────────────────────────── */
+
+// GET REJECTED PROPERTIES
+router.get(
+  "/property-verifications/rejected",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  getRejectedProperties,
+);
+
+// GET APPROVED PROPERTIES
+router.get(
+  "/property-verifications/approved",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  getApprovedProperties,
+);
+
+// HIDE PROPERTY
+router.patch(
+  "/property-verifications/:propertyId/hide",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  hideProperty,
+);
+
+// RESTORE PROPERTY
+router.patch(
+  "/property-verifications/:propertyId/restore",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  restoreProperty,
+);
+
+/* ─────────────────────────────────────────────
+   USER MANAGEMENT
+───────────────────────────────────────────── */
+
+// BLOCK USER
+router.patch(
+  "/users/:userId/block",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  blockUser,
+);
+
+// UNBLOCK USER
+router.patch(
+  "/users/:userId/unblock",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  unblockUser,
+);
+
+/* ─────────────────────────────────────────────
+   DASHBOARD
+───────────────────────────────────────────── */
+
+// ADMIN DASHBOARD STATS
+router.get(
+  "/dashboard/stats",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  getDashboardStats,
 );
 
 export default router;

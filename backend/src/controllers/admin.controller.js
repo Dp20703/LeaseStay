@@ -11,6 +11,13 @@ import {
   getPendingPropertyVerificationsService,
   approvePropertyVerificationService,
   rejectPropertyVerificationService,
+  getRejectedPropertiesService,
+  getApprovedPropertiesService,
+  hidePropertyService,
+  restorePropertyService,
+  blockUserService,
+  unblockUserService,
+  getDashboardStatsService,
 } from "../services/admin.service.js";
 
 // FETCH ALL USERS
@@ -159,4 +166,103 @@ export const rejectPropertyVerification = asyncHandler(async (req, res) => {
         property,
       ),
     );
+});
+
+// GET REJECTED PROPERTIES
+export const getRejectedProperties = asyncHandler(async (req, res) => {
+  const properties = await getRejectedPropertiesService();
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        "Rejected properties fetched successfully",
+        properties,
+      ),
+    );
+});
+
+// GET APPROVED PROPERTIES
+export const getApprovedProperties = asyncHandler(async (req, res) => {
+  const properties = await getApprovedPropertiesService();
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        "Approved properties fetched successfully",
+        properties,
+      ),
+    );
+});
+
+// HIDE PROPERTY
+export const hideProperty = asyncHandler(async (req, res) => {
+  const { propertyId } = req.params;
+
+  if (!propertyId) {
+    throw new ApiError(400, "Property ID is required");
+  }
+
+  const property = await hidePropertyService(propertyId);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Property hidden successfully", property));
+});
+
+// RESTORE PROPERTY
+export const restoreProperty = asyncHandler(async (req, res) => {
+  const { propertyId } = req.params;
+
+  if (!propertyId) {
+    throw new ApiError(400, "Property ID is required");
+  }
+
+  const property = await restorePropertyService(propertyId);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Property restored successfully", property));
+});
+
+// BLOCK USER
+export const blockUser = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  if (!userId) {
+    throw new ApiError(400, "User ID is required");
+  }
+
+  const user = await blockUserService(userId);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "User blocked successfully", user));
+});
+
+// UNBLOCK USER
+export const unblockUser = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  if (!userId) {
+    throw new ApiError(400, "User ID is required");
+  }
+
+  const user = await unblockUserService(userId);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "User unblocked successfully", user));
+});
+
+// ADMIN DASHBOARD STATS
+export const getDashboardStats = asyncHandler(async (req, res) => {
+  const stats = await getDashboardStatsService();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Dashboard stats fetched successfully", stats));
 });

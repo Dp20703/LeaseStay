@@ -196,6 +196,24 @@ export const deleteProfileImageService = async (userId) => {
   return await User.findById(user._id).select("-password");
 };
 
+// GET SAVED PROPERTIES
+
+export const getSavedPropertiesService = async (userId) => {
+  const user = await User.findById(userId).populate({
+    path: "savedProperties",
+    populate: {
+      path: "owner",
+      select: "userName fullName profileImage",
+    },
+  });
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  return user.savedProperties;
+};
+
 // DELETE ACCOUNT
 export const deleteAccountService = async (userId) => {
   const user = await User.findById(userId);

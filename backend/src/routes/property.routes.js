@@ -16,6 +16,12 @@ import {
   changeAvailabilityStatus,
   addPropertyImages,
   deletePropertyImage,
+  saveProperty,
+  unsaveProperty,
+  setPropertyThumbnail,
+  deletePropertyDocument,
+  getRelatedProperties,
+  contactPropertyOwner,
 } from "../controllers/property.controller.js";
 
 import {
@@ -107,4 +113,50 @@ router.delete(
 // Fetch a single property by slug.
 router.get("/:slug", getSingleProperty);
 
-export default router;
+/* ─────────────────────────────────────────────
+   PROPERTY SAVE / WISHLIST
+───────────────────────────────────────────── */
+
+// SAVE PROPERTY
+router.post("/:id/save", verifyJWT, saveProperty);
+
+// REMOVE SAVED PROPERTY
+router.delete("/:id/save", verifyJWT, unsaveProperty);
+
+/* ─────────────────────────────────────────────
+   PROPERTY THUMBNAIL
+───────────────────────────────────────────── */
+
+// SET PROPERTY THUMBNAIL
+router.patch(
+  "/:id/thumbnail/:imageId",
+  verifyJWT,
+  authorizeRoles(ROLES.OWNER, ROLES.ADMIN),
+  setPropertyThumbnail,
+);
+
+/* ─────────────────────────────────────────────
+   PROPERTY DOCUMENTS
+───────────────────────────────────────────── */
+
+// DELETE PROPERTY DOCUMENT
+router.delete(
+  "/:id/documents/:documentId",
+  verifyJWT,
+  authorizeRoles(ROLES.OWNER, ROLES.ADMIN),
+  deletePropertyDocument,
+);
+
+/* ─────────────────────────────────────────────
+   RELATED PROPERTIES
+───────────────────────────────────────────── */
+
+// GET RELATED PROPERTIES
+router.get("/:id/related", getRelatedProperties);
+
+/* ─────────────────────────────────────────────
+   PROPERTY CONTACT
+───────────────────────────────────────────── */
+
+// CONTACT PROPERTY OWNER
+router.post("/:id/contact-owner", verifyJWT, contactPropertyOwner);

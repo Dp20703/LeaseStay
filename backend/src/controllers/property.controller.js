@@ -4,14 +4,20 @@ import ApiResponse from "../utils/ApiResponse.js";
 import {
   addPropertyImagesService,
   changePropertyAvailabilityService,
+  contactPropertyOwnerService,
   createPropertyService,
+  deletePropertyDocumentService,
   deletePropertyImageService,
   deletePropertyService,
   getAllPropertiesService,
   getFeaturedPropertiesService,
   getOwnerPropertiesService,
   getRecommendedPropertiesService,
+  getRelatedPropertiesService,
   getSinglePropertyService,
+  savePropertyService,
+  setPropertyThumbnailService,
+  unsavePropertyService,
   updatePropertyService,
 } from "../services/property.service.js";
 
@@ -116,6 +122,80 @@ export const deletePropertyImage = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(200, "Property image deleted successfully", property),
     );
+});
+
+// Save a property for the authenticated user.
+export const saveProperty = asyncHandler(async (req, res) => {
+  const user = await savePropertyService({
+    propertyId: req.params.id,
+    userId: req.user._id,
+  });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Property saved successfully", user));
+});
+
+// Remove a saved property for the authenticated user.
+export const unsaveProperty = asyncHandler(async (req, res) => {
+  const user = await unsavePropertyService({
+    propertyId: req.params.id,
+    userId: req.user._id,
+  });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Property removed from saved list", user));
+});
+
+// Set a property image as the thumbnail.
+export const setPropertyThumbnail = asyncHandler(async (req, res) => {
+  const property = await setPropertyThumbnailService({
+    propertyId: req.params.id,
+    imageId: req.params.imageId,
+    user: req.user,
+  });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Property thumbnail updated", property));
+});
+
+// Delete a property document.
+export const deletePropertyDocument = asyncHandler(async (req, res) => {
+  const property = await deletePropertyDocumentService({
+    propertyId: req.params.id,
+    documentId: req.params.documentId,
+    user: req.user,
+  });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Property document deleted", property));
+});
+
+// Fetch related properties.
+export const getRelatedProperties = asyncHandler(async (req, res) => {
+  const properties = await getRelatedPropertiesService({
+    propertyId: req.params.id,
+  });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Related properties fetched", properties));
+});
+
+// Contact the property owner.
+export const contactPropertyOwner = asyncHandler(async (req, res) => {
+  const result = await contactPropertyOwnerService({
+    propertyId: req.params.id,
+    userId: req.user._id,
+    message: req.body.message,
+  });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Owner contacted successfully", result));
 });
 
 // Fetch featured properties.

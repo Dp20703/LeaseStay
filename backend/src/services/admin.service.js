@@ -128,3 +128,107 @@ export const rejectPropertyVerificationService = async (
 
   return property.populate("owner", OWNER_POPULATE);
 };
+
+// GET REJECTED PROPERTIES
+export const getRejectedPropertiesService = async () => {
+  return await Property.find({ status: "Rejected" })
+    .populate("owner", OWNER_POPULATE)
+    .sort({ updatedAt: -1 });
+};
+
+// GET APPROVED PROPERTIES
+export const getApprovedPropertiesService = async () => {
+  return await Property.find({ status: "Approved" })
+    .populate("owner", OWNER_POPULATE)
+    .sort({ updatedAt: -1 });
+};
+
+// HIDE PROPERTY
+export const hidePropertyService = async (propertyId) => {
+  const property = await Property.findById(propertyId);
+
+  if (!property) {
+    throw new ApiError(404, "Property not found");
+  }
+
+  property.status = "Hidden";
+  await property.save();
+
+  return await property.populate("owner", OWNER_POPULATE);
+};
+
+// RESTORE PROPERTY
+export const restorePropertyService = async (propertyId) => {
+  const property = await Property.findById(propertyId);
+
+  if (!property) {
+    throw new ApiError(404, "Property not found");
+  }
+
+  property.status = "Approved";
+  await property.save();
+
+  return await property.populate("owner", OWNER_POPULATE);
+};
+
+// BLOCK USER
+export const blockUserService = async (userId) => {
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  user.isBlocked = true;
+  await user.save();
+
+  return await User.findById(userId).select("-password");
+};
+
+// UNBLOCK USER
+export const unblockUserService = async (userId) => {
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  user.isBlocked = false;
+  await user.save();
+
+  return await User.findById(userId).select("-password");
+};
+
+// ADMIN DASHBOARD STATS
+export const getDashboardStatsService = async () => {
+  const [
+    totalUsers,
+    totalOwners,
+    totalProperties,
+    pendingOwnerVerifications,
+    pendingPropertyVerifications,
+    approvedProperties,
+    rejectedProperties,
+    hiddenProperties,
+  ] = await Promise.all([
+    User.countDocuments({ role: ROLES.USER, isDeleted: false }),
+    User.countDocuments({ role: ROLES.OWNER, isDeleted: false }),
+    Property.countDocuments({ isDeleted: false }),
+    User.countDocuments({ ownerVerificationStatus: "pending" }),
+    Property.countDocuments({ status: "Pending" }),
+    Property.countDocuments({ status: "Approved" }),
+    Property.countDocuments({ status: "Rejected" }),
+    Property.countDocuments({ status: "Hidden" }),
+  ]);
+
+  return {
+    totalUsers,
+    totalOwners,
+    totalProperties,
+    pendingOwnerVerifications,
+    pendingPropertyVerifications,
+    approvedProperties,
+    rejectedProperties,
+    hiddenProperties,
+  };
+};

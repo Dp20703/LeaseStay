@@ -6,6 +6,7 @@ import Property from "../models/property.model.js";
 import ApiError from "../utils/ApiError.js";
 import deleteFromCloudinary from "../helpers/cloudinary/deleteFromCloudinary.js";
 import uploadToCloudinary from "../helpers/cloudinary/uploadToCloudinary.js";
+import { sendMail } from "../helpers/mail/sendMail.js";
 import QueryBuilder from "../utils/queryBuilder.js";
 import { generateSlug } from "../helpers/slug/generateSlug.js";
 
@@ -95,8 +96,6 @@ export const createPropertyService = async ({ body, files, ownerId }) => {
   await property.populate("owner", OWNER_POPULATE);
 
   return property;
-
-  return property;
 };
 
 // Fetch approved properties with filtering, search, sorting, and pagination.
@@ -155,7 +154,7 @@ export const getFeaturedPropertiesService = async ({ limit = 6 } = {}) => {
   })
     .sort({ createdAt: -1 })
     .limit(Number(limit))
-    .populate("owner", "userName fullName profileImage")
+    .populate("owner", OWNER_POPULATE)
     .lean();
 };
 
@@ -167,7 +166,7 @@ export const getRecommendedPropertiesService = async ({ limit = 6 } = {}) => {
   })
     .sort({ createdAt: -1 })
     .limit(Number(limit))
-    .populate("owner", "userName fullName profileImage")
+    .populate("owner", OWNER_POPULATE)
     .lean();
 };
 
@@ -383,4 +382,239 @@ export const deletePropertyService = async ({ propertyId, user }) => {
   await property.save();
 
   return property;
+};
+
+// Save a property for the authenticated user.
+export const savePropertyService = async ({ propertyId, userId }) => {
+  const [user, property] = await Promise.all([
+    User.findById(userId),
+    Property.findById(propertyId),
+  ]);
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  if (!property) {
+    throw new ApiError(404, "Property not found");
+  }
+
+  const hasSavedProperty = user.savedProperties.some(
+    (savedPropertyId) => savedPropertyId.toString() === propertyId,
+  );
+
+  if (!hasSavedProperty) {
+    user.savedProperties.push(propertyId);
+  }
+
+  const hasSavedByUser = property.savedBy.some(
+    (savedByUserId) => savedByUserId.toString() === userId,
+  );
+
+  if (!hasSavedByUser) {
+    property.savedBy.push(userId);
+  }
+
+  await Promise.all([user.save(), property.save()]);
+
+  return await User.findById(userId)
+    .populate({
+      path: "savedProperties",
+      populate: {
+        path: "owner",
+        select: "userName fullName profileImage",
+      },
+    })
+    .select("-password");
+};
+
+// Remove a saved property for the authenticated user.
+export const unsavePropertyService = async ({ propertyId, userId }) => {
+  const [user, property] = await Promise.all([
+    User.findById(userId),
+    Property.findById(propertyId),
+  ]);
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  if (!property) {
+    throw new ApiError(404, "Property not found");
+  }
+
+  user.savedProperties = user.savedProperties.filter(
+    (savedPropertyId) => savedPropertyId.toString() !== propertyId,
+  );
+
+  property.savedBy = property.savedBy.filter(
+    (savedByUserId) => savedByUserId.toString() !== userId,
+  );
+
+  await Promise.all([user.save(), property.save()]);
+
+  return await User.findById(userId)
+    .populate({
+      path: "savedProperties",
+      populate: {
+        path: "owner",
+        select: "userName fullName profileImage",
+      },
+    })
+    .select("-password");
+};
+
+// Set a property image as the thumbnail.
+export const setPropertyThumbnailService = async ({
+  propertyId,
+  imageId,
+  user,
+}) => {
+  const property = await Property.findById(propertyId);
+
+  if (!property) {
+    throw new ApiError(404, "Property not found");
+  }
+
+  if (!property.owner?.equals(user._id) && user.role !== ROLES.ADMIN) {
+    throw new ApiError(403, "Unauthorized access");
+  }
+
+  const image = property.images.find(
+    (propertyImage) => propertyImage._id.toString() === imageId,
+  );
+
+  if (!image) {
+    throw new ApiError(404, "Property image not found");
+  }
+
+  property.thumbnail = {
+    url: image.url,
+    publicId: image.publicId,
+  };
+
+  await property.save();
+  await property.populate("owner", OWNER_POPULATE);
+
+  return property;
+};
+
+// Delete a property document and remove it from storage.
+export const deletePropertyDocumentService = async ({
+  propertyId,
+  documentId,
+  user,
+}) => {
+  const property = await Property.findById(propertyId);
+
+  if (!property) {
+    throw new ApiError(404, "Property not found");
+  }
+
+  if (!property.owner?.equals(user._id) && user.role !== ROLES.ADMIN) {
+    throw new ApiError(403, "Unauthorized access");
+  }
+
+  const document = property.propertyDocuments.find(
+    (propertyDocument) => propertyDocument._id.toString() === documentId,
+  );
+
+  if (!document) {
+    throw new ApiError(404, "Property document not found");
+  }
+
+  await deleteFromCloudinary(document.publicId);
+
+  property.propertyDocuments = property.propertyDocuments.filter(
+    (propertyDocument) => propertyDocument._id.toString() !== documentId,
+  );
+
+  await property.save();
+  await property.populate("owner", OWNER_POPULATE);
+
+  return property;
+};
+
+// Fetch related properties based on category and location.
+export const getRelatedPropertiesService = async ({ propertyId }) => {
+  const property = await Property.findById(propertyId);
+
+  if (!property) {
+    throw new ApiError(404, "Property not found");
+  }
+
+  const relatedProperties = await Property.find({
+    _id: { $ne: propertyId },
+    status: PROPERTY_STATUS.APPROVED,
+    isDeleted: false,
+    category: property.category,
+  })
+    .sort({ createdAt: -1 })
+    .limit(6)
+    .populate("owner", OWNER_POPULATE)
+    .lean();
+
+  if (relatedProperties.length) {
+    return relatedProperties;
+  }
+
+  return await Property.find({
+    _id: { $ne: propertyId },
+    status: PROPERTY_STATUS.APPROVED,
+    isDeleted: false,
+    location: property.location,
+  })
+    .sort({ createdAt: -1 })
+    .limit(6)
+    .populate("owner", OWNER_POPULATE)
+    .lean();
+};
+
+// Contact the property owner through email.
+export const contactPropertyOwnerService = async ({
+  propertyId,
+  userId,
+  message,
+}) => {
+  const property = await Property.findById(propertyId).populate(
+    "owner",
+    "email fullName userName",
+  );
+
+  if (!property) {
+    throw new ApiError(404, "Property not found");
+  }
+
+  if (!property.owner?.email) {
+    throw new ApiError(404, "Owner email not found");
+  }
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  const senderName = user.fullName?.firstName || user.userName || "A user";
+  const subject = `Inquiry about ${property.title}`;
+  const html = `
+    <div>
+      <p>Hello ${property.owner.fullName?.firstName || property.owner.userName},</p>
+      <p>${senderName} is interested in your property <strong>${property.title}</strong>.</p>
+      <p><strong>Message:</strong> ${message || "No message provided"}</p>
+      <p>Property link: ${process.env.FRONTEND_URL || "http://localhost:3000"}/properties/${property.slug}</p>
+    </div>
+  `;
+
+  await sendMail({
+    to: property.owner.email,
+    subject,
+    html,
+  });
+
+  return {
+    propertyId: property._id,
+    ownerEmail: property.owner.email,
+    propertyTitle: property.title,
+  };
 };

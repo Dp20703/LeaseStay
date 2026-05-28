@@ -144,6 +144,13 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
 
+    savedProperties: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Property",
+      },
+    ],
+
     /* ─────────────────────────────────────
          Status
       ───────────────────────────────────── */

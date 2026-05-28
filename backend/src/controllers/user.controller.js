@@ -5,6 +5,7 @@ import {
   changePasswordService,
   deleteAccountService,
   deleteProfileImageService,
+  getSavedPropertiesService,
   updateProfileService,
   applyOwnerService,
 } from "../services/user.service.js";
@@ -57,6 +58,22 @@ export const deleteProfileImage = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, "Profile image removed", updatedUser));
+});
+
+// GET SAVED PROPERTIES
+
+export const getSavedProperties = asyncHandler(async (req, res) => {
+  const savedProperties = await getSavedPropertiesService(req.user._id);
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        "Saved properties fetched successfully",
+        savedProperties,
+      ),
+    );
 });
 
 // DELETE ACCOUNT
