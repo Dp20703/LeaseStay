@@ -9,34 +9,7 @@ class QueryBuilder {
       this.mongooseQuery = this.mongooseQuery.find({
         $text: { $search: this.queryString.keyword },
       });
-      const keyword = this.queryString.keyword;
-
-      this.mongooseQuery = this.mongooseQuery.find({
-        $or: [
-          {
-            title: {
-              $regex: keyword,
-              $options: "i",
-            },
-          },
-
-          {
-            description: {
-              $regex: keyword,
-              $options: "i",
-            },
-          },
-
-          {
-            location: {
-              $regex: keyword,
-              $options: "i",
-            },
-          },
-        ],
-      });
     }
-
     return this;
   }
 
