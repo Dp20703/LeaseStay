@@ -28,9 +28,15 @@ export type FullName = {
 
 export type User = {
   _id: string;
-  profileImage: string;
   userName: string;
-  fullName: FullName;
+   profileImage?: {
+    url: string;
+    publicId: string;
+  };
+  fullName: {
+    firstName: string;
+    lastName?: string;
+  };
   email: string;
   googleId?: string | null;
   isGoogleUser: boolean;

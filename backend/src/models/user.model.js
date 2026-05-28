@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema(
 
     userName: {
       type: String,
-      unique: true,
+      match: [/^[a-zA-Z0-9_]+$/, "Invalid username format"],
       trim: true,
       lowercase: true,
       minlength: 3,
@@ -65,7 +65,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       minlength: 6,
       select: false,
-      default: null,
     },
 
     googleId: {
@@ -95,6 +94,7 @@ const userSchema = new mongoose.Schema(
     phone: {
       type: String,
       trim: true,
+      match: [/^[0-9]{10}$/, "Phone number must be 10 digits"],
     },
 
     /* ─────────────────────────────────────

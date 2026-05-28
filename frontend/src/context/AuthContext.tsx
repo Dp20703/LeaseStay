@@ -1,42 +1,41 @@
 import { createContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
-import { getCurrentUser, loginUser } from "@/services/authService";
+import authAPI from "@/services/authService";
+import type { User } from "@/types/entities/user.types";
+import type {
+  LoginFormData,
+  RegisterFormData,
+} from "@/types/forms/auth-form.types";
 
 /* ─────────────────────────────────────────────
-   Types
+   TYPES
 ───────────────────────────────────────────── */
 
-type User = {
-  _id: string;
-  name: string;
-  email: string;
-  role?: string;
-};
-
-type AuthContextType = {
+interface AuthContextType {
   user: User | null;
-
   loading: boolean;
-
+  login: (data: LoginFormData) => Promise<void>;
+  register: (data: RegisterFormData) => Promise<void>;
+  googleAuth: (credential: string) => Promise<void>;
+  logout: () => Promise<void>;
+  fetchCurrentUser: () => Promise<void>;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
+}
 
-  login: (token: string, userData: User) => void;
-
-  logout: () => void;
-};
-
-type AuthProviderProps = {
+interface AuthProviderProps {
   children: ReactNode;
-};
+}
 
 /* ─────────────────────────────────────────────
-   Context
+   CONTEXT
 ───────────────────────────────────────────── */
 
-export const AuthContext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined,
+);
 
 /* ─────────────────────────────────────────────
-   Provider
+   PROVIDER
 ───────────────────────────────────────────── */
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
@@ -44,68 +43,125 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const [loading, setLoading] = useState(true);
 
-  /* ─────────────────────────────────────────
-     Load User
-  ───────────────────────────────────────── */
+  /* FETCH CURRENT USER */
+
+  const fetchCurrentUser = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setUser(null);
+
+        return;
+      }
+
+      const response = await authAPI.getCurrentUser();
+
+      setUser(response.data);
+    } catch (error) {
+      localStorage.removeItem("token");
+
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const loadUser = async () => {
-      try {
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-          setLoading(false);
-          return;
-        }
-
-        const userData = await getCurrentUser();
-
-        setUser(userData);
-      } catch (error) {
-        console.log(error);
-
-        localStorage.removeItem("token");
-
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadUser();
+    fetchCurrentUser();
   }, []);
 
-  /* ─────────────────────────────────────────
-     Login
-  ───────────────────────────────────────── */
+  /* LOGIN */
 
-  const login = async (userData: User) => {
-    const response = await loginUser(userData);
-    console.log("res:", response);
-    localStorage.setItem("token", response.data.token);
+  const login = async (data: LoginFormData) => {
+    try {
+      setLoading(true);
 
-    setUser(response.data.user);
+      const response = await authAPI.login(data);
+
+      const { token, user } = response.data;
+
+      localStorage.setItem("token", token);
+
+      setUser(user);
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
-  /* ─────────────────────────────────────────
-     Logout
-  ───────────────────────────────────────── */
+  /* REGISTER */
 
-  const logout = () => {
-    localStorage.removeItem("token");
+  const register = async (data: RegisterFormData) => {
+    try {
+      setLoading(true);
 
-    setUser(null);
+      const response = await authAPI.register(data);
+
+      const { token, user } = response.data;
+
+      if (token) {
+        localStorage.setItem("token", token);
+
+        setUser(user);
+      }
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
-  /* ─────────────────────────────────────────
-     Context Values
-  ───────────────────────────────────────── */
+  /* GOOGLE AUTH */
+
+  const googleAuth = async (credential: string) => {
+    try {
+      setLoading(true);
+
+      const response = await authAPI.googleAuth(credential);
+
+      const { token, user } = response.data;
+
+      localStorage.setItem("token", token);
+
+      setUser(user);
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* LOGOUT */
+
+  const logout = async () => {
+    try {
+      await authAPI.logout();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      localStorage.removeItem("token");
+
+      setUser(null);
+    }
+  };
 
   const values: AuthContextType = {
     user,
-    loading,
+
     setUser,
+
+    loading,
+
+    fetchCurrentUser,
+
     login,
+
+    register,
+
+    googleAuth,
+
     logout,
   };
 

@@ -1,30 +1,27 @@
 import { GoogleLogin } from "@react-oauth/google";
-import { toast } from "react-toastify";
 import type { CredentialResponse } from "@react-oauth/google";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import api from "@/services/axios";
 
 const GoogleAuthButton = () => {
   const navigate = useNavigate();
 
-  const { login } = useAuth();
+  const { googleAuth } = useAuth();
 
   const handleGoogleSuccess = async (
     credentialResponse: CredentialResponse,
   ) => {
     try {
-      const response = await api.post("/auth/google", {
-        credential: credentialResponse.credential,
-      });
+      if (!credentialResponse.credential) {
+        toast.error("Google credential missing");
 
-      login(
-        response.data.data.token,
+        return;
+      }
 
-        response.data.data.user,
-      );
+      await googleAuth(credentialResponse.credential);
 
-      toast.success(response.data.message);
+      toast.success("Google login successful");
 
       navigate("/");
     } catch (error: any) {

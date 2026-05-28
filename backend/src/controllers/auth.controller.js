@@ -22,7 +22,15 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // REGISTER USER
 
 export const registerUser = asyncHandler(async (req, res) => {
-  const { userName, email, password, phone, fullName } = req.body;
+  const {
+    userName,
+    email,
+    password,
+    phone,
+    firstName,
+    lastName,
+    confirmPassword,
+  } = req.body;
 
   // CREATE USER
 
@@ -30,9 +38,10 @@ export const registerUser = asyncHandler(async (req, res) => {
     userName,
     email,
     password,
+    confirmPassword,
     phone,
-    firstName: fullName?.firstName,
-    lastName: fullName?.lastName,
+    firstName,
+    lastName,
   });
 
   // TOKEN

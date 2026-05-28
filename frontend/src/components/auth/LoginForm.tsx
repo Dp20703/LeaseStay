@@ -4,7 +4,10 @@ import { toast } from "react-toastify";
 import { FaEnvelope } from "react-icons/fa";
 import type { AxiosError } from "axios";
 import { useAuth } from "@/hooks/useAuth";
-import type { LoginFormData, LoginFormErrors } from "@/types/auth/auth.types";
+import type {
+  LoginFormData,
+  LoginFormErrors,
+} from "@/types/forms/auth-form.types";
 import AuthHeader from "./AuthHeader";
 import AuthInput from "./AuthInput";
 import PasswordInput from "./PasswordInput";

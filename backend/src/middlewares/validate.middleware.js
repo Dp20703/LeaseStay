@@ -11,10 +11,12 @@ const validate = (validations) => {
       return next(
         new ApiError(
           400,
-          errors
-            .array()
-            .map((err) => err.msg)
-            .join(", "),
+          JSON.stringify(
+            errors.array().map((error) => ({
+              field: error.path,
+              message: error.msg,
+            })),
+          ),
         ),
       );
     }

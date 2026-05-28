@@ -1,8 +1,21 @@
 export const errorMiddleware = (error, req, res, next) => {
   const statusCode = error.statusCode || 500;
 
-  res.status(statusCode).json({
+  let validationErrors = [];
+
+  /* VALIDATION ERRORS */
+
+  try {
+    validationErrors = JSON.parse(error.message);
+  } catch {
+    validationErrors = [];
+  }
+
+  return res.status(statusCode).json({
     success: false,
-    message: error.message || "Internal Server Error",
+    message: validationErrors.length
+      ? "Validation failed"
+      : error.message || "Internal Server Error",
+    errors: validationErrors,
   });
 };

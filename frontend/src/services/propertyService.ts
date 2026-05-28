@@ -49,7 +49,7 @@ const propertyAPI = {
     formData: FormData,
   ) => {
     const response = await api.post(
-      "/properties/create",
+      "/properties/",
       formData,
       {
         headers: {

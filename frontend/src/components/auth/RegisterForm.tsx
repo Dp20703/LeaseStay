@@ -3,23 +3,24 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaEnvelope, FaPhone, FaUser } from "react-icons/fa";
 import { useAuth } from "@/hooks/useAuth";
-import { registerUser } from "@/services/authService";
 import type {
   RegisterFormData,
   RegisterFormErrors,
-} from "@/types/auth/auth.types";
+} from "@/types/forms/auth-form.types";
 import AuthHeader from "./AuthHeader";
 import RegisterInput from "./RegisterInput";
 import PasswordInput from "./PasswordInput";
 import GoogleAuthButton from "./GoogleAuthButton";
 import { validateRegisterForm } from "./RegisterValidation";
+import { formatValidationErrors } from "@/utils/formatValidationErrors";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { register } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const [errors, setErrors] = useState<RegisterFormErrors>({});
+
   const [formData, setFormData] = useState<RegisterFormData>({
     firstName: "",
     lastName: "",
@@ -30,7 +31,9 @@ const RegisterForm = () => {
     phone: "",
   });
 
-  // HANDLE CHANGE
+  /* ─────────────────────────────────────────
+     HANDLE CHANGE
+  ───────────────────────────────────────── */
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -40,20 +43,29 @@ const RegisterForm = () => {
       [name]: value,
     }));
 
-    // REMOVE ERROR LIVE
+    /* REMOVE LIVE ERROR */
 
     if (errors[name as keyof RegisterFormErrors]) {
       setErrors((prev) => ({
         ...prev,
+
         [name]: "",
       }));
     }
   };
 
-  // SUBMIT
+  /* ─────────────────────────────────────────
+     SUBMIT
+  ───────────────────────────────────────── */
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    /* RESET ERRORS */
+
+    setErrors({});
+
+    /* FRONTEND VALIDATION */
 
     const validationErrors = validateRegisterForm(formData);
 
@@ -65,23 +77,23 @@ const RegisterForm = () => {
 
     try {
       setLoading(true);
+      console.log("formData:", formData);
+      await register(formData);
 
-      const response = await registerUser({
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        userName: formData.userName,
-        email: formData.email,
-        password: formData.password,
-        phone: formData.phone,
-      });
-
-      login(response.data.token, response.data.user);
-
-      toast.success(response.message);
+      toast.success("Registered successfully");
 
       navigate("/");
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Registration failed");
+      console.log("REGISTER ERROR:", error.response?.data);
+
+      /* BACKEND VALIDATION ERRORS */
+      if (error.response?.data?.errors) {
+        setErrors(formatValidationErrors(error.response.data.errors));
+      }
+
+      /* GENERAL ERROR */
+
+      toast.error(error.response?.data?.message || "Registration failed");
     } finally {
       setLoading(false);
     }
@@ -90,8 +102,8 @@ const RegisterForm = () => {
   return (
     <div className="ls-card p-10 max-w-2xl mx-auto">
       <AuthHeader
-        title={"Create Account"}
-        subtitle={"Join LeaseStay and explore verified properties."}
+        title="Create Account"
+        subtitle="Join LeaseStay and explore verified properties."
       />
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -174,7 +186,7 @@ const RegisterForm = () => {
           placeholder="Enter phone number"
         />
 
-        {/* BUTTON */}
+        {/* SUBMIT */}
 
         <button
           type="submit"

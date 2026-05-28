@@ -1,64 +1,98 @@
-import api from "@/services/axios"
-import type { RegisterFormData } from "@/types/forms/register-form.types";
+import api from "@/services/axios";
+
+import type { User } from "@/types/entities/user.types";
+
+import type {
+  LoginFormData,
+  RegisterFormData,
+} from "@/types/forms/auth-form.types";
 
 /* ─────────────────────────────────────────────
-   Types
+   TYPES
 ───────────────────────────────────────────── */
 
-export type LoginData = {
-  email: string
-  password: string
+export interface AuthResponse {
+  user: User;
+
+  token: string;
 }
 
 /* ─────────────────────────────────────────────
-   Register
+   AUTH API
 ───────────────────────────────────────────── */
 
-export const registerUser = async (data: RegisterFormData) => {
+const authAPI = {
+  /* LOGIN */
 
-  const formData = new FormData();
+  login: async (data: LoginFormData) => {
+    const response = await api.post("/auth/login", data);
 
-  formData.append("userName",data.userName);
-  formData.append("email",data.email);
-  formData.append("password",data.password);
-  formData.append("phone",data.phone);
-  formData.append("role",data.role);
-  formData.append("fullName[firstName]",data.firstName);
-  formData.append("fullName[lastName]",data.lastName);
+    return response.data;
+  },
 
-  const response = await api.post("/auth/register",formData );
+  /* REGISTER */
 
-  return response.data;
+  register: async (data: RegisterFormData) => {
+    const formData = new FormData();
+
+    formData.append("userName", data.userName);
+
+    formData.append("email", data.email);
+
+    formData.append("password", data.password);
+
+    formData.append("phone", data.phone);
+
+    formData.append("fullName[firstName]", data.firstName);
+
+    formData.append("fullName[lastName]", data.lastName);
+
+    const response = await api.post("/auth/register", formData);
+
+    return response.data;
+  },
+
+  /* GOOGLE AUTH */
+
+  googleAuth: async (credential: string) => {
+    const response = await api.post("/auth/google", {credential});
+
+    return response.data;
+  },
+
+  /* CURRENT USER */
+
+  getCurrentUser: async () => {
+    const response = await api.get("/auth/me");
+
+    return response.data;
+  },
+
+  /* LOGOUT */
+
+  logout: async () => {
+    const response = await api.post("/auth/logout");
+
+    return response.data;
+  },
+
+  /* FORGOT PASSWORD */
+
+  forgotPassword: async (email: string) => {
+    const response = await api.post("/auth/forgot-password", { email });
+
+    return response.data;
+  },
+
+  /* RESET PASSWORD */
+
+  resetPassword: async (token: string, password: string) => {
+    const response = await api.post(`/auth/reset-password/${token}`, {
+      password,
+    });
+
+    return response.data;
+  },
 };
 
-/* ─────────────────────────────────────────────
-   Login
-───────────────────────────────────────────── */
-
-export const loginUser = async (data: LoginData) => {
-  const response = await api.post("/auth/login",data)
-  
-  return response.data
-}
-
-/* ─────────────────────────────────────────────
-   Current User
-───────────────────────────────────────────── */
-
-export const getCurrentUser = async () => {
-
-  const response = await api.get("/auth/me")
-
-  return response?.data?.data
-}
-
-/* ─────────────────────────────────────────────
-   Logout
-───────────────────────────────────────────── */
-
-export const logoutUser = async () => {
-
-  const response = await api.post("/auth/logout")
-
-  return response.data
-}
+export default authAPI;

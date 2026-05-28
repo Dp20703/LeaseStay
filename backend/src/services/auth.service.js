@@ -7,6 +7,7 @@ export const registerUserService = async ({
   userName,
   email,
   password,
+  confirmPassword,
   phone,
   firstName,
   lastName,
@@ -26,6 +27,10 @@ export const registerUserService = async ({
 
   if (existingUsername) {
     throw new ApiError(409, "Username already taken");
+  }
+
+  if (password != confirmPassword) {
+    throw new ApiError(401, "Password and Confirm Password do not match");
   }
 
   // CREATE USER
