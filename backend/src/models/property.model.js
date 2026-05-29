@@ -1,4 +1,10 @@
 import mongoose from "mongoose";
+import {
+  PROPERTY_CATEGORIES,
+  PROPERTY_DOCUMENTS,
+  PROPERTY_STATUS,
+  PROPERTY_TYPES,
+} from "../constants/property.constants.js";
 
 const propertySchema = new mongoose.Schema(
   {
@@ -33,6 +39,7 @@ const propertySchema = new mongoose.Schema(
 
     category: {
       type: String,
+      enum: PROPERTY_CATEGORIES,
       required: true,
     },
 
@@ -76,7 +83,7 @@ const propertySchema = new mongoose.Schema(
 
     propertyType: {
       type: String,
-      enum: ["Apartment", "Villa", "House", "Studio", "PG", "Office"],
+      enum: PROPERTY_TYPES,
       required: true,
     },
 
@@ -117,7 +124,7 @@ const propertySchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["draft", "Pending", "Approved", "Rejected", "Hidden", "Inactive"],
+      enum: PROPERTY_STATUS,
       default: "Pending",
     },
 
@@ -131,6 +138,11 @@ const propertySchema = new mongoose.Schema(
       type: String,
       enum: ["available", "occupied", "reserved"],
       default: "available",
+    },
+
+    isVerifiedProperty: {
+      type: Boolean,
+      default: false,
     },
 
     isDeleted: {

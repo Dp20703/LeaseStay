@@ -1,89 +1,209 @@
+import { useAuth } from "@/hooks/useAuth";
+import { useProperty } from "@/hooks/useProperty";
+import type { Property } from "@/types/entities/property.types";
+import {
+  FaBath,
+  FaBed,
+  FaHeart,
+  FaMapMarkerAlt,
+  FaRegHeart,
+  FaRulerCombined,
+} from "react-icons/fa";
+import { MdApartment } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { FaBed, FaBath, FaHeart, FaMapMarkerAlt } from "react-icons/fa";
-import type { PropertyCardProps } from "./property-card.types";
+import { toast } from "react-toastify";
 
-const PropertyCard = ({
-  _id,
-  title,
-  location,
-  image,
-  price,
-  bedrooms,
-  bathrooms,
-  type,
-}: PropertyCardProps) => {
+interface PropertyCardProps {
+  property: Property;
+}
+
+const PropertyCard = ({ property }: PropertyCardProps) => {
+  const { user } = useAuth();
+
+  const { saveProperty, unsaveProperty } = useProperty();
+
+  const isSaved = property.savedBy?.some((id) => id === user?._id);
+
+  const handleSave = async () => {
+    if (!user) {
+      toast.error("Please login first");
+
+      return;
+    }
+
+    try {
+      if (isSaved) {
+        await unsaveProperty(property._id);
+
+        toast.success("Removed from wishlist");
+      } else {
+        await saveProperty(property._id);
+
+        toast.success("Saved successfully");
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  };
+
   return (
-    <div className="ls-card overflow-hidden group">
-      {/* ───────────────── Image ──────────────── */}
+    <div
+      className="
+        ls-card 
+        group
+        overflow-hidden
+        rounded-3xl
+        hover:-translate-y-2
+        transition-all
+        duration-300
+        hover:shadow-xl
+      "
+    >
+      {/* IMAGE */}
 
       <div className="relative overflow-hidden">
         <img
-          src={image}
-          alt={title}
-          className="w-full h-64 object-cover group-hover:scale-105 transition-all duration-300"
+          src={
+            property.thumbnail?.url ||
+            "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          }
+          alt={property.title}
+          className=" h-64 w-full object-cover group-hover:scale-110 transition-transform duration-500 "
         />
 
-        {/* Wishlist */}
+        {/* CATEGORY BADGE */}
 
-        <button className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 dark:bg-slate-900/90 flex items-center justify-center shadow-card hover:scale-110 transition-all">
-          <FaHeart className="text-red-500" />
+        <span className=" absolute top-4 left-4 ls-badge-primary shadow-md ">
+          {property.category}
+        </span>
+
+        {/* SAVE BUTTON */}
+
+        <button
+          type="button"
+          onClick={handleSave}
+          className=" absolute top-4 right-4 h-11 w-11 rounded-full bg-white/90 dark:bg-slate-900/90 flex items-center justify-center shadow-lg hover:scale-110 transition "
+        >
+          {isSaved ? (
+            <FaHeart className=" text-red-500 text-lg" />
+          ) : (
+            <FaRegHeart className="text-red-500 text-lg" />
+          )}
         </button>
-
-        {/* Type Badge */}
-
-        {type && <span className="absolute top-4 left-4 ls-badge">{type}</span>}
       </div>
 
-      {/* ───────────────── Content ──────────────── */}
+      {/* CONTENT */}
 
-      <div className="p-5">
-        {/* Location */}
+      <div className="p-5 space-y-5">
+        {/* LOCATION */}
 
-        <div className="flex items-center gap-2 text-sm text-text-muted dark:text-text-darkMuted">
+        <div
+          className="
+            flex
+            items-center
+            gap-2
+            text-sm
+            text-muted-foreground
+          "
+        >
           <FaMapMarkerAlt />
 
-          <span>{location}</span>
+          <span className="line-clamp-1">{property.location}</span>
         </div>
 
-        {/* Title */}
+        {/* TITLE */}
 
-        <h3 className="text-xl font-semibold mt-3 line-clamp-1">{title}</h3>
+        <div>
+          <h2
+            className="
+              text-xl
+              font-bold
+              line-clamp-1
+              group-hover:text-primary
+              transition
+            "
+          >
+            {property.title}
+          </h2>
 
-        {/* Price */}
+          <div
+            className="
+              mt-2
+              flex
+              items-center
+              gap-2
+              text-sm
+              text-muted-foreground
+            "
+          >
+            <MdApartment />
 
-        <div className="mt-4 flex items-center justify-between">
-          <div>
-            <span className="text-2xl font-bold text-primary">
-              ₹{price?.toLocaleString()}
-            </span>
-
-            <span className="text-sm text-text-muted dark:text-text-darkMuted">
-              /month
-            </span>
+            <span>{property.propertyType}</span>
           </div>
         </div>
 
-        {/* Features */}
+        {/* PRICE */}
 
-        <div className="flex items-center gap-5 mt-5 text-sm text-text-muted dark:text-text-darkMuted">
+        <div>
+          <span
+            className="
+              text-3xl
+              font-extrabold
+              text-primary
+            "
+          >
+            ₹{property.price.toLocaleString()}
+          </span>
+
+          {property.category === "Rent" && (
+            <span className="text-muted-foreground text-sm"> /month</span>
+          )}
+        </div>
+
+        {/* DETAILS */}
+
+        <div
+          className="
+            grid
+            grid-cols-3
+            gap-3
+            border-y
+            border-border-light
+            dark:border-border-dark
+            py-4
+            text-sm
+          "
+        >
           <div className="flex items-center gap-2">
-            <FaBed />
+            <FaBed className="text-primary" />
 
-            <span>{bedrooms} Beds</span>
+            <span>{property.bedrooms} Beds</span>
           </div>
 
           <div className="flex items-center gap-2">
-            <FaBath />
+            <FaBath className="text-primary" />
 
-            <span>{bathrooms} Baths</span>
+            <span>{property.bathrooms} Baths</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <FaRulerCombined className="text-primary" />
+
+            <span>{property.size} ft²</span>
           </div>
         </div>
 
-        {/* Button */}
+        {/* ACTION */}
 
         <Link
-          to={`/property/${_id}`}
-          className="ls-btn-primary w-full mt-6 flex items-center justify-center"
+          to={`/properties/${property.slug}`}
+          className="
+            ls-btn-primary
+            w-full
+            flex
+            items-center
+            justify-center
+          "
         >
           View Details
         </Link>

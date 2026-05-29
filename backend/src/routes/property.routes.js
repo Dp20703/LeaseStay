@@ -41,7 +41,7 @@ router.get("/recommended", getRecommendedProperties);
 
 // Owner-only routes for managing properties.
 router.get(
-  "/me/properties",
+  "/owner/properties",
   verifyJWT,
   authorizeRoles(ROLES.OWNER),
   getOwnerProperties,
@@ -162,3 +162,5 @@ router.post("/:id/contact-owner", verifyJWT, contactPropertyOwner);
 ───────────────────────────────────────────── */
 
 router.get("/:slug", getSingleProperty);
+
+export default router;

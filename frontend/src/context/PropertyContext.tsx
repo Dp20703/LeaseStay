@@ -5,22 +5,21 @@ import type { ReactNode } from "react";
 
 interface PropertyContextType {
   properties: Property[];
-
+  featuredProperties: Property[];
+  ownerProperties: Property[];
+  savedProperties: Property[];
   property: Property | null;
-
   loading: boolean;
-
   fetchProperties: (params?: Record<string, string | number>) => Promise<void>;
-
-  fetchSingleProperty: (id: string) => Promise<void>;
-
-  createProperty: (formData: FormData) => Promise<void>;
-
+  fetchSingleProperty: (slug: string) => Promise<void>;
+  createProperty: (formData: FormData) => Promise<any>;
   updateProperty: (id: string, formData: FormData) => Promise<void>;
-
   deleteProperty: (id: string) => Promise<void>;
-
-  searchProperties: (params: URLSearchParams) => Promise<void>;
+  getFeaturedProperties: () => Promise<Property[]>;
+  saveProperty: (id: string) => Promise<void>;
+  unsaveProperty: (id: string) => Promise<void>;
+  contactOwner: (id: string, message: string) => Promise<any>;
+  getOwnerProperties: () => Promise<Property[]>;
 }
 
 export const PropertyContext = createContext<PropertyContextType | undefined>(
@@ -29,21 +28,21 @@ export const PropertyContext = createContext<PropertyContextType | undefined>(
 
 export const PropertyProvider = ({ children }: { children: ReactNode }) => {
   const [properties, setProperties] = useState<Property[]>([]);
-
+  const [featuredProperties, setFeaturedProperties] = useState<Property[]>([]);
+  const [ownerProperties, setOwnerProperties] = useState<Property[]>([]);
+  const [savedProperties, setSavedProperties] = useState<Property[]>([]);
   const [property, setProperty] = useState<Property | null>(null);
 
   const [loading, setLoading] = useState(false);
 
-  /* ─────────────────────────────────────────────
-     FETCH ALL
-  ───────────────────────────────────────────── */
+  /* GET + SEARCH + FILTER */
 
-  const fetchProperties = async () => {
+  const fetchProperties = async (params = {}) => {
     try {
       setLoading(true);
 
-      const response = await propertyAPI.getAllProperties();
-      console.log("getAllProperties res:", response);
+      const response = await propertyAPI.getProperties(params);
+
       setProperties(response.data.properties);
     } catch (error) {
       console.log(error);
@@ -52,15 +51,13 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  /* ─────────────────────────────────────────────
-     FETCH SINGLE
-  ───────────────────────────────────────────── */
+  /* SINGLE */
 
-  const fetchSingleProperty = async (id: string) => {
+  const fetchSingleProperty = async (slug: string) => {
     try {
       setLoading(true);
 
-      const response = await propertyAPI.getSingleProperty(id);
+      const response = await propertyAPI.getSingleProperty(slug);
 
       setProperty(response.data);
     } catch (error) {
@@ -70,17 +67,17 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  /* ─────────────────────────────────────────────
-     CREATE
-  ───────────────────────────────────────────── */
+  /* CREATE */
 
   const createProperty = async (formData: FormData) => {
     try {
       setLoading(true);
 
-      await propertyAPI.createProperty(formData);
+      const response = await propertyAPI.createProperty(formData);
 
-      await fetchProperties();
+      setProperty(response.data);
+
+      return response;
     } catch (error) {
       console.log(error);
     } finally {
@@ -88,17 +85,15 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  /* ─────────────────────────────────────────────
-     UPDATE
-  ───────────────────────────────────────────── */
+  /* UPDATE */
 
   const updateProperty = async (id: string, formData: FormData) => {
     try {
       setLoading(true);
 
-      await propertyAPI.updateProperty(id, formData);
+      const response = await propertyAPI.updateProperty(id, formData);
 
-      await fetchSingleProperty(id);
+      setProperty(response.data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -106,9 +101,56 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  /* ─────────────────────────────────────────────
-     DELETE
-  ───────────────────────────────────────────── */
+  /* FEATURE PROPERTIES */
+
+  const getFeaturedProperties = async () => {
+    try {
+      setLoading(true);
+
+      const response = await propertyAPI.getFeaturedProperties();
+
+      console.log("res:", response);
+      setFeaturedProperties(response.data);
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* SAVED PROPERTIES */
+
+  const getSavedProperties = async () => {
+    const response = await propertyAPI.getSavedProperties();
+
+    setSavedProperties(response.data);
+  };
+
+  /* OWNER PROPERTIES */
+
+  const getOwnerProperties = async () => {
+    try {
+      setLoading(true);
+
+      const response = await propertyAPI.getOwnerProperties();
+
+      setOwnerProperties(response.data);
+
+      return response.data;
+    } catch (error) {
+      console.log("OWNER PROPERTY ERROR:", error);
+
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* DELETE */
 
   const deleteProperty = async (id: string) => {
     try {
@@ -124,22 +166,49 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  /* ─────────────────────────────────────────────
-     SEARCH
-  ───────────────────────────────────────────── */
+  /* SAVE PROPERTY */
 
-  const searchProperties = async (params: URLSearchParams) => {
-    try {
-      setLoading(true);
+  const saveProperty = async (id: string) => {
+    const response = await propertyAPI.saveProperty(id);
 
-      const response = await propertyAPI.searchProperties(params);
+    setProperties((prev) =>
+      prev.map((property) =>
+        property._id === id
+          ? {
+              ...property,
+              savedBy: [...(property.savedBy || []), response.data._id],
+            }
+          : property,
+      ),
+    );
+  };
 
-      setProperties(response.data.properties);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
+  /* UNSAVE PROPERTY */
+
+  const unsaveProperty = async (id: string) => {
+    const response = await propertyAPI.unsaveProperty(id);
+
+    setProperties((prev) =>
+      prev.map((property) =>
+        property._id === id
+          ? {
+              ...property,
+
+              savedBy: property.savedBy?.filter(
+                (userId) => userId !== response.data._id,
+              ),
+            }
+          : property,
+      ),
+    );
+  };
+
+  /* CONTACT OWNER */
+
+  const contactOwner = async (id: string, message: string) => {
+    const response = await propertyAPI.contactOwner(id, message);
+
+    return response;
   };
 
   useEffect(() => {
@@ -150,15 +219,26 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
     <PropertyContext.Provider
       value={{
         properties,
+        featuredProperties,
+        savedProperties,
+        ownerProperties,
         property,
         loading,
 
         fetchProperties,
         fetchSingleProperty,
+
         createProperty,
         updateProperty,
         deleteProperty,
-        searchProperties,
+        getFeaturedProperties,
+        getSavedProperties,
+
+        saveProperty,
+        unsaveProperty,
+
+        contactOwner,
+        getOwnerProperties,
       }}
     >
       {children}

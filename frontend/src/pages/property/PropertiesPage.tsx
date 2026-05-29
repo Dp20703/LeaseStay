@@ -1,4 +1,5 @@
-import PropertyCard from "@/components/property/PropertyCard2";
+import LoaderScreen from "@/components/common/LoaderScreen";
+import PropertyCard from "@/components/property/PropertyCard";
 import { useProperty } from "@/hooks/useProperty";
 
 const PropertiesPage = () => {
@@ -6,7 +7,7 @@ const PropertiesPage = () => {
 
   console.log("ALL PROPERTIES:", properties);
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoaderScreen />;
   }
 
   return (

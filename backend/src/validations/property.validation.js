@@ -23,7 +23,6 @@ export const availabilityValidation = [
 export const createPropertyValidation = [
   body("title")
     .trim()
-    .escape()
     .notEmpty()
     .withMessage("Title is required")
     .isLength({ min: 5, max: 120 })
@@ -31,7 +30,6 @@ export const createPropertyValidation = [
 
   body("description")
     .trim()
-    .escape()
     .notEmpty()
     .withMessage("Description is required")
     .isLength({ min: 20, max: 2000 })
@@ -39,7 +37,6 @@ export const createPropertyValidation = [
 
   body("location")
     .trim()
-    .escape()
     .notEmpty()
     .withMessage("Location is required")
     .isLength({ min: 10, max: 120 })
@@ -49,15 +46,13 @@ export const createPropertyValidation = [
 
   body("zipCode")
     .trim()
-    .escape()
     .notEmpty()
     .withMessage("Zip code is required")
-    .isLength({ min: 4, max: 10 })
+    .isLength({ min: 2, max: 10 })
     .withMessage("Invalid zip code"),
 
   body("propertyType")
     .trim()
-    .escape()
     .notEmpty()
     .withMessage("Property type is required")
     .isIn(PROPERTY_TYPES)
@@ -65,7 +60,6 @@ export const createPropertyValidation = [
 
   body("category")
     .trim()
-    .escape()
     .notEmpty()
     .withMessage("Category is required")
     .isIn(["Rent", "Sale"])
@@ -106,34 +100,35 @@ export const createPropertyValidation = [
     .custom((value) => value >= 0)
     .withMessage("Bathrooms cannot be negative"),
 
-  body("amenities")
-    .optional()
-    .custom((value) => {
-      const parsed = typeof value === "string" ? JSON.parse(value) : value;
+  // body("amenities")
+  //   .optional()
+  //   .custom((value) => {
+  //     const parsed = typeof value === "string" ? JSON.parse(value) : value;
 
-      return (
-        Array.isArray(parsed) &&
-        parsed.every((item) => typeof item === "string") &&
-        parsed.length <= 20
-      );
-    })
-    .withMessage("Invalid amenities"),
+  //     return (
+  //       Array.isArray(parsed) &&
+  //       parsed.every((item) => typeof item === "string") &&
+  //       parsed.length <= 20
+  //     );
+  //   })
+  //   .withMessage("Invalid amenities"),
 
   body("documentType")
     .optional()
     .isIn(PROPERTY_DOCUMENTS)
     .withMessage("Invalid document type"),
 
-  body("images").custom((value, { req }) => {
+  body().custom((value, { req }) => {
     if (!req.files?.images?.length) {
       throw new Error("Property images are required");
     }
 
     return true;
   }),
-  body("propertyDocuments").custom((value, { req }) => {
+
+  body().custom((value, { req }) => {
     if (!req.files?.propertyDocuments?.length) {
-      throw new Error("Property document is required");
+      throw new Error("Property document required");
     }
 
     return true;

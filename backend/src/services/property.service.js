@@ -46,9 +46,9 @@ export const createPropertyService = async ({ body, files, ownerId }) => {
     throw new ApiError(403, "Only verified owners can create properties");
   }
 
-  if (user.ownerVerificationStatus !== "approved") {
-    throw new ApiError(403, "Owner verification pending");
-  }
+  // if (user.ownerVerificationStatus !== "approved") {
+  //   throw new ApiError(403, "Owner verification pending");
+  // }
 
   const images = [];
   let thumbnail = {};
@@ -82,16 +82,26 @@ export const createPropertyService = async ({ body, files, ownerId }) => {
       });
     }
   }
-
-  const property = await Property.create({
-    ...body,
+  const propertyData = {
+    title: body.title,
+    description: body.description,
+    location: body.location,
+    address: body.address,
+    zipCode: body.zipCode,
+    category: body.category,
+    size: body.size,
+    price: body.price,
+    bedrooms: body.bedrooms,
+    bathrooms: body.bathrooms,
+    propertyType: body.propertyType,
     slug: generateSlug(body.title),
     images,
     thumbnail,
     propertyDocuments,
     amenities: parseAmenities(body.amenities),
     owner: ownerId,
-  });
+  };
+  const property = await Property.create(propertyData);
 
   await property.populate("owner", OWNER_POPULATE);
 
@@ -107,10 +117,7 @@ export const getAllPropertiesService = async (queryString) => {
     isDeleted: false,
   });
 
-  const queryBuilder = new QueryBuilder(
-    Property.find({ status: "Approved" }),
-    queryString,
-  )
+  const queryBuilder = new QueryBuilder(Property.find(), queryString)
     .search()
     .filter()
     .sort()
@@ -134,7 +141,6 @@ export const getSinglePropertyService = async (slug) => {
   return await Property.findOne({
     slug,
     isDeleted: false,
-    status: PROPERTY_STATUS.APPROVED,
   })
     .populate("owner", OWNER_POPULATE)
     .lean();
@@ -147,15 +153,17 @@ export const getOwnerPropertiesService = async (ownerId) => {
     .sort({ createdAt: -1 });
 };
 
-// Fetch featured properties for homepage or curated sections.
+// Fetch featured properties
 export const getFeaturedPropertiesService = async ({ limit = 6 } = {}) => {
   return await Property.find({
-    status: PROPERTY_STATUS.APPROVED,
+    isFeatured: true,
   })
     .sort({ createdAt: -1 })
     .limit(Number(limit))
     .populate("owner", OWNER_POPULATE)
     .lean();
+  // status: PROPERTY_STATUS.APPROVED,
+  // availabilityStatus: "available",
 };
 
 // Fetch recommended available properties for users.
@@ -387,8 +395,8 @@ export const deletePropertyService = async ({ propertyId, user }) => {
 // Save a property for the authenticated user.
 export const savePropertyService = async ({ propertyId, userId }) => {
   const [user, property] = await Promise.all([
-    User.findById(userId),
-    Property.findById(propertyId),
+    User.exists({ _id: userId }),
+    Property.exists({ _id: propertyId }),
   ]);
 
   if (!user) {
@@ -399,30 +407,26 @@ export const savePropertyService = async ({ propertyId, userId }) => {
     throw new ApiError(404, "Property not found");
   }
 
-  const hasSavedProperty = user.savedProperties.some(
-    (savedPropertyId) => savedPropertyId.toString() === propertyId,
-  );
+  await Promise.all([
+    User.findByIdAndUpdate(userId, {
+      $addToSet: {
+        savedProperties: propertyId,
+      },
+    }),
 
-  if (!hasSavedProperty) {
-    user.savedProperties.push(propertyId);
-  }
-
-  const hasSavedByUser = property.savedBy.some(
-    (savedByUserId) => savedByUserId.toString() === userId,
-  );
-
-  if (!hasSavedByUser) {
-    property.savedBy.push(userId);
-  }
-
-  await Promise.all([user.save(), property.save()]);
+    Property.findByIdAndUpdate(propertyId, {
+      $addToSet: {
+        savedBy: userId,
+      },
+    }),
+  ]);
 
   return await User.findById(userId)
     .populate({
       path: "savedProperties",
       populate: {
         path: "owner",
-        select: "userName fullName profileImage",
+        select:OWNER_POPULATE,
       },
     })
     .select("-password");
@@ -431,8 +435,8 @@ export const savePropertyService = async ({ propertyId, userId }) => {
 // Remove a saved property for the authenticated user.
 export const unsavePropertyService = async ({ propertyId, userId }) => {
   const [user, property] = await Promise.all([
-    User.findById(userId),
-    Property.findById(propertyId),
+    User.exists({ _id: userId }),
+    Property.exists({ _id: propertyId }),
   ]);
 
   if (!user) {
@@ -443,15 +447,19 @@ export const unsavePropertyService = async ({ propertyId, userId }) => {
     throw new ApiError(404, "Property not found");
   }
 
-  user.savedProperties = user.savedProperties.filter(
-    (savedPropertyId) => savedPropertyId.toString() !== propertyId,
-  );
+  await Promise.all([
+    User.findByIdAndUpdate(userId, {
+      $pull: {
+        savedProperties: propertyId,
+      },
+    }),
 
-  property.savedBy = property.savedBy.filter(
-    (savedByUserId) => savedByUserId.toString() !== userId,
-  );
-
-  await Promise.all([user.save(), property.save()]);
+    Property.findByIdAndUpdate(propertyId, {
+      $pull: {
+        savedBy: userId,
+      },
+    }),
+  ]);
 
   return await User.findById(userId)
     .populate({
@@ -578,12 +586,13 @@ export const contactPropertyOwnerService = async ({
 }) => {
   const property = await Property.findById(propertyId).populate(
     "owner",
-    "email fullName userName",
+    "userName fullName profileImage email",
   );
 
   if (!property) {
     throw new ApiError(404, "Property not found");
   }
+  console.log(property);
 
   if (!property.owner?.email) {
     throw new ApiError(404, "Owner email not found");

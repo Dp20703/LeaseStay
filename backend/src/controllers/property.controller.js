@@ -20,9 +20,12 @@ import {
   unsavePropertyService,
   updatePropertyService,
 } from "../services/property.service.js";
+import { Result } from "express-validator";
 
 // Create a new property listing.
 export const createProperty = asyncHandler(async (req, res) => {
+  console.log("Create property req.body", req.body);
+  console.log("Create property req.files", req?.files);
   const property = await createPropertyService({
     body: req.body,
     files: req.files,
@@ -200,6 +203,7 @@ export const contactPropertyOwner = asyncHandler(async (req, res) => {
 
 // Fetch featured properties.
 export const getFeaturedProperties = asyncHandler(async (req, res) => {
+  console.log("req.query", req.query);
   const properties = await getFeaturedPropertiesService(req.query);
 
   return res

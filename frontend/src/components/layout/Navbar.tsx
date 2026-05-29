@@ -25,11 +25,9 @@ const Navbar = () => {
      Theme
   ───────────────────────────────────────── */
 
-  const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("theme")
-      ? localStorage.getItem("theme") === "dark"
-      : window.matchMedia("(prefers-color-scheme: dark)").matches,
-  );
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("theme") !== "light";
+  });
 
   /* ─────────────────────────────────────────
      Apply Theme
@@ -106,6 +104,12 @@ const Navbar = () => {
               Dashboard
             </NavLink>
           )}
+
+          {user?.role === ROLES.ADMIN && (
+            <NavLink to="/admin" className="ls-btn-primary">
+              Admin
+            </NavLink>
+          )}
         </nav>
 
         {/* ───────────────── Right Actions ──────────────── */}
@@ -114,7 +118,7 @@ const Navbar = () => {
           {/* Theme Toggle */}
 
           <button
-            onClick={() => setDarkMode(!darkMode)}
+            onClick={() => setDarkMode((prev) => !prev)}
             className="w-10 h-10 rounded-full border border-border-light dark:border-border-dark flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
           >
             {darkMode ? <FaSun /> : <FaMoon />}
@@ -172,7 +176,7 @@ const Navbar = () => {
             {/* Theme Toggle */}
 
             <button
-              onClick={() => setDarkMode(!darkMode)}
+              onClick={() => setDarkMode((prev) => !prev)}
               className="ls-btn-outline w-full"
             >
               {darkMode ? "Light Mode" : "Dark Mode"}
@@ -234,11 +238,16 @@ const Navbar = () => {
 
                 {user.role === "owner" && (
                   <NavLink
-                    to="/dashboard"
+                    to="/owner/dashboard"
                     className="ls-nav-link"
                     onClick={() => setMenuOpen(false)}
                   >
                     Dashboard
+                  </NavLink>
+                )}
+                {user?.role === ROLES.ADMIN && (
+                  <NavLink to="/admin" className="ls-btn-primary">
+                    Admin
                   </NavLink>
                 )}
 

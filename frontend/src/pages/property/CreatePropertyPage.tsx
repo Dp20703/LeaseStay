@@ -1,6 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import PropertyForm from "../../components/property/PropertyForm";
+import { toast } from "react-toastify";
+
+import PropertyForm from "@/components/property/PropertyForm";
 import { useProperty } from "@/hooks/useProperty";
+import { formatValidationErrors } from "@/utils/formatValidationErrors";
 
 const CreatePropertyPage = () => {
   const navigate = useNavigate();
@@ -8,14 +11,32 @@ const CreatePropertyPage = () => {
   const { createProperty, loading } = useProperty();
 
   const handleSubmit = async (formData: FormData) => {
-    await createProperty(formData);
+    try {
+      await createProperty(formData);
 
-    navigate("/dashboard/properties");
+      toast.success("Property created successfully");
+
+      navigate("/owner/properties");
+    } catch (error: any) {
+      console.log("create propery error:", error);
+      const message =
+        formatValidationErrors(error.response?.data?.errors) ||
+        error.response?.data?.message ||
+        "Failed to create property";
+
+      toast.error(message || "Failed to create property");
+    }
   };
 
   return (
-    <section className="ls-container py-10 space-y-8">
-      <h1 className="text-5xl font-bold">Create Property</h1>
+    <section className="ls-container py-10">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold">Create Property</h1>
+
+        <p className="text-muted-foreground mt-2">
+          List your property and reach more tenants.
+        </p>
+      </div>
 
       <PropertyForm onSubmit={handleSubmit} loading={loading} />
     </section>

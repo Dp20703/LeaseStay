@@ -1,78 +1,156 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import PropertyBasicInfo from "./PropertyBasicInfo";
+import PropertyLocation from "./PropertyLocation";
+import { PropertyDetails } from "./PropertyDetails";
+import { PropertyAmenitiesDetails } from "./PropertyAmenitiesDetails";
+import PropertyImageUpload from "./PropertyImageUpload";
+import PropertyDocumentsUpload from "./PropertyDocumentsUpload";
+
+import {
+  createPropertySchema,
+  type CreatePropertyFormData,
+} from "@/validations/property.schema";
 
 interface PropertyFormProps {
-  onSubmit: (formData: FormData) => void;
   loading: boolean;
+  onSubmit: (formData: FormData) => Promise<void>;
 }
 
-const PropertyForm = ({ onSubmit, loading }: PropertyFormProps) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [location, setLocation] = useState("");
-  const [price, setPrice] = useState("");
+const PropertyForm = ({ loading, onSubmit }: PropertyFormProps) => {
   const [images, setImages] = useState<FileList | null>(null);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const [documents, setDocuments] = useState<FileList | null>(null);
+
+  const [fileErrors, setFileErrors] = useState({
+    images: "",
+    documents: "",
+  });
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+
+    formState: { errors },
+  } = useForm<CreatePropertyFormData>({
+    resolver: zodResolver(createPropertySchema),
+
+    defaultValues: {
+      category: "Rent",
+      propertyType: "Apartment",
+      documentType: "sale_deed",
+      amenities: [],
+    },
+  });
+
+  const submitHandler = async (data: CreatePropertyFormData) => {
+    /*
+      FILE VALIDATION
+    */
+
+    let hasError = false;
+
+    const newErrors = {
+      images: "",
+      documents: "",
+    };
+
+    if (!images?.length) {
+      newErrors.images = "Upload at least one property image";
+
+      hasError = true;
+    }
+
+    if (!documents?.length) {
+      newErrors.documents = "Upload property document";
+
+      hasError = true;
+    }
+
+    setFileErrors(newErrors);
+
+    if (hasError) return;
+
+    /*
+       CREATE FORM DATA
+    */
 
     const formData = new FormData();
 
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("location", location);
-    formData.append("price", price);
+    Object.entries(data).forEach(([key, value]) => {
+      if (value === undefined || value === null) return;
 
-    if (images) {
-      Array.from(images).forEach((file) => {
-        formData.append("images", file);
-      });
-    }
+      if (key === "amenities") {
+        formData.append(key, JSON.stringify(value));
+      } else {
+        formData.append(key, String(value));
+      }
+    });
 
-    onSubmit(formData);
+    Array.from(images).forEach((file) => {
+      formData.append("images", file);
+    });
+
+    Array.from(documents).forEach((file) => {
+      formData.append("propertyDocuments", file);
+    });
+
+    await onSubmit(formData);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-5">
-      <input
-        type="text"
-        placeholder="Property Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="ls-input"
+    <form
+      onSubmit={handleSubmit(submitHandler, (errors) => {
+        console.log("ZOD ERRORS:", errors);
+      })}
+      className="space-y-8"
+    >
+      {/* BASIC INFO */}
+
+      <PropertyBasicInfo register={register} errors={errors} />
+
+      {/* LOCATION */}
+
+      <PropertyLocation register={register} errors={errors} />
+
+      {/* DETAILS */}
+
+      <PropertyDetails register={register} errors={errors} />
+
+      {/* AMENITIES */}
+
+      <PropertyAmenitiesDetails
+        selectedAmenities={watch("amenities") || []}
+        setSelectedAmenities={(items) => {
+          setValue("amenities", items, {
+            shouldValidate: true,
+          });
+        }}
       />
 
-      <textarea
-        placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        className="ls-input min-h-[150px]"
+      {/* IMAGES */}
+
+      <PropertyImageUpload setImages={setImages} error={fileErrors.images} />
+
+      {/* DOCUMENTS */}
+
+      <PropertyDocumentsUpload
+        register={register}
+        errors={errors}
+        setDocuments={setDocuments}
+        error={fileErrors.documents}
       />
 
-      <input
-        type="text"
-        placeholder="Location"
-        value={location}
-        onChange={(e) => setLocation(e.target.value)}
-        className="ls-input"
-      />
-
-      <input
-        type="number"
-        placeholder="Price"
-        value={price}
-        onChange={(e) => setPrice(e.target.value)}
-        className="ls-input"
-      />
-
-      <input
-        type="file"
-        multiple
-        onChange={(e) => setImages(e.target.files)}
-        className="ls-input"
-      />
-
-      <button type="submit" disabled={loading} className="ls-button-primary">
-        {loading ? "Saving..." : "Save Property"}
+      <button
+        type="submit"
+        disabled={loading}
+        className="ls-btn-primary w-full"
+      >
+        {loading ? "Creating Property..." : "Create Property"}
       </button>
     </form>
   );

@@ -68,7 +68,7 @@ const AppRoutes = () => {
 
         <Route path="/properties" element={<PropertiesPage />} />
 
-        <Route path="/properties/:id" element={<PropertyDetailsPage />} />
+        <Route path="/properties/:slug" element={<PropertyDetailsPage />} />
 
         <Route path="/faq" element={<FaqPage />} />
 

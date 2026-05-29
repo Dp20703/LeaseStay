@@ -7,9 +7,13 @@ import type { Property } from "@/types/entities/property.types";
 
 export interface PropertyResponse {
   properties: Property[];
-  total: number;
-  page: number;
-  totalPages: number;
+
+  pagination: {
+    totalProperties: number;
+    currentPage: number;
+    resultPerPage: number;
+    totalPages: number;
+  };
 }
 
 /* ─────────────────────────────────────────────
@@ -17,84 +21,102 @@ export interface PropertyResponse {
 ───────────────────────────────────────────── */
 
 const propertyAPI = {
-  // GET ALL
-  getAllProperties: async () => {
-    const response = await api.get("/properties/");
-    console.log("getAllProperties Property API res:",response)
-    return response.data;
-  },
+  /* GET + SEARCH + FILTER */
 
-  // GET SINGLE
-  getSingleProperty: async (id: string) => {
-    const response = await api.get(
-      `/properties/${id}`,
-    );
+  getProperties: async (params?: Record<string, string | number>) => {
+    const response = await api.get("/properties", {
+      params,
+    });
 
     return response.data;
   },
 
-  // SEARCH
-  searchProperties: async (
-    params: URLSearchParams,
-  ) => {
-    const response = await api.get(
-      `/properties?${params.toString()}`,
-    );
+  /* GET SINGLE */
+
+  getSingleProperty: async (slug: string) => {
+    const response = await api.get(`/properties/${slug}`);
 
     return response.data;
   },
 
-  // CREATE
-  createProperty: async (
-    formData: FormData,
-  ) => {
-    const response = await api.post(
-      "/properties/",
-      formData,
-      {
-        headers: {
-          "Content-Type":
-            "multipart/form-data",
-        },
+  /* CREATE */
+
+  createProperty: async (formData: FormData) => {
+    const response = await api.post("/properties", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
       },
-    );
+    });
 
     return response.data;
   },
 
-  // UPDATE
-  updateProperty: async (
-    id: string,
-    formData: FormData,
-  ) => {
-    const response = await api.put(
-      `/properties/${id}`,
-      formData,
-      {
-        headers: {
-          "Content-Type":
-            "multipart/form-data",
-        },
+  /* UPDATE */
+
+  updateProperty: async (id: string, formData: FormData) => {
+    const response = await api.patch(`/properties/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
       },
-    );
+    });
 
     return response.data;
   },
 
-  // DELETE
+  /* DELETE */
+
   deleteProperty: async (id: string) => {
-    const response = await api.delete(
-      `/properties/${id}`,
-    );
+    const response = await api.delete(`/properties/${id}`);
 
     return response.data;
   },
 
-  // OWNER PROPERTIES
+  /* SAVE PROPERTY */
+
+  saveProperty: async (id: string) => {
+    const response = await api.post(`/properties/${id}/save`);
+
+    return response.data;
+  },
+
+  /* UNSAVE PROPERTY */
+
+  unsaveProperty: async (id: string) => {
+    const response = await api.delete(`/properties/${id}/save`);
+
+    return response.data;
+  },
+
+  /* FEATURED PROPERTIES */
+
+  getFeaturedProperties: async () => {
+    const {data} = await api.get("/properties/featured");
+
+    return data;
+  },
+
+  /* SAVED PROPERTIES */
+ 
+  getSavedProperties: async () => {
+    const {data} = await api.get("users/saved-properties");
+
+    return data;
+  },
+
+  /* OWNER PROPERTIES */
+
   getOwnerProperties: async () => {
-    const response = await api.get(
-      "/properties/owner/my-properties",
-    );
+    const { data } = await api.get("/properties/owner/properties");
+
+    return data;
+  },
+
+  /* CONTACT PROPERTY OWNER */
+
+  contactOwner: async (id: string, message: string) => {
+    const response = await api.post(`/properties/${id}/contact-owner`, {
+      message,
+    });
 
     return response.data;
   },

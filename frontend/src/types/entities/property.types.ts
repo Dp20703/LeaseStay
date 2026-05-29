@@ -30,6 +30,19 @@ export type PropertyImage = {
   publicId: string;
 };
 
+export const PropertyAmenities = [
+  "WiFi",
+  "Parking",
+  "Security",
+  "Lift",
+  "Gym",
+  "Garden",
+  "Balcony",
+  "Power Backup",
+  "CCTV",
+  "Swimming Pool",
+];
+
 export type PropertyDocument = {
   type: PropertyDocumentType;
   url: string;

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import PropertyCard from "../../components/property/PropertyCard2";
+import PropertyCard from "../../components/property/PropertyCard";
 import { useProperty } from "@/hooks/useProperty";
 
 const SearchPropertiesPage = () => {
@@ -41,7 +41,7 @@ const SearchPropertiesPage = () => {
           className="ls-input"
         />
 
-        <button onClick={handleSearch} className="ls-button-primary">
+        <button onClick={handleSearch} className="ls-btn-primary">
           Search
         </button>
       </div>

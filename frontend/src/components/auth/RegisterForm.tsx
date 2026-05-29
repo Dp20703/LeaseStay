@@ -77,7 +77,7 @@ const RegisterForm = () => {
 
     try {
       setLoading(true);
-      console.log("formData:", formData);
+
       await register(formData);
 
       toast.success("Registered successfully");
