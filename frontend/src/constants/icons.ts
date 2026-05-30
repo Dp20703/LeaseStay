@@ -11,16 +11,11 @@ export {
   FaTag,
   FaUser,
   FaRupeeSign,
+  FaEye,
+  FaEyeSlash,
+  FaLock,
 } from "react-icons/fa";
 
+export { MdEmail, MdVerified } from "react-icons/md";
 
-export {
-  MdEmail,
-  MdVerified,
-} from "react-icons/md";
-
-
-export {
-  IoSearch,
-  IoFilter,
-} from "react-icons/io5";
+export { IoSearch, IoFilter } from "react-icons/io5";

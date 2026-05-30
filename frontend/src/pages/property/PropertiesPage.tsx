@@ -17,10 +17,10 @@ const PropertiesPage = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {properties.length == 0 ? (
+        {properties?.length == 0 ? (
           <h1>No Properites</h1>
         ) : (
-          properties.map((property) => (
+          properties?.map((property) => (
             <PropertyCard key={property._id} property={property} />
           ))
         )}

@@ -129,26 +129,26 @@ export const deletePropertyImage = asyncHandler(async (req, res) => {
 
 // Save a property for the authenticated user.
 export const saveProperty = asyncHandler(async (req, res) => {
-  const user = await savePropertyService({
+  const result = await savePropertyService({
     propertyId: req.params.id,
     userId: req.user._id,
   });
 
   return res
     .status(200)
-    .json(new ApiResponse(200, "Property saved successfully", user));
+    .json(new ApiResponse(200, "Property saved successfully", result));
 });
 
 // Remove a saved property for the authenticated user.
 export const unsaveProperty = asyncHandler(async (req, res) => {
-  const user = await unsavePropertyService({
+  const result = await unsavePropertyService({
     propertyId: req.params.id,
     userId: req.user._id,
   });
 
   return res
     .status(200)
-    .json(new ApiResponse(200, "Property removed from saved list", user));
+    .json(new ApiResponse(200, "Property removed from wishlist", result));
 });
 
 // Set a property image as the thumbnail.

@@ -9,6 +9,12 @@ import uploadToCloudinary from "../helpers/cloudinary/uploadToCloudinary.js";
 import { sendMail } from "../helpers/mail/sendMail.js";
 import QueryBuilder from "../utils/queryBuilder.js";
 import { generateSlug } from "../helpers/slug/generateSlug.js";
+import {
+  deleteCache,
+  deleteCacheByPattern,
+  getCache,
+  setCache,
+} from "../helpers/redis/redis.utils.js";
 
 // Populate owner
 const OWNER_POPULATE = "userName fullName profileImage";
@@ -103,6 +109,11 @@ export const createPropertyService = async ({ body, files, ownerId }) => {
   };
   const property = await Property.create(propertyData);
 
+  await Promise.all([
+    deleteCacheByPattern("featured:*"),
+    deleteCacheByPattern("properties:*"),
+  ]);
+
   await property.populate("owner", OWNER_POPULATE);
 
   return property;
@@ -110,6 +121,17 @@ export const createPropertyService = async ({ body, files, ownerId }) => {
 
 // Fetch approved properties with filtering, search, sorting, and pagination.
 export const getAllPropertiesService = async (queryString) => {
+  const cacheKey = `properties:${new URLSearchParams(queryString || {}).toString() || "all"}`;
+
+  const cachedProperties = await getCache(cacheKey);
+
+  if (cachedProperties) {
+    console.log("FROM REDIS");
+    return cachedProperties;
+  }
+
+  console.log("FROM MONGODB");
+
   const resultPerPage = Number(queryString.limit) || 10;
 
   const totalProperties = await Property.countDocuments({
@@ -125,7 +147,7 @@ export const getAllPropertiesService = async (queryString) => {
 
   const properties = await queryBuilder.mongooseQuery.lean();
 
-  return {
+  const allProperties = {
     properties,
     pagination: {
       totalProperties,
@@ -134,41 +156,107 @@ export const getAllPropertiesService = async (queryString) => {
       totalPages: Math.ceil(totalProperties / resultPerPage),
     },
   };
+
+  if (allProperties) {
+    await setCache(cacheKey, allProperties, 300);
+  }
+
+  return allProperties;
 };
 
 // Fetch a single approved property by slug.
 export const getSinglePropertyService = async (slug) => {
-  return await Property.findOne({
+  const cacheKey = `property:${slug}`;
+
+  // CHECK CACHE
+  const cachedProperty = await getCache(cacheKey);
+
+  if (cachedProperty) {
+    console.log("FROM REDIS");
+    return cachedProperty;
+  }
+
+  console.log("FROM MONGODB");
+
+  const property = await Property.findOne({
     slug,
     isDeleted: false,
   })
     .populate("owner", OWNER_POPULATE)
     .lean();
+
+  await Property.updateOne({ slug }, { $inc: { views: 1 } });
+
+  if (property) {
+    await setCache(cacheKey, property, 300); // 5 min cache
+  }
+
+  return property;
 };
 
 // Fetch all properties owned by a specific user.
 export const getOwnerPropertiesService = async (ownerId) => {
-  return await Property.find({ owner: ownerId, isDeleted: false })
+  const cacheKey = `properties:owner:${ownerId}`;
+
+  const cachedProperties = await getCache(cacheKey);
+
+  if (cachedProperties) {
+    console.log("FROM REDIS");
+
+    return cachedProperties;
+  }
+
+  console.log("FROM MONGODB");
+
+  const properties = await Property.find({ owner: ownerId, isDeleted: false })
     .populate("owner", OWNER_POPULATE)
     .sort({ createdAt: -1 });
+
+  if (properties) {
+    await setCache(cacheKey, properties, 300);
+  }
+
+  return properties;
 };
 
 // Fetch featured properties
 export const getFeaturedPropertiesService = async ({ limit = 6 } = {}) => {
-  return await Property.find({
-    isFeatured: true,
-  })
-    .sort({ createdAt: -1 })
-    .limit(Number(limit))
+  const cacheKey = `featured:${limit}`;
+
+  const cachedProperties = await getCache(cacheKey);
+
+  if (cachedProperties) {
+    console.log("FROM REDIS");
+
+    return cachedProperties;
+  }
+
+  console.log("FROM MONGODB");
+
+  const properties = await Property.find({ isFeatured: true, isDeleted: false })
     .populate("owner", OWNER_POPULATE)
+    .limit(Number(limit))
     .lean();
-  // status: PROPERTY_STATUS.APPROVED,
-  // availabilityStatus: "available",
+
+  await setCache(cacheKey, properties, 300);
+
+  return properties;
 };
 
 // Fetch recommended available properties for users.
 export const getRecommendedPropertiesService = async ({ limit = 6 } = {}) => {
-  return await Property.find({
+  const cacheKey = `properties:recommended:${limit}`;
+
+  const cachedProperties = await getCache(cacheKey);
+
+  if (cachedProperties) {
+    console.log("FROM REDIS");
+    return cachedProperties;
+  }
+
+  console.log("FROM MONGODB");
+
+  const properties = await Property.find({
     status: PROPERTY_STATUS.APPROVED,
     availabilityStatus: "available",
   })
@@ -176,6 +264,12 @@ export const getRecommendedPropertiesService = async ({ limit = 6 } = {}) => {
     .limit(Number(limit))
     .populate("owner", OWNER_POPULATE)
     .lean();
+
+  if (properties) {
+    await setCache(cacheKey, properties, 300);
+  }
+
+  return properties;
 };
 
 // Update a property's details and upload additional media if provided.
@@ -194,6 +288,8 @@ export const updatePropertyService = async ({
   if (!property.owner?.equals(user._id) && user.role !== ROLES.ADMIN) {
     throw new ApiError(403, "Unauthorized access");
   }
+
+  const oldSlug = property.slug;
 
   if (body.title && body.title !== property.title) {
     property.slug = generateSlug(body.title);
@@ -256,9 +352,12 @@ export const updatePropertyService = async ({
     }
   }
 
-  await property.save();
+  await deleteCache("featured:6");
+  await deleteCache(`property:${oldSlug}`);
 
+  await property.save();
   await property.populate("owner", OWNER_POPULATE);
+
   return property;
 };
 
@@ -282,6 +381,13 @@ export const changePropertyAvailabilityService = async ({
   await property.save();
 
   await property.populate("owner", OWNER_POPULATE);
+
+  await Promise.all([
+    deleteCache(`property:${property.slug}`),
+    deleteCacheByPattern("featured:*"),
+    deleteCacheByPattern("properties:*"),
+  ]);
+
   return property;
 };
 
@@ -317,6 +423,9 @@ export const addPropertyImagesService = async ({ propertyId, files, user }) => {
   await property.save();
 
   await property.populate("owner", OWNER_POPULATE);
+
+  await deleteCache(`property:${property.slug}`);
+
   return property;
 };
 
@@ -355,6 +464,9 @@ export const deletePropertyImageService = async ({
   await property.save();
 
   await property.populate("owner", OWNER_POPULATE);
+
+  await deleteCache(`property:${property.slug}`);
+
   return property;
 };
 
@@ -387,6 +499,10 @@ export const deletePropertyService = async ({ propertyId, user }) => {
   property.isDeleted = true;
   property.deletedAt = new Date();
   property.status = PROPERTY_STATUS.INACTIVE;
+
+  await deleteCache("featured:6");
+  await deleteCache(`property:${property.slug}`);
+
   await property.save();
 
   return property;
@@ -396,7 +512,7 @@ export const deletePropertyService = async ({ propertyId, user }) => {
 export const savePropertyService = async ({ propertyId, userId }) => {
   const [user, property] = await Promise.all([
     User.exists({ _id: userId }),
-    Property.exists({ _id: propertyId }),
+    Property.exists({ _id: propertyId, isDeleted: false }),
   ]);
 
   if (!user) {
@@ -409,27 +525,20 @@ export const savePropertyService = async ({ propertyId, userId }) => {
 
   await Promise.all([
     User.findByIdAndUpdate(userId, {
-      $addToSet: {
-        savedProperties: propertyId,
-      },
+      $addToSet: { savedProperties: propertyId },
     }),
 
     Property.findByIdAndUpdate(propertyId, {
-      $addToSet: {
-        savedBy: userId,
-      },
+      $addToSet: { savedBy: userId },
     }),
   ]);
 
-  return await User.findById(userId)
-    .populate({
-      path: "savedProperties",
-      populate: {
-        path: "owner",
-        select:OWNER_POPULATE,
-      },
-    })
-    .select("-password");
+  await deleteCache(`wishlist:${userId}`);
+
+  return {
+    propertyId,
+    saved: true,
+  };
 };
 
 // Remove a saved property for the authenticated user.
@@ -449,27 +558,20 @@ export const unsavePropertyService = async ({ propertyId, userId }) => {
 
   await Promise.all([
     User.findByIdAndUpdate(userId, {
-      $pull: {
-        savedProperties: propertyId,
-      },
+      $pull: { savedProperties: propertyId },
     }),
 
     Property.findByIdAndUpdate(propertyId, {
-      $pull: {
-        savedBy: userId,
-      },
+      $pull: { savedBy: userId },
     }),
   ]);
 
-  return await User.findById(userId)
-    .populate({
-      path: "savedProperties",
-      populate: {
-        path: "owner",
-        select: "userName fullName profileImage",
-      },
-    })
-    .select("-password");
+  await deleteCache(`wishlist:${userId}`);
+
+  return {
+    propertyId,
+    saved: false,
+  };
 };
 
 // Set a property image as the thumbnail.
@@ -502,6 +604,13 @@ export const setPropertyThumbnailService = async ({
   };
 
   await property.save();
+
+  await Promise.all([
+    deleteCache(`property:${property.slug}`),
+    deleteCacheByPattern?.("featured:*"),
+    deleteCacheByPattern?.("properties:*"),
+  ]);
+
   await property.populate("owner", OWNER_POPULATE);
 
   return property;
@@ -539,6 +648,8 @@ export const deletePropertyDocumentService = async ({
 
   await property.save();
   await property.populate("owner", OWNER_POPULATE);
+
+  await deleteCache(`property:${property.slug}`);
 
   return property;
 };

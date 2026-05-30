@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaEye, FaEyeSlash, FaLock } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaLock } from "@/constants/icons";
 
 type PasswordInputProps = {
   label: string;

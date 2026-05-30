@@ -1,6 +1,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useProperty } from "@/hooks/useProperty";
 import type { Property } from "@/types/entities/property.types";
+import { useEffect, useState } from "react";
 import {
   FaBath,
   FaBed,
@@ -18,47 +19,40 @@ interface PropertyCardProps {
 }
 
 const PropertyCard = ({ property }: PropertyCardProps) => {
+  const [isSaved, setIsSaved] = useState(false);
   const { user } = useAuth();
-
   const { saveProperty, unsaveProperty } = useProperty();
 
-  const isSaved = property.savedBy?.some((id) => id === user?._id);
+  useEffect(() => {
+    const isSavedByUser = property.savedBy?.some((id) => id === user?._id);
+    setIsSaved(isSavedByUser);
+  }, [user]);
 
   const handleSave = async () => {
     if (!user) {
       toast.error("Please login first");
-
       return;
     }
 
     try {
-      if (isSaved) {
-        await unsaveProperty(property._id);
+      const result = isSaved
+        ? await unsaveProperty(property._id)
+        : await saveProperty(property._id);
 
-        toast.success("Removed from wishlist");
-      } else {
-        await saveProperty(property._id);
+      setIsSaved(result.saved);
 
-        toast.success("Saved successfully");
-      }
+      toast.success(
+        response.saved
+          ? "Property added to wishlist"
+          : "Property removed from wishlist",
+      );
     } catch (error) {
       toast.error("Something went wrong");
     }
   };
 
   return (
-    <div
-      className="
-        ls-card 
-        group
-        overflow-hidden
-        rounded-3xl
-        hover:-translate-y-2
-        transition-all
-        duration-300
-        hover:shadow-xl
-      "
-    >
+    <div className="ls-card group overflow-hidden rounded-3xl hover:-translate-y-2 transition-all duration-300 hover:shadow-xl">
       {/* IMAGE */}
 
       <div className="relative overflow-hidden">
@@ -82,7 +76,8 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         <button
           type="button"
           onClick={handleSave}
-          className=" absolute top-4 right-4 h-11 w-11 rounded-full bg-white/90 dark:bg-slate-900/90 flex items-center justify-center shadow-lg hover:scale-110 transition "
+          className="absolute top-4 right-4 h-11 w-11 rounded-full bg-white/90 dark:bg-slate-900/90 
+          flex items-center justify-center shadow-lg hover:scale-110 transition"
         >
           {isSaved ? (
             <FaHeart className=" text-red-500 text-lg" />
@@ -97,15 +92,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
       <div className="p-5 space-y-5">
         {/* LOCATION */}
 
-        <div
-          className="
-            flex
-            items-center
-            gap-2
-            text-sm
-            text-muted-foreground
-          "
-        >
+        <div className=" flex items-center gap-2 text-sm text-muted-foreground ">
           <FaMapMarkerAlt />
 
           <span className="line-clamp-1">{property.location}</span>
@@ -114,30 +101,12 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         {/* TITLE */}
 
         <div>
-          <h2
-            className="
-              text-xl
-              font-bold
-              line-clamp-1
-              group-hover:text-primary
-              transition
-            "
-          >
+          <h2 className=" text-xl font-bold line-clamp-1 group-hover:text-primary transition ">
             {property.title}
           </h2>
 
-          <div
-            className="
-              mt-2
-              flex
-              items-center
-              gap-2
-              text-sm
-              text-muted-foreground
-            "
-          >
+          <div className=" mt-2 flex items-center gap-2 text-sm text-muted-foreground">
             <MdApartment />
-
             <span>{property.propertyType}</span>
           </div>
         </div>
@@ -145,13 +114,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         {/* PRICE */}
 
         <div>
-          <span
-            className="
-              text-3xl
-              font-extrabold
-              text-primary
-            "
-          >
+          <span className="text-3xl font-extrabold text-primary ">
             ₹{property.price.toLocaleString()}
           </span>
 
@@ -162,21 +125,10 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
         {/* DETAILS */}
 
-        <div
-          className="
-            grid
-            grid-cols-3
-            gap-3
-            border-y
-            border-border-light
-            dark:border-border-dark
-            py-4
-            text-sm
-          "
-        >
+        <div className="grid grid-cols-3 gap-3 border-y border-border-light dark:border-border-dark py-4 text-sm">
           <div className="flex items-center gap-2">
+            {" "}
             <FaBed className="text-primary" />
-
             <span>{property.bedrooms} Beds</span>
           </div>
 
@@ -197,13 +149,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
         <Link
           to={`/properties/${property.slug}`}
-          className="
-            ls-btn-primary
-            w-full
-            flex
-            items-center
-            justify-center
-          "
+          className="ls-btn-primary w-full flex items-center justify-center"
         >
           View Details
         </Link>

@@ -4,6 +4,7 @@ import uploadToCloudinary from "../helpers/cloudinary/uploadToCloudinary.js";
 import deleteFromCloudinary from "../helpers/cloudinary/deleteFromCloudinary.js";
 import { CLOUDINARY_FOLDERS } from "../constants/cloudinary.constants.js";
 import { ROLES } from "../constants/role.constants.js";
+import { getCache, setCache } from "../helpers/redis/redis.utils.js";
 
 // UPDATE PROFILE
 
@@ -199,16 +200,34 @@ export const deleteProfileImageService = async (userId) => {
 // GET SAVED PROPERTIES
 
 export const getSavedPropertiesService = async (userId) => {
-  const user = await User.findById(userId).populate({
-    path: "savedProperties",
-    populate: {
-      path: "owner",
-      select: "userName fullName profileImage",
-    },
-  });
+  const cacheKey = `wishlist:${userId}`;
+
+  const cachedProperties = await getCache(cacheKey);
+
+  if (cachedProperties) {
+    console.log("FROM REDIS");
+
+    return cachedProperties;
+  }
+
+  console.log("FROM MONGODB");
+
+  const user = await User.findById(userId)
+    .populate({
+      path: "savedProperties",
+      populate: {
+        path: "owner",
+        select: "userName fullName profileImage",
+      },
+    })
+    .lean();
 
   if (!user) {
     throw new ApiError(404, "User not found");
+  }
+
+  if (user?.savedProperties) {
+    await setCache(cacheKey, user.savedProperties, 300);
   }
 
   return user.savedProperties;

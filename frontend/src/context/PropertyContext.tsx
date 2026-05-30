@@ -169,38 +169,25 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
   /* SAVE PROPERTY */
 
   const saveProperty = async (id: string) => {
-    const response = await propertyAPI.saveProperty(id);
+    try {
+      const response = await propertyAPI.saveProperty(id);
 
-    setProperties((prev) =>
-      prev.map((property) =>
-        property._id === id
-          ? {
-              ...property,
-              savedBy: [...(property.savedBy || []), response.data._id],
-            }
-          : property,
-      ),
-    );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   };
 
   /* UNSAVE PROPERTY */
 
   const unsaveProperty = async (id: string) => {
-    const response = await propertyAPI.unsaveProperty(id);
+    try {
+      const response = await propertyAPI.unsaveProperty(id);
 
-    setProperties((prev) =>
-      prev.map((property) =>
-        property._id === id
-          ? {
-              ...property,
-
-              savedBy: property.savedBy?.filter(
-                (userId) => userId !== response.data._id,
-              ),
-            }
-          : property,
-      ),
-    );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   };
 
   /* CONTACT OWNER */
