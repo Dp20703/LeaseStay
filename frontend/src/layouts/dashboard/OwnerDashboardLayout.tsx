@@ -1,5 +1,5 @@
 import DashboardLayout from "./DashboardLayout";
-import OwnerSidebar from "@/components/layout/OwnerSidebar";
+import OwnerSidebar from "@/components/layout/Sidebar/OwnerSidebar";
 
 const OwnerDashboardLayout = () => {
   return <DashboardLayout sidebar={<OwnerSidebar />} />;

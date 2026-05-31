@@ -664,7 +664,6 @@ export const getRelatedPropertiesService = async ({ propertyId }) => {
 
   const relatedProperties = await Property.find({
     _id: { $ne: propertyId },
-    status: PROPERTY_STATUS.APPROVED,
     isDeleted: false,
     category: property.category,
   })
@@ -679,7 +678,6 @@ export const getRelatedPropertiesService = async ({ propertyId }) => {
 
   return await Property.find({
     _id: { $ne: propertyId },
-    status: PROPERTY_STATUS.APPROVED,
     isDeleted: false,
     location: property.location,
   })

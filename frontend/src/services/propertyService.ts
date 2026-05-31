@@ -90,15 +90,23 @@ const propertyAPI = {
   /* FEATURED PROPERTIES */
 
   getFeaturedProperties: async () => {
-    const {data} = await api.get("/properties/featured");
+    const { data } = await api.get("/properties/featured");
 
     return data;
   },
 
+  /* RELATED PROPERTIES */
+
+  getRelatedProperties: async (propertyId: string) => {
+    const response = await api.get(`/properties/${propertyId}/related`);
+
+    return response.data;
+  },
+
   /* SAVED PROPERTIES */
- 
+
   getSavedProperties: async () => {
-    const {data} = await api.get("users/saved-properties");
+    const { data } = await api.get("users/saved-properties");
 
     return data;
   },

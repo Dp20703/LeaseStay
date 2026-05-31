@@ -23,10 +23,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
   const { user } = useAuth();
   const { saveProperty, unsaveProperty } = useProperty();
 
-  useEffect(() => {
-    const isSavedByUser = property.savedBy?.some((id) => id === user?._id);
-    setIsSaved(isSavedByUser);
-  }, [user]);
+  // const isSaved = user?.savedProperties?.includes(property._id);
 
   const handleSave = async () => {
     if (!user) {
@@ -42,7 +39,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
       setIsSaved(result.saved);
 
       toast.success(
-        response.saved
+        result.saved
           ? "Property added to wishlist"
           : "Property removed from wishlist",
       );

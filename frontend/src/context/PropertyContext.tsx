@@ -101,6 +101,64 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  /* DELETE */
+
+  const deleteProperty = async (id: string) => {
+    try {
+      setLoading(true);
+
+      await propertyAPI.deleteProperty(id);
+
+      setProperties((prev) => prev.filter((property) => property._id !== id));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* SAVE PROPERTY */
+
+  const saveProperty = async (id: string) => {
+    try {
+      const response = await propertyAPI.saveProperty(id);
+
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  /* UNSAVE PROPERTY */
+
+  const unsaveProperty = async (id: string) => {
+    try {
+      const response = await propertyAPI.unsaveProperty(id);
+
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  /* RELATED PROPERTIES */
+
+  const getRelatedProperties = async (propertyId: string) => {
+    try {
+      setLoading(true);
+
+      const response = await propertyAPI.getRelatedProperties(propertyId);
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   /* FEATURE PROPERTIES */
 
   const getFeaturedProperties = async () => {
@@ -150,46 +208,6 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  /* DELETE */
-
-  const deleteProperty = async (id: string) => {
-    try {
-      setLoading(true);
-
-      await propertyAPI.deleteProperty(id);
-
-      setProperties((prev) => prev.filter((property) => property._id !== id));
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  /* SAVE PROPERTY */
-
-  const saveProperty = async (id: string) => {
-    try {
-      const response = await propertyAPI.saveProperty(id);
-
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  /* UNSAVE PROPERTY */
-
-  const unsaveProperty = async (id: string) => {
-    try {
-      const response = await propertyAPI.unsaveProperty(id);
-
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
-
   /* CONTACT OWNER */
 
   const contactOwner = async (id: string, message: string) => {
@@ -197,10 +215,6 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
 
     return response;
   };
-
-  useEffect(() => {
-    fetchProperties();
-  }, []);
 
   return (
     <PropertyContext.Provider
@@ -219,6 +233,7 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
         updateProperty,
         deleteProperty,
         getFeaturedProperties,
+        getRelatedProperties,
         getSavedProperties,
 
         saveProperty,

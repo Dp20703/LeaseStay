@@ -1,11 +1,17 @@
 import LoaderScreen from "@/components/common/LoaderScreen";
 import PropertyCard from "@/components/property/PropertyCard";
 import { useProperty } from "@/hooks/useProperty";
+import { useEffect } from "react";
 
 const PropertiesPage = () => {
-  const { properties, loading } = useProperty();
+  const { fetchProperties, properties, loading } = useProperty();
 
   console.log("ALL PROPERTIES:", properties);
+
+  useEffect(() => {
+    fetchProperties();
+  }, []);
+
   if (loading) {
     return <LoaderScreen />;
   }

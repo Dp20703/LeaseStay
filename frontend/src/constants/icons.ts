@@ -14,7 +14,19 @@ export {
   FaEye,
   FaEyeSlash,
   FaLock,
+  FaUserCircle,
+  FaSignOutAlt,
+  FaChevronDown,
+  FaBars,
+ FaTimes,
+ FaBuilding,
+ FaShieldAlt,
+ FaChevronLeft,
+  FaChevronRight,
+  FaExpand,
 } from "react-icons/fa";
+
+export { AiFillDashboard } from "react-icons/ai";
 
 export { MdEmail, MdVerified } from "react-icons/md";
 
