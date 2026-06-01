@@ -5,19 +5,19 @@ import { OWNER_VERIFICATION_DOCUMENTS } from "../constants/auth.constants.js";
 
 export const updateProfileValidation = [
   body("firstName")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .trim()
     .isLength({ min: 2, max: 30 })
     .withMessage("First name must be between 2 and 30 characters"),
 
   body("lastName")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .trim()
     .isLength({ max: 30 })
     .withMessage("Last name too long"),
 
   body("userName")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .trim()
     .toLowerCase()
     .isLength({ min: 3, max: 30 })

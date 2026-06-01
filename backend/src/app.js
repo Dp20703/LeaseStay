@@ -13,6 +13,7 @@ import authRoutes from "./routes/auth.routes.js";
 import propertyRoutes from "./routes/property.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import bookingRoutes from "./routes/booking.routes.js";
 
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 import { notFoundMiddleware } from "./middlewares/notFound.middleware.js";
@@ -62,9 +63,10 @@ app.get("/", (req, res) => {
 /* ROUTES */
 
 app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/properties", propertyRoutes);
-app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/admin", adminRoutes);
+app.use("/api/v1/properties", propertyRoutes);
+app.use("/api/v1/bookiings", bookingRoutes);
 
 /* ERROR */
 app.use(errorMiddleware);

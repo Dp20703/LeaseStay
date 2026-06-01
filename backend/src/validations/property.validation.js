@@ -101,7 +101,7 @@ export const createPropertyValidation = [
     .withMessage("Bathrooms cannot be negative"),
 
   // body("amenities")
-  //   .optional()
+  //   .optional({ nullable: true, checkFalsy: true })
   //   .custom((value) => {
   //     const parsed = typeof value === "string" ? JSON.parse(value) : value;
 
@@ -114,7 +114,7 @@ export const createPropertyValidation = [
   //   .withMessage("Invalid amenities"),
 
   body("documentType")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .isIn(PROPERTY_DOCUMENTS)
     .withMessage("Invalid document type"),
 
@@ -139,52 +139,52 @@ export const updatePropertyValidation = [
   param("id").isMongoId().withMessage("Invalid property id"),
 
   body("title")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .trim()
     .escape()
     .isLength({ min: 5, max: 120 })
     .withMessage("Title must be between 5 and 120 characters"),
 
   body("description")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .trim()
     .escape()
     .isLength({ min: 20, max: 2000 })
     .withMessage("Description must be between 20 and 2000 characters"),
 
   body("location")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .trim()
     .escape()
     .notEmpty()
     .withMessage("Location cannot be empty"),
 
   body("address")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .trim()
     .escape()
     .notEmpty()
     .withMessage("Address cannot be empty"),
 
   body("zipCode")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .trim()
     .escape()
     .isLength({ min: 4, max: 10 })
     .withMessage("Invalid zip code"),
 
   body("propertyType")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .isIn(PROPERTY_TYPES)
     .withMessage("Invalid property type"),
 
   body("category")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .isIn(["Rent", "Sale"])
     .withMessage("Invalid category"),
 
   body("size")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .isInt()
     .isNumeric()
     .withMessage("Size must be numeric")
@@ -192,7 +192,7 @@ export const updatePropertyValidation = [
     .withMessage("Size must be greater than 0"),
 
   body("price")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .toFloat()
     .isNumeric()
     .withMessage("Price must be numeric")
@@ -200,7 +200,7 @@ export const updatePropertyValidation = [
     .withMessage("Price must be greater than 0"),
 
   body("bedrooms")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .toInt()
     .isNumeric()
     .withMessage("Bedrooms must be numeric")
@@ -208,7 +208,7 @@ export const updatePropertyValidation = [
     .withMessage("Bedrooms cannot be negative"),
 
   body("bathrooms")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .toInt()
     .isNumeric()
     .withMessage("Bathrooms must be numeric")
@@ -216,61 +216,61 @@ export const updatePropertyValidation = [
     .withMessage("Bathrooms cannot be negative"),
 
   body("status")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .isIn(["draft", "Pending", "Approved", "Rejected", "Hidden", "Inactive"])
     .withMessage("Invalid status"),
 
   body("availabilityStatus")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .isIn(["available", "occupied", "reserved"])
     .withMessage("Invalid availability status"),
 
   body("documentType")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .isIn(["sale_deed", "tax_receipt", "electricity_bill", "rental_agreement"])
     .withMessage("Invalid document type"),
 ];
 
 export const searchPropertyValidation = [
   query("page")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .isInt({ min: 1 })
     .withMessage("Page must be greater than 0"),
 
   query("limit")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .isInt({ min: 1, max: 100 })
     .withMessage("Limit must be between 1 and 100"),
 
   query("minPrice")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .isNumeric()
     .withMessage("minPrice must be numeric"),
 
   query("maxPrice")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .isNumeric()
     .withMessage("maxPrice must be numeric"),
 
   query("bedrooms")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .isNumeric()
     .withMessage("Bedrooms must be numeric"),
 
   query("bathrooms")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .isNumeric()
     .withMessage("Bathrooms must be numeric"),
 
   query("category")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .isIn(["Rent", "Sale"])
     .withMessage("Invalid category"),
 
   query("propertyType")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .isIn(PROPERTY_TYPES)
     .withMessage("Invalid property type"),
 
-  query("sort").optional().isIn(["price", "-price", "createdAt", "-createdAt"]),
+  query("sort").optional({ nullable: true, checkFalsy: true }).isIn(["price", "-price", "createdAt", "-createdAt"]),
 ];

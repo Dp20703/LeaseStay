@@ -20,7 +20,7 @@ export const rejectOwnerVerificationValidation = [
     .withMessage("Invalid user ID format"),
 
   body("reason")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .trim()
     .isLength({ min: 5, max: 500 })
     .withMessage("Reason must be between 5 and 500 characters"),
@@ -46,7 +46,7 @@ export const rejectPropertyVerificationValidation = [
     .withMessage("Invalid property ID format"),
 
   body("reason")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .trim()
     .isLength({ min: 5, max: 500 })
     .withMessage("Reason must be between 5 and 500 characters"),

@@ -36,9 +36,9 @@ export const createPropertySchema = z.object({
 
   bathrooms: z.coerce.number().min(0, "Bathrooms cannot be negative"),
 
-  amenities: z.array(z.string()).optional(),
+  amenities: z.array(z.string()).optional({ nullable: true, checkFalsy: true }),
 
-  documentType: z.string().optional(),
+  documentType: z.string().optional({ nullable: true, checkFalsy: true }),
 });
 
 export type CreatePropertyFormData = z.infer<typeof createPropertySchema>;
