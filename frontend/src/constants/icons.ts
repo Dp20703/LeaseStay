@@ -18,12 +18,13 @@ export {
   FaSignOutAlt,
   FaChevronDown,
   FaBars,
- FaTimes,
- FaBuilding,
- FaShieldAlt,
- FaChevronLeft,
+  FaTimes,
+  FaBuilding,
+  FaShieldAlt,
+  FaChevronLeft,
   FaChevronRight,
   FaExpand,
+  FaCalendarAlt,
 } from "react-icons/fa";
 
 export { AiFillDashboard } from "react-icons/ai";

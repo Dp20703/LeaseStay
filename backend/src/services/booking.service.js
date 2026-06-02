@@ -1,5 +1,8 @@
-import Property from "../models/property.model";
-import Booking from "../models/booking.model";
+import Property from "../models/property.model.js";
+import Booking from "../models/booking.model.js";
+import ApiError from "../utils/ApiError.js";
+import { sendMail } from "../helpers/mail/sendMail.js";
+import User from "../models/user.model.js";
 
 export const BOOKING_POPULATE = [
   {
@@ -22,6 +25,7 @@ export const createBookingService = async ({
   propertyId,
   tenantId,
   moveInDate,
+  moveOutDate,
   phoneNumber,
   message,
 }) => {
@@ -42,7 +46,21 @@ export const createBookingService = async ({
   if (property.owner.toString() === tenantId) {
     throw new ApiError(400, "You cannot book your own property");
   }
-  const moveInDate = new Date(moveInDate);
+  const parsedMoveInDate = new Date(moveInDate);
+
+  if (parsedMoveInDate < new Date()) {
+    throw new ApiError(400, "Move in date cannot be in the past");
+  }
+
+  let parsedMoveOutDate = null;
+
+  if (moveOutDate) {
+    parsedMoveOutDate = new Date(moveOutDate);
+
+    if (parsedMoveOutDate <= parsedMoveInDate) {
+      throw new ApiError(400, "Move out date must be after move in date");
+    }
+  }
 
   if (moveInDate < new Date()) {
     throw new ApiError(400, "Move in date cannot be in the past");
@@ -59,18 +77,31 @@ export const createBookingService = async ({
   if (existingBooking) {
     throw new ApiError(409, "Booking request already exists");
   }
+  const user = await User.findById(tenantId);
 
+  await sendMail({
+    to: property.owner.email,
+    subject: "New Booking Request",
+    html: `
+    <h2>New Booking Request</h2>
+
+    <p>${user?.userName || "An user"} requested to book:</p>
+
+    <strong>${property.title}</strong>
+  `,
+  });
   return await Booking.create({
     property: property._id,
     tenant: tenantId,
     owner: property.owner,
-    moveInDate,
+
+    moveInDate: parsedMoveInDate,
+    moveOutDate: parsedMoveOutDate || null,
+
     phoneNumber,
     message,
     monthlyRent: property.price,
   });
-  // moveOutDate,
-  // securityDeposit,
 };
 
 // MY BOOKINGS

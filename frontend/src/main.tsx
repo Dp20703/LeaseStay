@@ -7,6 +7,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { PropertyProvider } from "./context/PropertyContext";
 import "react-toastify/dist/ReactToastify.css";
+import { BookingProvider } from "./context/BookingContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -14,7 +15,9 @@ createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         <AuthProvider>
           <PropertyProvider>
-            <App />
+            <BookingProvider>
+              <App />
+            </BookingProvider>
           </PropertyProvider>
         </AuthProvider>
       </BrowserRouter>

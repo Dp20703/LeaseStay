@@ -1,8 +1,28 @@
 import ContactOwner from "./ContactOwner";
 import { FaRupeeSign, FaUser } from "@/constants/icons";
 import { MdEmail } from "@/constants/icons";
+import { useState } from "react";
+import BookingModal from "../booking/BookingModal";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const PropertySidebar = ({ property, showContact, setShowContact }: any) => {
+  const [showBooking, setShowBooking] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleBooking = () => {
+    if (!user) {
+      toast.info("Please login to book properties", {
+        onClose: () => navigate("/login"),
+      });
+
+      return;
+    }
+
+    setShowBooking(true);
+  };
   return (
     <div>
       <div className="ls-card sticky top-24 p-7 space-y-6">
@@ -17,6 +37,10 @@ const PropertySidebar = ({ property, showContact, setShowContact }: any) => {
           {property.category === "Rent" && (
             <p className="text-muted-foreground">per month</p>
           )}
+
+          <button onClick={handleBooking} className="ls-btn-primary w-full">
+            {user ? "Book Property" : "Login to Book"}
+          </button>
         </div>
 
         <div className="border-t pt-5">
@@ -42,6 +66,13 @@ const PropertySidebar = ({ property, showContact, setShowContact }: any) => {
         </button>
 
         {showContact && <ContactOwner propertyId={property._id} />}
+        {showBooking && (
+          <BookingModal
+            open={showBooking}
+            onClose={() => setShowBooking(false)}
+            property={property}
+          />
+        )}
       </div>
     </div>
   );

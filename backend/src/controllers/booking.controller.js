@@ -6,9 +6,11 @@ import {
   getOwnerBookingRequestsService,
   getSingleBookingService,
   rejectBookingService,
-} from "../services/booking.service";
+} from "../services/booking.service.js";
+import ApiResponse from "../utils/ApiResponse.js";
+import asyncHandler from "../utils/asyncHandler.js";
 
-//  CREATE BOOKING
+// CREATE BOOKING
 
 export const createBooking = asyncHandler(async (req, res) => {
   const booking = await createBookingService({
@@ -16,7 +18,9 @@ export const createBooking = asyncHandler(async (req, res) => {
     tenantId: req.user._id,
   });
 
-  return apiResponse(res, 201, booking, "Booking request created");
+  return res
+    .status(201)
+    .json(new ApiResponse(201, "Booking request created", booking));
 });
 
 // MY BOOKINGS
@@ -26,7 +30,7 @@ export const getMyBookings = asyncHandler(async (req, res) => {
     userId: req.user._id,
   });
 
-  return apiResponse(res, 200, bookings, "My Bookings");
+  return res.status(200).json(new ApiResponse(200, "My Bookings", bookings));
 });
 
 // GET SINGLE BOOKING
@@ -37,7 +41,7 @@ export const getSingleBooking = asyncHandler(async (req, res) => {
     userId: req.user._id,
   });
 
-  return apiResponse(res, 200, booking, "Booking Details");
+  return res.status(200).json(new ApiResponse(200, "Booking Details", booking));
 });
 
 // GET OWNER BOOKING
@@ -47,7 +51,9 @@ export const getOwnerBookingRequests = asyncHandler(async (req, res) => {
     ownerId: req.user._id,
   });
 
-  return apiResponse(res, 200, bookingRequest, "Booking Requests");
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Booking Requests", bookingRequest));
 });
 
 // ACCEPT BOOKING
@@ -58,20 +64,25 @@ export const acceptBooking = asyncHandler(async (req, res) => {
     ownerId: req.user._id,
   });
 
-  return apiResponse(res, 200, booking, "Booking accepted");
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Booking accepted", booking));
 });
 
 // REJECT BOOKING
 
 export const rejectBooking = asyncHandler(async (req, res) => {
   const reason = req.body?.reason || "";
+
   const booking = await rejectBookingService({
     bookingId: req.body.bookingId,
     ownerId: req.user._id,
     reason,
   });
 
-  return apiResponse(res, 200, booking, "Booking rejected");
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Booking rejected", booking));
 });
 
 // CANCEL BOOKING
@@ -82,5 +93,7 @@ export const cancelBooking = asyncHandler(async (req, res) => {
     tenantId: req.user._id,
   });
 
-  return apiResponse(res, 200, booking, "Booking canceled");
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Booking canceled", booking));
 });

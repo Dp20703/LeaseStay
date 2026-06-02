@@ -1,15 +1,8 @@
 import express from "express";
-import {
-  acceptBooking,
-  cancelBooking,
-  getMyBookings,
-  getOwnerBookingRequests,
-  getSingleBooking,
-  rejectBooking,
-} from "../controllers/booking.controller";
-import { ROLES } from "../constants/role.constants.js";
-import { verifyJWT } from "../middlewares/auth.middleware.js";
 import validate from "../middlewares/validate.middleware.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { authorizeRoles } from "../middlewares/role.middleware.js";
+import { ROLES } from "../constants/role.constants.js";
 import {
   acceptBookingValidation,
   cancelBookingValidation,
@@ -17,6 +10,15 @@ import {
   getSingleBookingValidation,
   rejectBookingValidation,
 } from "../validations/booking.validation.js";
+import {
+  acceptBooking,
+  cancelBooking,
+  createBooking,
+  getMyBookings,
+  getOwnerBookingRequests,
+  getSingleBooking,
+  rejectBooking,
+} from "../controllers/booking.controller.js";
 
 const router = express.Router();
 
@@ -29,7 +31,11 @@ router.post("/", validate(createBookingValidation), createBooking);
 router.get("/my-bookings", getMyBookings);
 
 // GET  OWNER REQUESTS
-router.get("/owner/requests", authorize(ROLES.OWNER), getOwnerBookingRequests);
+router.get(
+  "/owner/requests",
+  authorizeRoles(ROLES.OWNER),
+  getOwnerBookingRequests,
+);
 
 // GET  GET SINGLE BOOKING
 router.get("/:id", validate(getSingleBookingValidation), getSingleBooking);
@@ -38,7 +44,7 @@ router.get("/:id", validate(getSingleBookingValidation), getSingleBooking);
 router.patch(
   "/:id/accept",
   validate(acceptBookingValidation),
-  authorize(ROLES.OWNER),
+  authorizeRoles(ROLES.OWNER),
   acceptBooking,
 );
 
@@ -46,7 +52,7 @@ router.patch(
 router.patch(
   "/:id/reject",
   validate(rejectBookingValidation),
-  authorize(ROLES.OWNER),
+  authorizeRoles(ROLES.OWNER),
   rejectBooking,
 );
 

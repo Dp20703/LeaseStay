@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { FaHeart, FaUser } from "react-icons/fa";
+import { FaCalendarCheck, FaHeart, FaUser } from "react-icons/fa";
 import { FcSettings } from "react-icons/fc";
 
 const UserSidebar = () => {
@@ -20,6 +20,11 @@ const UserSidebar = () => {
           <span>Wishlist</span>
         </NavLink>
 
+        <NavLink to="/bookings" className="ls-sidebar-link">
+          <FaCalendarCheck />
+
+          <span>My Bookings</span>
+        </NavLink>
         <NavLink to="/settings" className="ls-sidebar-link">
           <FcSettings />
 

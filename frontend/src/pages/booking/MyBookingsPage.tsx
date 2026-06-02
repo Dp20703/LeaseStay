@@ -1,0 +1,47 @@
+import { useEffect } from "react";
+import BookingCard from "@/components/booking/BookingCard";
+import LoaderScreen from "@/components/common/LoaderScreen";
+import { useBooking } from "@/hooks/useBooking";
+
+const MyBookingsPage = () => {
+  const { bookings, getMyBookings, loading } = useBooking();
+
+  console.log(bookings);
+  useEffect(() => {
+    getMyBookings();
+  }, []);
+
+  if (loading) {
+    return <LoaderScreen />;
+  }
+
+  return (
+    <section className="ls-container py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold">My Bookings</h1>
+
+        <p className="text-muted-foreground mt-2">
+          Track all your booking requests and their status.
+        </p>
+      </div>
+
+      {bookings.length === 0 ? (
+        <div className="ls-card p-10 text-center">
+          <h2 className="text-xl font-semibold">No Bookings Found</h2>
+
+          <p className="text-muted-foreground mt-2">
+            You haven't made any booking requests yet.
+          </p>
+        </div>
+      ) : (
+        <div className="grid gap-6">
+          {bookings.map((booking) => (
+            <BookingCard key={booking._id} booking={booking} />
+          ))}
+        </div>
+      )}
+    </section>
+  );
+};
+
+export default MyBookingsPage;

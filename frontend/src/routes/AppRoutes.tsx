@@ -39,6 +39,7 @@ import ResetPasswordPage from "@/pages/auth/ResetPasswordPage";
 import ProfilePage from "@/pages/profile/ProfilePage";
 import SettingsPage from "@/pages/profile/SettingsPage";
 import WishListPage from "@/pages/property/WishListPage";
+import MyBookingsPage from "@/pages/booking/MyBookingsPage";
 
 /* Owner Pages */
 
@@ -99,6 +100,7 @@ const AppRoutes = () => {
         <Route element={<UserDashboardLayout />}>
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/wishlist" element={<WishListPage />} />
+          <Route path="/bookings" element={<MyBookingsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
         </Route>
       </Route>

@@ -66,7 +66,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/properties", propertyRoutes);
-app.use("/api/v1/bookiings", bookingRoutes);
+app.use("/api/v1/bookings", bookingRoutes);
 
 /* ERROR */
 app.use(errorMiddleware);

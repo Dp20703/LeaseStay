@@ -15,6 +15,11 @@ export const createBookingValidation = [
     .isISO8601()
     .withMessage("Invalid move in date"),
 
+  body("moveOutDate")
+    .optional({ nullable: true, checkFalsy: true })
+    .isISO8601()
+    .withMessage("Invalid move out date"),
+
   body("phoneNumber")
     .notEmpty()
     .withMessage("Phone number is required")
