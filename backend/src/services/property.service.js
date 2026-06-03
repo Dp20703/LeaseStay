@@ -17,7 +17,7 @@ import {
 } from "../helpers/redis/redis.utils.js";
 
 // Populate owner
-const OWNER_POPULATE = "userName fullName profileImage";
+const OWNER_POPULATE = "userName email fullName profileImage";
 
 // Normalize amenities input into a consistent array format.
 const parseAmenities = (value) => {

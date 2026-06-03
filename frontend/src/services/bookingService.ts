@@ -1,15 +1,19 @@
 import api from "./axios";
 
 const bookingAPI = {
-  // Create Booking
+  /* ─────────────────────────────────────────────
+     CREATE BOOKING
+  ───────────────────────────────────────────── */
+
   createBooking: async (bookingData) => {
     const response = await api.post("/bookings", bookingData);
 
-    console.log(response);
     return response.data;
   },
 
-  // Get My Bookings
+  /* ─────────────────────────────────────────────
+     MY BOOKINGS
+  ───────────────────────────────────────────── */
 
   getMyBookings: async () => {
     const response = await api.get("/bookings/my-bookings");
@@ -17,10 +21,54 @@ const bookingAPI = {
     return response.data;
   },
 
-  // Cancel Booking
+  /* ─────────────────────────────────────────────
+     SINGLE BOOKING
+  ───────────────────────────────────────────── */
+
+  getSingleBooking: async (bookingId) => {
+    const response = await api.get(`/bookings/${bookingId}`);
+
+    return response.data;
+  },
+
+  /* ─────────────────────────────────────────────
+     CANCEL BOOKING
+  ───────────────────────────────────────────── */
 
   cancelBooking: async (bookingId) => {
     const response = await api.patch(`/bookings/${bookingId}/cancel`);
+
+    return response.data;
+  },
+
+  /* ─────────────────────────────────────────────
+     OWNER REQUESTS
+  ───────────────────────────────────────────── */
+
+  getOwnerBookingRequests: async () => {
+    const response = await api.get("/bookings/owner/requests");
+
+    return response.data;
+  },
+
+  /* ─────────────────────────────────────────────
+     ACCEPT BOOKING
+  ───────────────────────────────────────────── */
+
+  acceptBooking: async (bookingId) => {
+    const response = await api.patch(`/bookings/${bookingId}/accept`);
+
+    return response.data;
+  },
+
+  /* ─────────────────────────────────────────────
+     REJECT BOOKING
+  ───────────────────────────────────────────── */
+
+  rejectBooking: async (bookingId, reason = "") => {
+    const response = await api.patch(`/bookings/${bookingId}/reject`, {
+      reason,
+    });
 
     return response.data;
   },

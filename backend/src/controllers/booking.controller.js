@@ -37,7 +37,7 @@ export const getMyBookings = asyncHandler(async (req, res) => {
 
 export const getSingleBooking = asyncHandler(async (req, res) => {
   const booking = await getSingleBookingService({
-    bookingId: req.body.bookingId,
+    bookingId: req.params.id,
     userId: req.user._id,
   });
 
@@ -60,7 +60,7 @@ export const getOwnerBookingRequests = asyncHandler(async (req, res) => {
 
 export const acceptBooking = asyncHandler(async (req, res) => {
   const booking = await acceptBookingService({
-    bookingId: req.body.bookingId,
+    bookingId: req.params.id,
     ownerId: req.user._id,
   });
 
@@ -75,7 +75,7 @@ export const rejectBooking = asyncHandler(async (req, res) => {
   const reason = req.body?.reason || "";
 
   const booking = await rejectBookingService({
-    bookingId: req.body.bookingId,
+    bookingId: req.params.id,
     ownerId: req.user._id,
     reason,
   });
@@ -89,7 +89,7 @@ export const rejectBooking = asyncHandler(async (req, res) => {
 
 export const cancelBooking = asyncHandler(async (req, res) => {
   const booking = await cancelBookingService({
-    bookingId: req.body.bookingId,
+    bookingId: req.params.id,
     tenantId: req.user._id,
   });
 

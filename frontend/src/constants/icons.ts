@@ -25,6 +25,7 @@ export {
   FaChevronRight,
   FaExpand,
   FaCalendarAlt,
+  FaCheck,
 } from "react-icons/fa";
 
 export { AiFillDashboard } from "react-icons/ai";

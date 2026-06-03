@@ -8,14 +8,16 @@ import type { Booking } from "@/types/entities/booking.types";
 ───────────────────────────────────────────── */
 
 interface BookingContextType {
+  bookings: Booking[];
   booking: Booking | null;
   loading: boolean;
-  login: (data: LoginFormData) => Promise<void>;
-  getMyBookings: (data: RegisterFormData) => Promise<void>;
-  googleBooking: (credential: string) => Promise<void>;
-  getMyBookings: () => Promise<void>;
-  fetchCurrentUser: () => Promise<void>;
-  setBookings: React.Dispatch<React.SetStateAction<Booking | null>>;
+  createBooking: (bookingData: any) => Promise<any>;
+  getMyBookings: () => Promise<any>;
+  getSingleBooking: (bookingId: string) => Promise<any>;
+  cancelBooking: (bookingId: string) => Promise<any>;
+  getOwnerBookingRequests: () => Promise<any>;
+  acceptBooking: (bookingId: string) => Promise<any>;
+  rejectBooking: (bookingId: string, reason?: string) => Promise<any>;
 }
 
 interface BookingProviderProps {
@@ -36,6 +38,7 @@ export const BookingContext = createContext<BookingContextType | undefined>(
 
 export const BookingProvider = ({ children }: BookingProviderProps) => {
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [booking, setBooking] = useState<Booking | null>(null);
   const [loading, setLoading] = useState(false);
 
   /* Create Booking */
@@ -74,12 +77,131 @@ export const BookingProvider = ({ children }: BookingProviderProps) => {
     }
   };
 
+  /* Get Single Booking*/
+
+  const getSingleBooking = async (bookingId: string) => {
+    try {
+      setLoading(true);
+
+      const response = await bookingAPI.getSingleBooking(bookingId);
+
+      setBooking(response.data);
+
+      return response.data;
+    } catch (error) {
+      console.log("Get Booking Error:", error);
+
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* Cancel Booking*/
+
+  const cancelBooking = async (bookingId: string) => {
+    try {
+      setLoading(true);
+
+      const response = await bookingAPI.cancelBooking(bookingId);
+
+      setBookings((prev) =>
+        prev.map((booking) =>
+          booking._id === bookingId ? response.data : booking,
+        ),
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log("Cancel Booking Error:", error);
+
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* Owner Requests */
+
+  const getOwnerBookingRequests = async () => {
+    try {
+      setLoading(true);
+
+      const response = await bookingAPI.getOwnerBookingRequests();
+
+      setBookings(response.data);
+
+      return response.data;
+    } catch (error) {
+      console.log("Owner Requests Error:", error);
+
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* Accept Booking*/
+
+  const acceptBooking = async (bookingId: string) => {
+    try {
+      setLoading(true);
+
+      const response = await bookingAPI.acceptBooking(bookingId);
+
+      setBookings((prev) =>
+        prev.map((booking) =>
+          booking._id === bookingId ? response.data : booking,
+        ),
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log("Accept Booking Error:", error);
+
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* Reject Booking*/
+
+  const rejectBooking = async (bookingId: string, reason = "") => {
+    try {
+      setLoading(true);
+
+      const response = await bookingAPI.rejectBooking(bookingId, reason);
+
+      setBookings((prev) =>
+        prev.map((booking) =>
+          booking._id === bookingId ? response.data : booking,
+        ),
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log("Reject Booking Error:", error);
+
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
   const values: BookingContextType = {
     bookings,
-    createBooking,
-    getMyBookings,
+    booking,
 
     loading,
+
+    createBooking,
+    getMyBookings,
+    getSingleBooking,
+    cancelBooking,
+
+    getOwnerBookingRequests,
+    acceptBooking,
+    rejectBooking,
   };
 
   return (

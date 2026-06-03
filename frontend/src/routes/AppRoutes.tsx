@@ -40,12 +40,14 @@ import ProfilePage from "@/pages/profile/ProfilePage";
 import SettingsPage from "@/pages/profile/SettingsPage";
 import WishListPage from "@/pages/property/WishListPage";
 import MyBookingsPage from "@/pages/booking/MyBookingsPage";
+import PaymentPage from "@/pages/payment/PaymentPage";
 
 /* Owner Pages */
 
 import DashboardPage from "@/pages/owner/DashboardPage";
 import CreatePropertyPage from "@/pages/property/CreatePropertyPage";
 import OwnerPropertiesPage from "@/pages/property/OwnerPropertiesPage";
+import OwnerBookingRequestsPage from "@/pages/owner/OwnerBookingRequestsPage";
 
 /* Admin Pages */
 
@@ -62,21 +64,13 @@ const AppRoutes = () => {
 
       <Route element={<MainLayout />}>
         <Route path="/" element={<HomePage />} />
-
         <Route path="/about" element={<AboutPage />} />
-
         <Route path="/contact" element={<ContactPage />} />
-
         <Route path="/properties" element={<PropertiesPage />} />
-
         <Route path="/properties/:slug" element={<PropertyDetailsPage />} />
-
         <Route path="/faq" element={<FaqPage />} />
-
         <Route path="/terms" element={<TermsConditionsPage />} />
-
         <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-
         <Route path="/cookies" element={<CookiesPolicyPage />} />
       </Route>
 
@@ -102,6 +96,7 @@ const AppRoutes = () => {
           <Route path="/wishlist" element={<WishListPage />} />
           <Route path="/bookings" element={<MyBookingsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/payment/:id" element={<PaymentPage />} />
         </Route>
       </Route>
 
@@ -112,6 +107,10 @@ const AppRoutes = () => {
           <Route path="/owner/dashboard" element={<DashboardPage />} />
 
           <Route path="/owner/properties" element={<OwnerPropertiesPage />} />
+          <Route
+            path="/owner/booking-requests"
+            element={<OwnerBookingRequestsPage />}
+          />
 
           <Route
             path="/owner/properties/create"

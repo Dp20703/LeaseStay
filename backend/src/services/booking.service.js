@@ -4,6 +4,8 @@ import ApiError from "../utils/ApiError.js";
 import { sendMail } from "../helpers/mail/sendMail.js";
 import User from "../models/user.model.js";
 
+const OWNER_POPULATE = "userName email fullName profileImage";
+
 export const BOOKING_POPULATE = [
   {
     path: "property",
@@ -29,7 +31,11 @@ export const createBookingService = async ({
   phoneNumber,
   message,
 }) => {
-  const property = await Property.findById(propertyId);
+  const property = await Property.findById(propertyId).populate(
+    "owner",
+    OWNER_POPULATE,
+  );
+  console.log(property);
 
   if (!property) {
     throw new ApiError(404, "Property not found");
@@ -148,7 +154,7 @@ export const acceptBookingService = async ({ bookingId, ownerId }) => {
     throw new ApiError(404, "Booking not found");
   }
 
-  if (booking.owner.toString() !== ownerId) {
+  if (booking.owner.toString() !== ownerId.toString()) {
     throw new ApiError(403, "Unauthorized access");
   }
 
@@ -174,7 +180,7 @@ export const rejectBookingService = async ({ bookingId, ownerId, reason }) => {
     throw new ApiError(404, "Booking not found");
   }
 
-  if (booking.owner.toString() !== ownerId) {
+  if (booking.owner.toString() !== ownerId.toString()) {
     throw new ApiError(403, "Unauthorized access");
   }
 
@@ -202,7 +208,7 @@ export const cancelBookingService = async ({ bookingId, tenantId }) => {
     throw new ApiError(404, "Booking not found");
   }
 
-  if (booking.tenant.toString() !== tenantId) {
+  if (booking.tenant.toString() !== tenantId.toString()) {
     throw new ApiError(403, "Unauthorized access");
   }
 
