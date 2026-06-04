@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { FaEdit } from "react-icons/fa";
+import { Pencil } from "@/constants/icons";
 import api from "@/services/axios";
 import type { User } from "@/types/entities/user.types";
 import type { ProfileFormData } from "@/types/forms/profile-form.types";
@@ -147,7 +147,7 @@ const ProfileEditCard = ({
               onClick={() => setIsEditing(true)}
               className="ls-btn-primary flex items-center gap-2"
             >
-              <FaEdit className="text-sm" />
+              <Pencil className="text-sm" />
               Edit
             </button>
           )}

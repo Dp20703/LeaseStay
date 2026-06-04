@@ -2,14 +2,14 @@ import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ROLES } from "@/constants/role.constants";
 import {
-  FaUserCircle,
-  FaHeart,
-  FaUser,
-  FaSignOutAlt,
-  FaChevronDown,
-  FaBuilding,
-  FaShieldAlt,
-  AiFillDashboard,
+  CircleUser,
+  Heart,
+  User,
+  LogOut,
+  ChevronDown,
+  Building,
+  Shield,
+  LayoutDashboard,
 } from "@/constants/icons";
 
 interface UserMenuProps {
@@ -42,7 +42,7 @@ const UserMenu = ({ user, logout }: UserMenuProps) => {
         onClick={() => setOpen(!open)}
         className="flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-muted-light dark:hover:bg-muted-dark transition "
       >
-        <FaUserCircle className="text-3xl text-primary" />
+        <CircleUser className="text-3xl text-primary" />
 
         <div className="text-left hidden xl:block">
           <p className="font-medium text-sm">{user.userName}</p>
@@ -50,7 +50,7 @@ const UserMenu = ({ user, logout }: UserMenuProps) => {
           <p className="text-xs text-muted-foreground">{user.email}</p>
         </div>
 
-        <FaChevronDown className={`transition ${open ? "rotate-180" : ""}`} />
+        <ChevronDown className={`transition ${open ? "rotate-180" : ""}`} />
       </button>
 
       {/* Dropdown */}
@@ -75,7 +75,7 @@ const UserMenu = ({ user, logout }: UserMenuProps) => {
               onClick={() => setOpen(!open)}
               className="flex items-center gap-3 rounded-xl p-3 hover:bg-muted-light dark:hover:bg-muted-dark"
             >
-              <FaUser />
+              <User />
               Profile
             </Link>
 
@@ -84,7 +84,7 @@ const UserMenu = ({ user, logout }: UserMenuProps) => {
               onClick={() => setOpen(!open)}
               className="flex items-center gap-3 rounded-xl p-3 hover:bg-muted-light dark:hover:bg-muted-dark"
             >
-              <FaHeart />
+              <Heart />
               Wishlist
             </Link>
 
@@ -94,7 +94,7 @@ const UserMenu = ({ user, logout }: UserMenuProps) => {
                 onClick={() => setOpen(!open)}
                 className="flex items-center gap-3 rounded-xl p-3 hover:bg-muted-light dark:hover:bg-muted-dark"
               >
-                <AiFillDashboard />
+                <LayoutDashboard />
                 Dashboard
               </Link>
             )}
@@ -104,7 +104,7 @@ const UserMenu = ({ user, logout }: UserMenuProps) => {
                 to="/admin"
                 className="flex items-center gap-3 rounded-xl p-3 hover:bg-muted-light dark:hover:bg-muted-dark"
               >
-                <FaShieldAlt />
+                <Shield />
                 Admin Panel
               </Link>
             )}
@@ -113,7 +113,7 @@ const UserMenu = ({ user, logout }: UserMenuProps) => {
               onClick={logout}
               className="w-full flex items-center gap-3 rounded-xl p-3 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 "
             >
-              <FaSignOutAlt />
+              <LogOut />
               Logout
             </button>
           </div>

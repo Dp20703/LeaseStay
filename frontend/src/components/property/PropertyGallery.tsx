@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import {
-  FaArrowLeft,
-  FaChevronLeft,
-  FaChevronRight,
-  FaExpand,
-  FaTimes,
+  ArrowLeft,
+  ChevronLeft,
+  ChevronRight,
+  Expand,
+  X,
 } from "@/constants/icons";
 import { useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
@@ -74,14 +74,14 @@ const PropertyGallery = ({ images }: PropertyGalleryProps) => {
             onClick={() => setIsOpen(true)}
             className=" absolute top-6 right-6 h-12 w-12 rounded-full bg-white/90 dark:bg-slate-900/90 flex items-center justify-center shadow-lg hover:scale-110 transition "
           >
-            <FaExpand />
+            <Expand />
           </button>
 
           <button
             onClick={() => navigate(-1)}
             className="absolute top-6 left-6 z-10 flex items-center gap-2 px-5 py-3 rounded-full bg-white/90 dark:bg-slate-900/90 text-slate-900 dark:text-white shadow-xl backdrop-blur-md hover:scale-105 transition"
           >
-            <FaArrowLeft />
+            <ArrowLeft />
             <span className="font-medium">Back</span>
           </button>
         </div>
@@ -114,7 +114,7 @@ const PropertyGallery = ({ images }: PropertyGalleryProps) => {
               onClick={() => setIsOpen(false)}
               className=" absolute top-6 right-6 h-12 w-12 rounded-full bg-white text-black flex items-center justify-center "
             >
-              <FaTimes />
+              <X />
             </button>
 
             {/* Previous */}
@@ -123,7 +123,7 @@ const PropertyGallery = ({ images }: PropertyGalleryProps) => {
               onClick={prevImage}
               className=" absolute left-6 h-14 w-14 rounded-full bg-white text-black flex items-center justify-center "
             >
-              <FaChevronLeft />
+              <ChevronLeft />
             </button>
 
             {/* Next */}
@@ -132,7 +132,7 @@ const PropertyGallery = ({ images }: PropertyGalleryProps) => {
               onClick={nextImage}
               className=" absolute right-6 h-14 w-14 rounded-full bg-white text-black flex items-center justify-center "
             >
-              <FaChevronRight />
+              <ChevronRight />
             </button>
 
             {/* Image */}

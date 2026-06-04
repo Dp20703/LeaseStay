@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { FaBars, FaHeart, FaTimes } from "@/constants/icons";
+import { Menu, Heart, X } from "@/constants/icons";
 
 import { useAuth } from "@/hooks/useAuth";
 import { ROLES } from "@/constants/role.constants";
@@ -51,7 +51,7 @@ const Navbar = () => {
               to="/wishlist"
               className="ls-nav-link flex items-center gap-2"
             >
-              <FaHeart />
+              <Heart />
               Wishlist
             </NavLink>
           )}
@@ -93,7 +93,7 @@ const Navbar = () => {
           onClick={() => setMenuOpen((prev) => !prev)}
           className="lg:hidden text-2xl"
         >
-          {menuOpen ? <FaTimes /> : <FaBars />}
+          {menuOpen ? <X /> : <Menu />}
         </button>
       </div>
 

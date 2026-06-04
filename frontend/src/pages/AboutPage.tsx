@@ -1,4 +1,4 @@
-import { FaBuilding, FaHandshake, FaHome, FaShieldAlt } from "react-icons/fa";
+import { Building, Handshake, Home, Shield } from "@/constants/icons";
 
 const AboutPage = () => {
   return (
@@ -55,7 +55,7 @@ const AboutPage = () => {
         <div className="grid lg:grid-cols-2 gap-10">
           <div className="ls-card p-8">
             <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary text-2xl mb-6">
-              <FaHome />
+              <Home />
             </div>
 
             <h3 className="text-2xl font-semibold mb-4">
@@ -70,7 +70,7 @@ const AboutPage = () => {
 
           <div className="ls-card p-8">
             <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary text-2xl mb-6">
-              <FaShieldAlt />
+              <Shield />
             </div>
 
             <h3 className="text-2xl font-semibold mb-4">Verified & Secure</h3>
@@ -83,7 +83,7 @@ const AboutPage = () => {
 
           <div className="ls-card p-8">
             <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary text-2xl mb-6">
-              <FaBuilding />
+              <Building />
             </div>
 
             <h3 className="text-2xl font-semibold mb-4">
@@ -98,7 +98,7 @@ const AboutPage = () => {
 
           <div className="ls-card p-8">
             <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary text-2xl mb-6">
-              <FaHandshake />
+              <Handshake />
             </div>
 
             <h3 className="text-2xl font-semibold mb-4">Trusted Community</h3>

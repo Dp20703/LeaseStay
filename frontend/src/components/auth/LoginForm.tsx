@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { FaEnvelope } from "react-icons/fa";
 import type { AxiosError } from "axios";
 import { useAuth } from "@/hooks/useAuth";
 import type {
@@ -13,6 +12,7 @@ import AuthInput from "./AuthInput";
 import PasswordInput from "./PasswordInput";
 import GoogleAuthButton from "./GoogleAuthButton";
 import { validateLoginForm } from "./login.validation";
+import { Mail } from "@/constants/icons";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -91,7 +91,7 @@ const LoginForm = () => {
           value={formData.email}
           onChange={handleChange}
           error={errors.email}
-          icon={<FaEnvelope />}
+          icon={<Mail />}
           placeholder="Enter email"
           autoComplete="email"
         />

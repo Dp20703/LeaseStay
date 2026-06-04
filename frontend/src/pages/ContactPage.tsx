@@ -1,8 +1,6 @@
 import { useState } from "react";
-
-import { FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
-
 import { toast } from "react-toastify";
+import { Mail, MapPin, Phone } from "@/constants/icons";
 
 const ContactPage = () => {
   const [loading, setLoading] = useState(false);
@@ -69,7 +67,7 @@ const ContactPage = () => {
           <div className="space-y-8">
             <div className="ls-card p-8 flex gap-5">
               <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary text-2xl shrink-0">
-                <FaEnvelope />
+                <Mail />
               </div>
 
               <div>
@@ -83,7 +81,7 @@ const ContactPage = () => {
 
             <div className="ls-card p-8 flex gap-5">
               <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary text-2xl shrink-0">
-                <FaPhoneAlt />
+                <Phone />
               </div>
 
               <div>
@@ -97,7 +95,7 @@ const ContactPage = () => {
 
             <div className="ls-card p-8 flex gap-5">
               <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary text-2xl shrink-0">
-                <FaMapMarkerAlt />
+                <MapPin />
               </div>
 
               <div>

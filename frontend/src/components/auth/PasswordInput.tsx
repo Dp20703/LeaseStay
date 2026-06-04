@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaEye, FaEyeSlash, FaLock } from "@/constants/icons";
+import { Eye, EyeOff, Lock } from "@/constants/icons";
 
 type PasswordInputProps = {
   label: string;
@@ -23,7 +23,7 @@ const PasswordInput = ({
       <label className="ls-label">{label}</label>
 
       <div className="relative mt-2">
-        <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" />
+        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" />
 
         <input
           type={showPassword ? "text" : "password"}
@@ -40,7 +40,7 @@ const PasswordInput = ({
           onClick={() => setShowPassword(!showPassword)}
           className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted"
         >
-          {showPassword ? <FaEyeSlash /> : <FaEye />}
+          {showPassword ? <EyeOff /> : <Eye />}
         </button>
       </div>
 

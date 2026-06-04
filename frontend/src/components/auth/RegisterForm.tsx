@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { FaEnvelope, FaPhone, FaUser } from "react-icons/fa";
+import { Mail, Phone, User } from "@/constants/icons";
 import { useAuth } from "@/hooks/useAuth";
 import type {
   RegisterFormData,
@@ -116,7 +116,7 @@ const RegisterForm = () => {
             value={formData.firstName}
             onChange={handleChange}
             error={errors.firstName}
-            icon={<FaUser />}
+            icon={<User />}
             placeholder="Enter first name"
           />
 
@@ -150,7 +150,7 @@ const RegisterForm = () => {
           value={formData.email}
           onChange={handleChange}
           error={errors.email}
-          icon={<FaEnvelope />}
+          icon={<Mail />}
           placeholder="Enter email"
         />
 
@@ -182,7 +182,7 @@ const RegisterForm = () => {
           value={formData.phone}
           onChange={handleChange}
           error={errors.phone}
-          icon={<FaPhone />}
+          icon={<Phone />}
           placeholder="Enter phone number"
         />
 

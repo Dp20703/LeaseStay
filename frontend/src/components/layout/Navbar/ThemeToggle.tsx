@@ -1,4 +1,4 @@
-import { FaMoon, FaSun } from "react-icons/fa";
+import { Moon, Sun } from "@/constants/icons";
 
 interface ThemeToggleProps {
   darkMode: boolean;
@@ -18,7 +18,7 @@ const ThemeToggle = ({ darkMode, setDarkMode }: ThemeToggleProps) => {
         transition-all
       "
     >
-      {darkMode ? <FaSun /> : <FaMoon />}
+      {darkMode ? <Sun /> : <Moon />}
     </button>
   );
 };

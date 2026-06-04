@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { ChevronDown, ChevronUp } from "@/constants/icons";
 
 const faqs = [
   {
@@ -64,7 +64,7 @@ const FaqPage = () => {
                 >
                   <h3 className="text-lg font-semibold">{faq.question}</h3>
 
-                  {isOpen ? <FaChevronUp /> : <FaChevronDown />}
+                  {isOpen ? <ChevronUp /> : <ChevronDown />}
                 </button>
 
                 {isOpen && (

@@ -1,6 +1,6 @@
 import ContactOwner from "./ContactOwner";
-import { FaRupeeSign, FaUser } from "@/constants/icons";
-import { MdEmail } from "@/constants/icons";
+import { IndianRupee, User } from "@/constants/icons";
+import { Mail } from "@/constants/icons";
 import { useState } from "react";
 import BookingModal from "../booking/BookingModal";
 import { useAuth } from "@/hooks/useAuth";
@@ -30,7 +30,7 @@ const PropertySidebar = ({ property, showContact, setShowContact }: any) => {
           <p className="text-muted-foreground">Property Price</p>
 
           <h2 className="text-4xl font-black text-primary flex items-center">
-            <FaRupeeSign />
+            <IndianRupee />
             {property.price.toLocaleString()}
           </h2>
 
@@ -48,7 +48,7 @@ const PropertySidebar = ({ property, showContact, setShowContact }: any) => {
 
         <div className="border-t pt-5">
           <div className="flex items-center gap-3">
-            <FaUser className="text-primary" />
+            <User className="text-primary" />
 
             <div>
               <p className="font-semibold">Verified Owner</p>
@@ -64,7 +64,7 @@ const PropertySidebar = ({ property, showContact, setShowContact }: any) => {
           onClick={() => setShowContact(!showContact)}
           className="ls-btn-primary w-full flex items-center justify-center gap-2"
         >
-          <MdEmail />
+          <Mail />
           Contact Owner
         </button>
 

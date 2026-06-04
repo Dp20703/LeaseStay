@@ -1,12 +1,11 @@
 import {
-  FaArrowLeft,
-  FaHeart,
-  FaRegHeart,
-  FaMapMarkerAlt,
-  FaTag,
-  FaHome,
-  FaEye,
-  FiShare2,
+  ArrowLeft,
+  Heart,
+  MapPin,
+  Tag,
+  Home,
+  Eye,
+  Share2,
 } from "@/constants/icons";
 
 const PropertyHeader = ({
@@ -20,21 +19,21 @@ const PropertyHeader = ({
       <div>
         <div className="flex flex-wrap gap-3 mb-4">
           <span className="ls-badge-primary flex gap-2">
-            <FaTag />
+            <Tag />
             {property.category}
           </span>
 
           <span className="ls-badge flex gap-2">
-            <FaHome />
+            <Home />
             {property.propertyType}
           </span>
 
           <span className="ls-badge flex gap-2">
-            <FaEye />
+            <Eye />
             {property.views || 0}
           </span>
           <span className="ls-badge flex gap-2">
-            <FiShare2 />
+            <Share2 />
             {property?.shareCount || 0}
           </span>
         </div>
@@ -42,7 +41,7 @@ const PropertyHeader = ({
         <h1 className="text-5xl font-black">{property.title}</h1>
 
         <div className="flex items-center gap-2 mt-3 text-muted-foreground">
-          <FaMapMarkerAlt />
+          <MapPin />
           {property.location}
         </div>
       </div>
@@ -51,14 +50,14 @@ const PropertyHeader = ({
           onClick={() => setShareOpen(true)}
           className="ls-btn-outline flex items-center gap-3 h-fit"
         >
-          <FiShare2 />
+          <Share2 />
           Share
         </button>
         <button
           onClick={onWishlist}
           className="ls-btn-outline flex items-center gap-3 h-fit"
         >
-          {isSaved ? <FaHeart /> : <FaRegHeart />}
+          {isSaved ? <Heart /> : <Heart />}
           {isSaved ? "Saved" : "Save Property"}
         </button>
       </div>

@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { FaTimes } from "react-icons/fa";
+import { X } from "@/constants/icons";
 
 const Dialog = DialogPrimitive.Root;
 const DialogTrigger = DialogPrimitive.Trigger;
@@ -35,7 +35,7 @@ const DialogContent = React.forwardRef<
       {children}
 
       <DialogPrimitive.Close className=" absolute right-4 top-4 rounded-full p-2 hover:bg-muted transition ">
-        <FaTimes />
+        <X />
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>

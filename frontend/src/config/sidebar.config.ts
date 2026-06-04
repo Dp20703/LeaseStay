@@ -1,40 +1,39 @@
-import {
-  FaHome,
-  FaPlus,
-  FaUsers,
-  FaHeart,
-  FaUser,
-  FaCalendarCheck,
-  FaClipboardList,
-  FaCheckCircle,
-  FaTachometerAlt,
-} from "react-icons/fa";
-
-import { FcSettings } from "react-icons/fc";
 import { ROLES } from "@/constants/role.constants";
 import type { SidebarItem } from "@/constants/navigation.types";
-
+import {
+  Home,
+  Plus,
+  Users,
+  Heart,
+  User,
+  ClipboardCheck,
+  ClipboardList,
+  CheckCircle,
+  LayoutDashboard,
+  Settings,
+} from "@/constants/icons";
+Home;
 export const SIDEBAR_CONFIG: Record<string, SidebarItem[]> = {
   [ROLES.USER]: [
     {
       path: "/profile",
       label: "Profile",
-      icon: FaUser,
+      icon: User,
     },
     {
       path: "/wishlist",
       label: "Wishlist",
-      icon: FaHeart,
+      icon: Heart,
     },
     {
       path: "/bookings",
       label: "My Bookings",
-      icon: FaCalendarCheck,
+      icon: ClipboardCheck,
     },
     {
       path: "/settings",
       label: "Settings",
-      icon: FcSettings,
+      icon: Settings,
     },
   ],
 
@@ -42,23 +41,23 @@ export const SIDEBAR_CONFIG: Record<string, SidebarItem[]> = {
     {
       path: "/owner/dashboard",
       label: "Dashboard",
-      icon: FaTachometerAlt,
+      icon: LayoutDashboard,
     },
     {
       path: "/owner/properties",
       label: "My Properties",
-      icon: FaHome,
+      icon: Home,
       end: true,
     },
     {
       path: "/owner/booking-requests",
       label: "Booking Requests",
-      icon: FaClipboardList,
+      icon: ClipboardList,
     },
     {
       path: "/owner/properties/create",
       label: "Add Property",
-      icon: FaPlus,
+      icon: Plus,
     },
   ],
 
@@ -66,18 +65,18 @@ export const SIDEBAR_CONFIG: Record<string, SidebarItem[]> = {
     {
       path: "/admin",
       label: "Dashboard",
-      icon: FaHome,
+      icon: Home,
       end: true,
     },
     {
       path: "/admin/users",
       label: "Users",
-      icon: FaUsers,
+      icon: Users,
     },
     {
       path: "/admin/verifications",
       label: "Verifications",
-      icon: FaCheckCircle,
+      icon: CheckCircle,
     },
   ],
 };

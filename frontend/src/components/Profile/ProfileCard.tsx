@@ -1,6 +1,6 @@
 import type { User } from "@/types/entities/user.types";
 import type { ProfileFormData } from "@/types/forms/profile-form.types";
-import { FaCamera, FaEnvelope, FaPhone, FaShieldAlt } from "react-icons/fa";
+import { Camera, Mail, Phone, Shield } from "@/constants/icons";
 
 type ProfileCardProps = {
   user: User;
@@ -55,7 +55,7 @@ const ProfileCard = ({
                 onChange={handleImageChange}
               />
 
-              <FaCamera className="text-sm" />
+              <Camera className="text-sm" />
             </label>
           )}
         </div>
@@ -80,18 +80,18 @@ const ProfileCard = ({
 
         <div className="mt-8 space-y-4 text-left">
           <div className="flex items-center gap-3">
-            <FaEnvelope className="text-sm" />
+            <Mail className="text-sm" />
             <span className="text-sm">{user?.email}</span>
           </div>
 
           <div className="flex items-center gap-3">
-            <FaPhone className="text-sm" />
+            <Phone className="text-sm" />
 
             <span className="text-sm">{user?.phone || "N/A"}</span>
           </div>
 
           <div className="flex items-center gap-3">
-            <FaShieldAlt className="text-sm" />
+            <Shield className="text-sm" />
 
             <span className="text-sm">
               {user?.isVerified ? "Verified" : "Not Verified"}

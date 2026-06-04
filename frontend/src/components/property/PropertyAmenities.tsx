@@ -1,4 +1,4 @@
-import { FaCheckCircle } from "@/constants/icons";
+import { CheckCircle } from "@/constants/icons";
 
 const PropertyAmenities = ({ amenities }: { amenities: string[] }) => {
   return (
@@ -8,7 +8,7 @@ const PropertyAmenities = ({ amenities }: { amenities: string[] }) => {
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         {amenities?.map((item) => (
           <div key={item} className="ls-badge flex items-center gap-2">
-            <FaCheckCircle />
+            <CheckCircle />
             {item}
           </div>
         ))}

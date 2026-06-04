@@ -1,10 +1,10 @@
 import {
-  FaCalendarAlt,
-  FaMapMarkerAlt,
-  FaRupeeSign,
-  FaHome,
-  FaCheck,
-  FaTimes,
+  Calendar,
+  MapPin,
+  IndianRupee,
+  Home,
+  Check,
+  X,
 } from "@/constants/icons";
 
 import { Link } from "react-router-dom";
@@ -87,7 +87,7 @@ const BookingCard = ({ booking, isOwnerView = false }: BookingCardProps) => {
               </Link>
 
               <div className="mt-2 flex items-center gap-2 text-muted-foreground">
-                <FaMapMarkerAlt />
+                <MapPin />
 
                 <span>{property?.location}</span>
               </div>
@@ -132,7 +132,7 @@ const BookingCard = ({ booking, isOwnerView = false }: BookingCardProps) => {
 
           <div className="mt-6 grid gap-5 md:grid-cols-3">
             <div className="flex items-center gap-3">
-              <FaCalendarAlt className="text-primary" />
+              <Calendar className="text-primary" />
 
               <div>
                 <p className="text-sm text-muted-foreground">Move In</p>
@@ -144,7 +144,7 @@ const BookingCard = ({ booking, isOwnerView = false }: BookingCardProps) => {
             </div>
 
             <div className="flex items-center gap-3">
-              <FaCalendarAlt className="text-primary" />
+              <Calendar className="text-primary" />
 
               <div>
                 <p className="text-sm text-muted-foreground">Move Out</p>
@@ -158,7 +158,7 @@ const BookingCard = ({ booking, isOwnerView = false }: BookingCardProps) => {
             </div>
 
             <div className="flex items-center gap-3">
-              <FaRupeeSign className="text-primary" />
+              <IndianRupee className="text-primary" />
 
               <div>
                 <p className="text-sm text-muted-foreground">Monthly Rent</p>
@@ -175,7 +175,7 @@ const BookingCard = ({ booking, isOwnerView = false }: BookingCardProps) => {
               to={`/properties/${property?.slug}`}
               className="ls-btn-outline"
             >
-              <FaHome />
+              <Home />
               View Property
             </Link>
 
@@ -184,12 +184,12 @@ const BookingCard = ({ booking, isOwnerView = false }: BookingCardProps) => {
             {isOwnerView && status === "pending" && (
               <>
                 <button onClick={handleAccept} className="ls-btn-success">
-                  <FaCheck />
+                  <Check />
                   Accept
                 </button>
 
                 <button onClick={handleReject} className="ls-btn-danger">
-                  <FaTimes />
+                  <X />
                   Reject
                 </button>
               </>

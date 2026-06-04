@@ -1,14 +1,13 @@
 import { Link } from "react-router-dom";
-
 import {
-  FaFacebookF,
+  FaFacebook,
   FaTwitter,
   FaInstagram,
   FaLinkedinIn,
-  FaEnvelope,
-  FaPhoneAlt,
-  FaMapMarkerAlt,
-} from "react-icons/fa";
+  Mail,
+  Phone,
+  MapPin,
+} from "@/constants/icons";
 
 const Footer = () => {
   return (
@@ -41,7 +40,7 @@ const Footer = () => {
                 href="#"
                 className="w-10 h-10 rounded-full border border-border-light dark:border-border-dark flex items-center justify-center hover:bg-primary hover:text-white transition-all"
               >
-                <FaFacebookF />
+                <FaFacebook />
               </a>
 
               <a
@@ -132,7 +131,7 @@ const Footer = () => {
 
             <ul className="mt-5 space-y-5 text-sm">
               <li className="flex items-start gap-3">
-                <FaEnvelope className="mt-1 text-primary" />
+                <Mail className="mt-1 text-primary" />
 
                 <a
                   href="mailto:support@leasestay.com"
@@ -143,7 +142,7 @@ const Footer = () => {
               </li>
 
               <li className="flex items-start gap-3">
-                <FaPhoneAlt className="mt-1 text-primary" />
+                <Phone className="mt-1 text-primary" />
 
                 <a
                   href="tel:+919054800900"
@@ -154,7 +153,7 @@ const Footer = () => {
               </li>
 
               <li className="flex items-start gap-3">
-                <FaMapMarkerAlt className="mt-1 text-primary" />
+                <MapPin className="mt-1 text-primary" />
 
                 <span className="text-text-muted dark:text-text-darkMuted">
                   Ahmedabad, Gujarat, India

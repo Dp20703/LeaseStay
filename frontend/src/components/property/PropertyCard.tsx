@@ -1,18 +1,10 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useProperty } from "@/hooks/useProperty";
-import type { Property } from "@/types/entities/property.types";
-import { useEffect, useState } from "react";
-import {
-  FaBath,
-  FaBed,
-  FaHeart,
-  FaMapMarkerAlt,
-  FaRegHeart,
-  FaRulerCombined,
-} from "react-icons/fa";
-import { MdApartment } from "react-icons/md";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import type { Property } from "@/types/entities/property.types";
+import { Building2, Bath, Bed, Heart, MapPin, Ruler } from "@/constants/icons";
 
 interface PropertyCardProps {
   property: Property;
@@ -36,15 +28,15 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         ? await unsaveProperty(property._id)
         : await saveProperty(property._id);
 
-      setIsSaved(result.saved);
+      setIsSaved(result?.saved);
 
       toast.success(
-        result.saved
+        result?.saved
           ? "Property added to wishlist"
           : "Property removed from wishlist",
       );
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error(error?.message || "Something went wrong");
     }
   };
 
@@ -77,9 +69,9 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           flex items-center justify-center shadow-lg hover:scale-110 transition"
         >
           {isSaved ? (
-            <FaHeart className=" text-red-500 text-lg" />
+            <Heart className=" text-red-500 text-lg" />
           ) : (
-            <FaRegHeart className="text-red-500 text-lg" />
+            <Heart className="text-red-500 text-lg" />
           )}
         </button>
       </div>
@@ -90,7 +82,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         {/* LOCATION */}
 
         <div className=" flex items-center gap-2 text-sm text-muted-foreground ">
-          <FaMapMarkerAlt />
+          <MapPin />
 
           <span className="line-clamp-1">{property.location}</span>
         </div>
@@ -103,7 +95,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           </h2>
 
           <div className=" mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-            <MdApartment />
+            <Building2 />
             <span>{property.propertyType}</span>
           </div>
         </div>
@@ -125,18 +117,18 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         <div className="grid grid-cols-3 gap-3 border-y border-border-light dark:border-border-dark py-4 text-sm">
           <div className="flex items-center gap-2">
             {" "}
-            <FaBed className="text-primary" />
+            <Bed className="text-primary" />
             <span>{property.bedrooms} Beds</span>
           </div>
 
           <div className="flex items-center gap-2">
-            <FaBath className="text-primary" />
+            <Bath className="text-primary" />
 
             <span>{property.bathrooms} Baths</span>
           </div>
 
           <div className="flex items-center gap-2">
-            <FaRulerCombined className="text-primary" />
+            <Ruler className="text-primary" />
 
             <span>{property.size} ft²</span>
           </div>

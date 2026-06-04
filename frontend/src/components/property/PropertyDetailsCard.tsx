@@ -1,10 +1,4 @@
-import {
-  FaBed,
-  FaBath,
-  FaRulerCombined,
-  FaHome,
-  FaTag,
-} from "@/constants/icons";
+import { Bed, Bath, Ruler, Home, Tag } from "@/constants/icons";
 
 const PropertyDetailsCard = ({ property }: any) => {
   return (
@@ -12,38 +6,26 @@ const PropertyDetailsCard = ({ property }: any) => {
       <h2 className="text-3xl font-bold mb-6">Property Details</h2>
 
       <div className="grid md:grid-cols-2 gap-5">
-        <DetailRow
-          icon={<FaBed />}
-          label="Bedrooms"
-          value={property.bedrooms}
-        />
+        <DetailRow icon={<Bed />} label="Bedrooms" value={property.bedrooms} />
 
         <DetailRow
-          icon={<FaBath />}
+          icon={<Bath />}
           label="Bathrooms"
           value={property.bathrooms}
         />
 
         <DetailRow
-          icon={<FaRulerCombined />}
+          icon={<Ruler />}
           label="Area"
           value={`${property.size} sqft`}
         />
 
-        <DetailRow
-          icon={<FaHome />}
-          label="Type"
-          value={property.propertyType}
-        />
+        <DetailRow icon={<Home />} label="Type" value={property.propertyType} />
+
+        <DetailRow icon={<Tag />} label="Category" value={property.category} />
 
         <DetailRow
-          icon={<FaTag />}
-          label="Category"
-          value={property.category}
-        />
-
-        <DetailRow
-          icon={<FaHome />}
+          icon={<Home />}
           label="Availability"
           value={property.availabilityStatus}
         />

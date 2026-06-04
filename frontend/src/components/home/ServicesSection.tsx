@@ -1,21 +1,21 @@
-import { FaHome, FaBuilding, FaUsers } from "react-icons/fa";
+import { Home, Building, Users } from "@/constants/icons";
 
 const services = [
   {
     title: "Residential Rentals",
-    icon: FaHome,
+    icon: Home,
     description: "Modern apartments and homes for families and individuals.",
   },
 
   {
     title: "Commercial Spaces",
-    icon: FaBuilding,
+    icon: Building,
     description: "Professional office and retail spaces for businesses.",
   },
 
   {
     title: "Property Management",
-    icon: FaUsers,
+    icon: Users,
     description: "Complete rental and tenant management solutions.",
   },
 ];

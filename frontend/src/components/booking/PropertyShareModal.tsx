@@ -1,14 +1,18 @@
-import { FiShare2, FiCopy } from "react-icons/fi";
-import { FaWhatsapp, FaFacebook, FaXTwitter } from "react-icons/fa6";
-
+import { toast } from "react-toastify";
+import {
+  Share2,
+  Copy,
+  FaWhatsapp,
+  FaFacebook,
+  FaTwitter,
+  Send,
+} from "@/constants/icons";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/Dialog";
-import { toast } from "react-toastify";
-import { FaTelegramPlane } from "react-icons/fa";
 
 interface PropertyShareModalProps {
   open: boolean;
@@ -65,18 +69,18 @@ export default function PropertyShareModal({
     },
     {
       name: "Telegram",
-      icon: <FaTelegramPlane size={24} />,
+      icon: <Send size={24} />,
       url: `https://t.me/share/url?url=${encodeURIComponent(propertyUrl)}`,
     },
     {
       name: "Twitter",
-      icon: <FaXTwitter size={24} />,
+      icon: <FaTwitter size={24} />,
       url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(
         propertyUrl,
       )}`,
     },
     {
-      name: "Facebook",
+      name: "FaFacebook",
       icon: <FaFacebook size={24} />,
       url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
         propertyUrl,
@@ -138,7 +142,7 @@ export default function PropertyShareModal({
             onClick={copyLink}
             className="flex w-full items-center justify-center gap-2 rounded-xl border p-3"
           >
-            <FiCopy />
+            <Copy />
             Copy Link
           </button>
 
@@ -149,7 +153,7 @@ export default function PropertyShareModal({
               onClick={nativeShare}
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary p-3 text-white"
             >
-              <FiShare2 />
+              <Share2 />
               Share
             </button>
           )}

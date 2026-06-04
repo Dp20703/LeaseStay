@@ -1,4 +1,4 @@
-import { FaStar } from "react-icons/fa";
+import { Star } from "@/constants/icons";
 
 const testimonials = [
   {
@@ -54,7 +54,7 @@ const Testimonials = () => {
                 {Array.from({
                   length: 5,
                 }).map((_, index) => (
-                  <FaStar key={index} />
+                  <Star key={index} />
                 ))}
               </div>
 

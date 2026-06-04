@@ -1,4 +1,4 @@
-import type { IconType } from "react-icons";
+import type { IconType } from "@/constants/icons";
 
 export interface SidebarItem {
   path: string;
