@@ -11,17 +11,24 @@ import PropertySidebar from "@/components/property/PropertySidebar";
 import { useProperty } from "@/hooks/useProperty";
 import { useAuth } from "@/hooks/useAuth";
 import RelatedProperties from "@/components/property/RelatedProperties";
+import PropertyShareModal from "@/components/booking/PropertyShareModal";
 
 const PropertyDetailsPage = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
 
-  const { property, fetchSingleProperty, saveProperty, unsaveProperty } =
-    useProperty();
+  const {
+    property,
+    fetchSingleProperty,
+    saveProperty,
+    unsaveProperty,
+    trackPropertyShareCount,
+  } = useProperty();
   const { user } = useAuth();
 
   const [showContact, setShowContact] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
 
   const saved = user?.savedProperties?.includes(property?._id || "") ?? false;
 
@@ -64,6 +71,7 @@ const PropertyDetailsPage = () => {
         property={property}
         isSaved={isSaved}
         onWishlist={handleWishlist}
+        setShareOpen={setShareOpen}
       />
 
       <div className="grid lg:grid-cols-[1fr_380px] gap-8">
@@ -83,6 +91,15 @@ const PropertyDetailsPage = () => {
 
         <RelatedProperties propertyId={property._id} />
       </div>
+
+      {shareOpen && (
+        <PropertyShareModal
+          open={shareOpen}
+          onOpenChange={setShareOpen}
+          property={property}
+          trackPropertyShareCount={trackPropertyShareCount}
+        />
+      )}
     </section>
   );
 };

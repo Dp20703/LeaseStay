@@ -38,7 +38,10 @@ const PropertySidebar = ({ property, showContact, setShowContact }: any) => {
             <p className="text-muted-foreground">per month</p>
           )}
 
-          <button onClick={handleBooking} className="ls-btn-primary w-full">
+          <button
+            onClick={handleBooking}
+            className="ls-btn-primary w-full mt-5"
+          >
             {user ? "Book Property" : "Login to Book"}
           </button>
         </div>

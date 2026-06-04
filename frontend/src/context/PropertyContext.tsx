@@ -18,6 +18,7 @@ interface PropertyContextType {
   getFeaturedProperties: () => Promise<Property[]>;
   saveProperty: (id: string) => Promise<void>;
   unsaveProperty: (id: string) => Promise<void>;
+  trackPropertyShareCount: (id: string) => Promise<void>;
   contactOwner: (id: string, message: string) => Promise<any>;
   getOwnerProperties: () => Promise<Property[]>;
 }
@@ -216,6 +217,15 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
     return response;
   };
 
+  /* TRACK PROPERTY SHARE COUNT */
+  const trackPropertyShareCount = async (propertyId: string) => {
+    try {
+      await propertyAPI.trackPropertyShareCount(propertyId);
+    } catch (error) {
+      console.log("Share Count Error:", error);
+    }
+  };
+
   return (
     <PropertyContext.Provider
       value={{
@@ -238,6 +248,8 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
 
         saveProperty,
         unsaveProperty,
+
+        trackPropertyShareCount,
 
         contactOwner,
         getOwnerProperties,

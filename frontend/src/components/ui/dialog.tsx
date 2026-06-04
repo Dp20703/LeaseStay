@@ -3,11 +3,8 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { FaTimes } from "react-icons/fa";
 
 const Dialog = DialogPrimitive.Root;
-
 const DialogTrigger = DialogPrimitive.Trigger;
-
 const DialogPortal = DialogPrimitive.Portal;
-
 const DialogClose = DialogPrimitive.Close;
 
 const DialogOverlay = React.forwardRef<
@@ -16,12 +13,7 @@ const DialogOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
-    className={`
-      fixed inset-0 z-50 bg-black/80 backdrop-blur-sm
-      data-[state=open]:animate-in
-      data-[state=closed]:animate-out
-      ${className || ""}
-    `}
+    className={` fixed inset-0 z-50 bg-black/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out ${className || ""}`}
     {...props}
   />
 ));
@@ -37,33 +29,12 @@ const DialogContent = React.forwardRef<
 
     <DialogPrimitive.Content
       ref={ref}
-      className={`
-        fixed left-1/2 top-1/2 z-50
-        w-full max-w-lg
-        -translate-x-1/2 -translate-y-1/2
-        rounded-3xl
-        border
-        bg-background
-        p-6
-        shadow-xl
-        duration-200
-        ${className || ""}
-      `}
+      className={`fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-3xl border bg-background p-6 shadow-xl duration-200 ${className || ""}`}
       {...props}
     >
       {children}
 
-      <DialogPrimitive.Close
-        className="
-          absolute
-          right-4
-          top-4
-          rounded-full
-          p-2
-          hover:bg-muted
-          transition
-        "
-      >
+      <DialogPrimitive.Close className=" absolute right-4 top-4 rounded-full p-2 hover:bg-muted transition ">
         <FaTimes />
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>

@@ -22,6 +22,7 @@ import {
   deletePropertyDocument,
   getRelatedProperties,
   contactPropertyOwner,
+  trackPropertyShareCount,
 } from "../controllers/property.controller.js";
 
 import {
@@ -149,6 +150,9 @@ router.delete(
 
 // GET RELATED PROPERTIES
 router.get("/:id/related", getRelatedProperties);
+
+/* Track Share Count */
+router.patch("/:id/share", trackPropertyShareCount);
 
 /* ─────────────────────────────────────────────
    PROPERTY CONTACT
