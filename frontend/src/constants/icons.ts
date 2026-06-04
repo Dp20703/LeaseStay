@@ -26,10 +26,10 @@ export {
   FaExpand,
   FaCalendarAlt,
   FaCheck,
+  FaShareAlt,
 } from "react-icons/fa";
 
+export { FiShare2 } from "react-icons/fi";
 export { AiFillDashboard } from "react-icons/ai";
-
 export { MdEmail, MdVerified } from "react-icons/md";
-
 export { IoSearch, IoFilter } from "react-icons/io5";

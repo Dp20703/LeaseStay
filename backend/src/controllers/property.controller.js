@@ -19,8 +19,8 @@ import {
   setPropertyThumbnailService,
   unsavePropertyService,
   updatePropertyService,
+  trackPropertyShareCountService,
 } from "../services/property.service.js";
-import { Result } from "express-validator";
 
 // Create a new property listing.
 export const createProperty = asyncHandler(async (req, res) => {
@@ -246,4 +246,11 @@ export const deleteProperty = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, "Property deleted successfully"));
+});
+
+// Track Property Shares Count.
+export const trackPropertyShareCount = asyncHandler(async (req, res) => {
+  await trackPropertyShareCountService({ propertyId: req.params.id });
+
+  return res.status(200).json(new ApiResponse(200, "Share count incremented"));
 });

@@ -163,6 +163,10 @@ const propertySchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    shareCount: {
+      type: Number,
+      default: 0,
+    },
     savedBy: [
       {
         type: mongoose.Schema.Types.ObjectId,

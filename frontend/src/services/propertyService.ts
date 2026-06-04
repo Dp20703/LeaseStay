@@ -128,6 +128,14 @@ const propertyAPI = {
 
     return response.data;
   },
+
+  /* TRACK PROPERTY SHARE COUNT */
+
+  trackPropertyShareCount: async (id: string) => {
+    const response = await api.patch(`/properties/${id}/share`);
+    console.log("share count:", response);
+    // return response.data;
+  },
 };
 
 export default propertyAPI;

@@ -736,3 +736,10 @@ export const contactPropertyOwnerService = async ({
     propertyTitle: property.title,
   };
 };
+
+// Track Property Shares Count.
+export const trackPropertyShareCountService = async ({ propertyId }) => {
+  await Property.updateOne({ _id: propertyId }, { $inc: { shareCount: 1 } });
+
+  return true;
+};
