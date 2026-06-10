@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+const { Schema } = mongoose;
 
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
   {
     /* ─────────────────────────────────────
          Profile
@@ -136,7 +137,7 @@ const userSchema = new mongoose.Schema(
     ownerVerifiedAt: Date,
 
     ownerVerifiedBy: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
     },
 
@@ -146,7 +147,7 @@ const userSchema = new mongoose.Schema(
 
     savedProperties: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Property",
       },
     ],
@@ -226,6 +227,6 @@ userSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 
 export default User;

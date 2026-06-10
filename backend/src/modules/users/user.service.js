@@ -1,10 +1,10 @@
-import User from "../models/user.model.js";
-import ApiError from "../utils/ApiError.js";
-import uploadToCloudinary from "../helpers/cloudinary/uploadToCloudinary.js";
-import deleteFromCloudinary from "../helpers/cloudinary/deleteFromCloudinary.js";
-import { CLOUDINARY_FOLDERS } from "../constants/cloudinary.constants.js";
-import { ROLES } from "../constants/role.constants.js";
-import { getCache, setCache } from "../helpers/redis/redis.utils.js";
+import User from "./user.model.js";
+import ApiError from "../../utils/ApiError.js";
+import uploadToCloudinary from "../../helpers/cloudinary/uploadToCloudinary.js";
+import deleteFromCloudinary from "../../helpers/cloudinary/deleteFromCloudinary.js";
+import { CLOUDINARY_FOLDERS } from "../../constants/cloudinary.constants.js";
+import { ROLES } from "../../constants/role.constants.js";
+import { getCache, setCache } from "../../helpers/redis/redis.utils.js";
 
 // UPDATE PROFILE
 

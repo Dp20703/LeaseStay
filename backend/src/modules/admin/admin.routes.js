@@ -1,7 +1,7 @@
 import express from "express";
-import { verifyJWT } from "../middlewares/auth.middleware.js";
-import validate from "../middlewares/validate.middleware.js";
-import { authorizeRoles } from "../middlewares/role.middleware.js";
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
+import validate from "../../middlewares/validate.middleware.js";
+import { authorizeRoles } from "../../middlewares/role.middleware.js";
 import {
   fetchAllUsers,
   fetchAllProperties,
@@ -19,14 +19,14 @@ import {
   blockUser,
   unblockUser,
   getDashboardStats,
-} from "../controllers/admin.controller.js";
+} from "./admin.controller.js";
 import {
   approveOwnerVerificationValidation,
   rejectOwnerVerificationValidation,
   approvePropertyVerificationValidation,
   rejectPropertyVerificationValidation,
-} from "../validations/admin.validation.js";
-import { ROLES } from "../constants/role.constants.js";
+} from "../../validations/admin.validation.js";
+import { ROLES } from "../../constants/role.constants.js";
 
 const router = express.Router();
 

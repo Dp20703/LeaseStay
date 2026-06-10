@@ -1,21 +1,18 @@
 import jwt from "jsonwebtoken";
-import User from "../models/user.model.js";
+import User from "../../models/user.model.js";
 import { OAuth2Client } from "google-auth-library";
-import generateUniqueUsername from "../helpers/auth/generateUniqueUsername.js";
-import sendToken from "../helpers/auth/sendToken.js";
-import { sendMail } from "../helpers/mail/sendMail.js";
-import ApiError from "../utils/ApiError.js";
-import ApiResponse from "../utils/ApiResponse.js";
-import asyncHandler from "../utils/asyncHandler.js";
-import welcomeEmailTemplate from "../templates/welcome.template.js";
+import generateUniqueUsername from "../../helpers/auth/generateUniqueUsername.js";
+import sendToken from "../../helpers/auth/sendToken.js";
+import { sendMail } from "../../helpers/mail/sendMail.js";
+import ApiError from "../../utils/ApiError.js";
+import ApiResponse from "../../utils/ApiResponse.js";
+import asyncHandler from "../../utils/asyncHandler.js";
+import welcomeEmailTemplate from "../../templates/welcome.template.js";
 import crypto from "crypto";
-import generateResetToken from "../helpers/auth/generateResetToken.js";
-import resetWelcomeTemplate from "../templates/resetPassword.template.js";
-import COOKIE_OPTIONS from "../constants/cookie.constants.js";
-import {
-  registerUserService,
-  loginUserService,
-} from "../services/auth.service.js";
+import generateResetToken from "../../helpers/auth/generateResetToken.js";
+import resetWelcomeTemplate from "../../templates/resetPassword.template.js";
+import COOKIE_OPTIONS from "../../constants/cookie.constants.js";
+import { registerUserService, loginUserService } from "./auth.service.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 

@@ -1,6 +1,6 @@
-import asyncHandler from "../utils/asyncHandler.js";
-import ApiError from "../utils/ApiError.js";
-import ApiResponse from "../utils/ApiResponse.js";
+import asyncHandler from "../../utils/asyncHandler.js";
+import ApiError from "../../utils/ApiError.js";
+import ApiResponse from "../../utils/ApiResponse.js";
 import {
   addPropertyImagesService,
   changePropertyAvailabilityService,
@@ -20,7 +20,7 @@ import {
   unsavePropertyService,
   updatePropertyService,
   trackPropertyShareCountService,
-} from "../services/property.service.js";
+} from "./property.service.js";
 
 // Create a new property listing.
 export const createProperty = asyncHandler(async (req, res) => {

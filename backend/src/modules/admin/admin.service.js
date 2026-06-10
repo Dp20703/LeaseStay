@@ -1,7 +1,7 @@
-import User from "../models/user.model.js";
-import Property from "../models/property.model.js";
-import ApiError from "../utils/ApiError.js";
-import { ROLES } from "../constants/role.constants.js";
+import User from "../users/user.model.js";
+import Property from "../properties/property.model.js";
+import ApiError from "../../utils/ApiError.js";
+import { ROLES } from "../../constants/role.constants.js";
 
 // Populate owner
 const OWNER_POPULATE = "userName fullName profileImage";

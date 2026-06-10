@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
+const { Schema } = mongoose;
 import {
   PROPERTY_CATEGORIES,
   PROPERTY_DOCUMENTS,
   PROPERTY_STATUS,
   PROPERTY_TYPES,
-} from "../constants/property.constants.js";
+} from "./property.constants.js";
 
-const propertySchema = new mongoose.Schema(
+const propertySchema = new Schema(
   {
     slug: {
       type: String,
@@ -114,7 +115,7 @@ const propertySchema = new mongoose.Schema(
     verifiedAt: Date,
 
     verifiedBy: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
     },
 
@@ -129,7 +130,7 @@ const propertySchema = new mongoose.Schema(
     },
 
     owner: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
@@ -169,7 +170,7 @@ const propertySchema = new mongoose.Schema(
     },
     savedBy: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "User",
       },
     ],
@@ -219,6 +220,7 @@ propertySchema.pre(/^find/, function () {
   }
 });
 
-const Property = mongoose.model("Property", propertySchema);
+const Property =
+  mongoose.models.Property || mongoose.model("Property", propertySchema);
 
 export default Property;

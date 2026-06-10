@@ -1,5 +1,5 @@
-import asyncHandler from "../utils/asyncHandler.js";
-import ApiResponse from "../utils/ApiResponse.js";
+import asyncHandler from "../../utils/asyncHandler.js";
+import ApiResponse from "../../utils/ApiResponse.js";
 import {
   changeEmailService,
   changePasswordService,
@@ -8,7 +8,7 @@ import {
   getSavedPropertiesService,
   updateProfileService,
   applyOwnerService,
-} from "../services/user.service.js";
+} from "./user.service.js";
 
 // UPDATE PROFILE
 

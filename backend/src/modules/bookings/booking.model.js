@@ -1,23 +1,24 @@
 import mongoose from "mongoose";
+const { Schema } = mongoose;
 
-const bookingSchema = new mongoose.Schema(
+const bookingSchema = new Schema(
   {
     property: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Property",
       required: true,
       index: true,
     },
 
     tenant: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
       index: true,
     },
 
     owner: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
       index: true,
@@ -82,9 +83,9 @@ const bookingSchema = new mongoose.Schema(
       default: null,
     },
 
-    paymentId: {
-      type: String,
-      default: null,
+    payment: {
+      type: Schema.Types.ObjectId,
+      ref: "Payment",
     },
 
     ownerResponse: {
@@ -128,5 +129,6 @@ bookingSchema.index({
   status: 1,
 });
 
-const Booking = mongoose.model("Booking", bookingSchema);
+const Booking =
+  mongoose.models.Booking || mongoose.model("Booking", bookingSchema);
 export default Booking;

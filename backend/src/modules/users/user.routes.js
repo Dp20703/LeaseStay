@@ -1,7 +1,7 @@
 import express from "express";
-import { upload } from "../config/multer.config.js";
-import { verifyJWT } from "../middlewares/auth.middleware.js";
-import validate from "../middlewares/validate.middleware.js";
+import { upload } from "../../config/multer.config.js";
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
+import validate from "../../middlewares/validate.middleware.js";
 import {
   updateProfile,
   changePassword,
@@ -10,13 +10,13 @@ import {
   getSavedProperties,
   deleteAccount,
   applyOwner,
-} from "../controllers/user.controller.js";
+} from "./user.controller.js";
 import {
   updateProfileValidation,
   changePasswordValidation,
   changeEmailValidation,
   applyOwnerValidation,
-} from "../validations/user.validation.js";
+} from "../../validations/user.validation.js";
 
 const router = express.Router();
 

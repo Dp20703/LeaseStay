@@ -6,9 +6,9 @@ import {
   getOwnerBookingRequestsService,
   getSingleBookingService,
   rejectBookingService,
-} from "../services/booking.service.js";
-import ApiResponse from "../utils/ApiResponse.js";
-import asyncHandler from "../utils/asyncHandler.js";
+} from "./booking.service.js";
+import ApiResponse from "../../utils/ApiResponse.js";
+import asyncHandler from "../../utils/asyncHandler.js";
 
 // CREATE BOOKING
 

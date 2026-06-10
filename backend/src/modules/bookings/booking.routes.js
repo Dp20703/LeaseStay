@@ -1,15 +1,15 @@
 import express from "express";
-import validate from "../middlewares/validate.middleware.js";
-import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { authorizeRoles } from "../middlewares/role.middleware.js";
-import { ROLES } from "../constants/role.constants.js";
+import validate from "../../middlewares/validate.middleware.js";
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
+import { authorizeRoles } from "../../middlewares/role.middleware.js";
+import { ROLES } from "../../constants/role.constants.js";
 import {
   acceptBookingValidation,
   cancelBookingValidation,
   createBookingValidation,
   getSingleBookingValidation,
   rejectBookingValidation,
-} from "../validations/booking.validation.js";
+} from "./booking.validation.js";
 import {
   acceptBooking,
   cancelBooking,
@@ -18,7 +18,7 @@ import {
   getOwnerBookingRequests,
   getSingleBooking,
   rejectBooking,
-} from "../controllers/booking.controller.js";
+} from "./booking.controller.js";
 
 const router = express.Router();
 

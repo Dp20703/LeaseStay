@@ -1,9 +1,9 @@
 import express from "express";
-import { verifyJWT } from "../middlewares/auth.middleware.js";
-import validate from "../middlewares/validate.middleware.js";
-import { upload } from "../config/multer.config.js";
-import { authorizeRoles } from "../middlewares/role.middleware.js";
-import { ROLES } from "../constants/role.constants.js";
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
+import validate from "../../middlewares/validate.middleware.js";
+import { upload } from "../../config/multer.config.js";
+import { authorizeRoles } from "../../middlewares/role.middleware.js";
+import { ROLES } from "../../constants/role.constants.js";
 import {
   createProperty,
   getAllProperties,
@@ -23,7 +23,7 @@ import {
   getRelatedProperties,
   contactPropertyOwner,
   trackPropertyShareCount,
-} from "../controllers/property.controller.js";
+} from "./property.controller.js";
 
 import {
   createPropertyValidation,
@@ -31,7 +31,7 @@ import {
   propertyIdValidation,
   availabilityValidation,
   searchPropertyValidation,
-} from "../validations/property.validation.js";
+} from "../../validations/property.validation.js";
 
 const router = express.Router();
 

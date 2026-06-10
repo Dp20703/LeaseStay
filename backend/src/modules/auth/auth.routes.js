@@ -1,6 +1,6 @@
 import express from "express";
-import { verifyJWT } from "../middlewares/auth.middleware.js";
-import validate from "../middlewares/validate.middleware.js";
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
+import validate from "../../middlewares/validate.middleware.js";
 import {
   registerUser,
   loginUser,
@@ -9,14 +9,14 @@ import {
   googleAuth,
   forgotPassword,
   resetPassword,
-} from "../controllers/auth.controller.js";
+} from "./auth.controller.js";
 import {
   registerValidation,
   loginValidation,
   googleAuthValidation,
   forgotPasswordValidation,
   resetPasswordValidation,
-} from "../validations/auth.validation.js";
+} from "./auth.validation.js";
 
 const router = express.Router();
 

@@ -1,6 +1,6 @@
-import asyncHandler from "../utils/asyncHandler.js";
-import ApiResponse from "../utils/ApiResponse.js";
-import ApiError from "../utils/ApiError.js";
+import asyncHandler from "../../utils/asyncHandler.js";
+import ApiResponse from "../../utils/ApiResponse.js";
+import ApiError from "../../utils/ApiError.js";
 import {
   fetchAllUsersService,
   fetchAllPropertiesService,
@@ -18,7 +18,7 @@ import {
   blockUserService,
   unblockUserService,
   getDashboardStatsService,
-} from "../services/admin.service.js";
+} from "./admin.service.js";
 
 // FETCH ALL USERS
 export const fetchAllUsers = asyncHandler(async (req, res) => {
