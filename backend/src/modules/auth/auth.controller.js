@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import User from "../../models/user.model.js";
+import User from "../users/user.model.js";
 import { OAuth2Client } from "google-auth-library";
 import generateUniqueUsername from "../../helpers/auth/generateUniqueUsername.js";
 import sendToken from "../../helpers/auth/sendToken.js";

@@ -1,4 +1,4 @@
-import User from "../../models/user.model.js";
+import User from "../../modules/users/user.model.js";
 
 // GENERATE UNIQUE USERNAME
 

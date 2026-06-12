@@ -9,11 +9,7 @@ import rateLimit from "express-rate-limit";
 import cookieParser from "cookie-parser";
 import compression from "compression";
 
-import authRoutes from "./routes/auth.routes.js";
-import propertyRoutes from "./routes/property.routes.js";
-import adminRoutes from "./routes/admin.routes.js";
-import userRoutes from "./routes/user.routes.js";
-import bookingRoutes from "./routes/booking.routes.js";
+import routes from "./routes/index.js";
 
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 import { notFoundMiddleware } from "./middlewares/notFound.middleware.js";
@@ -61,12 +57,7 @@ app.get("/", (req, res) => {
 });
 
 /* ROUTES */
-
-app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/users", userRoutes);
-app.use("/api/v1/admin", adminRoutes);
-app.use("/api/v1/properties", propertyRoutes);
-app.use("/api/v1/bookings", bookingRoutes);
+app.use("/api/v1", routes);
 
 /* ERROR */
 app.use(errorMiddleware);

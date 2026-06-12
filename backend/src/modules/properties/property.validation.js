@@ -1,8 +1,5 @@
 import { body, param, query } from "express-validator";
-import {
-  PROPERTY_DOCUMENTS,
-  PROPERTY_TYPES,
-} from "../../constants/property.constants.js";
+import { PROPERTY_DOCUMENTS, PROPERTY_TYPES } from "./property.constants.js";
 
 export const propertyIdValidation = [
   param("id").isMongoId().withMessage("Invalid property id"),
@@ -272,5 +269,7 @@ export const searchPropertyValidation = [
     .isIn(PROPERTY_TYPES)
     .withMessage("Invalid property type"),
 
-  query("sort").optional({ nullable: true, checkFalsy: true }).isIn(["price", "-price", "createdAt", "-createdAt"]),
+  query("sort")
+    .optional({ nullable: true, checkFalsy: true })
+    .isIn(["price", "-price", "createdAt", "-createdAt"]),
 ];

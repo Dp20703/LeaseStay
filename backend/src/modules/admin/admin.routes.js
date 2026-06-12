@@ -25,7 +25,7 @@ import {
   rejectOwnerVerificationValidation,
   approvePropertyVerificationValidation,
   rejectPropertyVerificationValidation,
-} from "../../validations/admin.validation.js";
+} from "./admin.validation.js";
 import { ROLES } from "../../constants/role.constants.js";
 
 const router = express.Router();

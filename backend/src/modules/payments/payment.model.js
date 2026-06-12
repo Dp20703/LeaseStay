@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const paymentSchema = new Schema(
@@ -194,14 +194,6 @@ paymentSchema.index({
   createdAt: -1,
 });
 
-paymentSchema.index({
-  orderId: 1,
-});
-
-paymentSchema.index({
-  paymentId: 1,
-});
-
 /* -----------------------------
    Virtuals
 ----------------------------- */
@@ -278,6 +270,35 @@ paymentSchema.statics.createPending = function (payload) {
   });
 };
 
+paymentSchema.statics.findAccessiblePayment = async function (paymentId, user) {
+  const payment = await this.findById(paymentId)
+    .populate("property", "title price location")
+    .populate("tenant", "fullName email");
+
+  if (!payment) return null;
+
+  const allowed =
+    payment.tenant._id.toString() === user.id ||
+    payment.landlord.toString() === user.id ||
+    user.role === "admin";
+
+  return allowed ? payment : null;
+};
+
+paymentSchema.statics.getStats = function () {
+  return this.aggregate([
+    {
+      $group: {
+        _id: "$status",
+        count: { $sum: 1 },
+        totalAmount: {
+          $sum: "$amount",
+        },
+      },
+    },
+  ]);
+};
+
 /* -----------------------------
    Model Export
 ----------------------------- */
@@ -285,4 +306,4 @@ paymentSchema.statics.createPending = function (payload) {
 const Payment =
   mongoose.models.Payment || mongoose.model("Payment", paymentSchema);
 
-module.exports = Payment;
+export default Payment;

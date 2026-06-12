@@ -16,7 +16,7 @@ import {
   changePasswordValidation,
   changeEmailValidation,
   applyOwnerValidation,
-} from "../../validations/user.validation.js";
+} from "./user.validation.js";
 
 const router = express.Router();
 

@@ -31,7 +31,7 @@ import {
   propertyIdValidation,
   availabilityValidation,
   searchPropertyValidation,
-} from "../../validations/property.validation.js";
+} from "./property.validation.js";
 
 const router = express.Router();
 
