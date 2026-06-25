@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Menu, Heart, X } from "@/constants/icons";
+import { Menu, Heart, X, User } from "@/constants/icons";
 
 import { useAuth } from "@/hooks/useAuth";
 import { ROLES } from "@/constants/role.constants";
@@ -47,13 +47,22 @@ const Navbar = () => {
           <NavbarLinks />
 
           {user && (
-            <NavLink
-              to="/wishlist"
-              className="ls-nav-link flex items-center gap-2"
-            >
-              <Heart />
-              Wishlist
-            </NavLink>
+            <>
+              <NavLink
+                to="/wishlist"
+                className="ls-nav-link flex items-center gap-2"
+              >
+                <Heart />
+                Wishlist
+              </NavLink>
+              <NavLink
+                to="/become_owner"
+                className="ls-nav-link flex items-center gap-2"
+              >
+                <User />
+                Become_Owner
+              </NavLink>
+            </>
           )}
 
           {user?.role === ROLES.OWNER && (

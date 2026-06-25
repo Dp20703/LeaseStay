@@ -1,7 +1,5 @@
 import api from "@/services/axios";
-
 import type { User } from "@/types/entities/user.types";
-
 import type {
   LoginFormData,
   RegisterFormData,
@@ -13,7 +11,6 @@ import type {
 
 export interface AuthResponse {
   user: User;
-
   token: string;
 }
 
@@ -57,7 +54,7 @@ const authAPI = {
   /* GOOGLE AUTH */
 
   googleAuth: async (credential: string) => {
-    const response = await api.post("/auth/google", {credential});
+    const response = await api.post("/auth/google", { credential });
 
     return response.data;
   },

@@ -34,15 +34,10 @@ const ProfileEditCard = ({
 
   const resetFormData = () => ({
     firstName: user?.fullName?.firstName || "",
-
     lastName: user?.fullName?.lastName || "",
-
     userName: user?.userName || "",
-
     email: user?.email || "",
-
     phone: user?.phone || "",
-
     profileImage: null as File | null,
   });
 
@@ -67,11 +62,8 @@ const ProfileEditCard = ({
       const updatedFormData = new FormData();
 
       updatedFormData.append("firstName", formData.firstName);
-
       updatedFormData.append("lastName", formData.lastName);
-
       updatedFormData.append("userName", formData.userName);
-
       updatedFormData.append("phone", formData.phone);
 
       if (formData.profileImage) {
@@ -80,9 +72,7 @@ const ProfileEditCard = ({
 
       const response = await api.patch(
         "/users/update-profile",
-
         updatedFormData,
-
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -98,15 +88,10 @@ const ProfileEditCard = ({
 
       setFormData({
         firstName: response.data.data.fullName?.firstName || "",
-
         lastName: response.data.data.fullName?.lastName || "",
-
         userName: response.data.data?.userName || "",
-
         email: response.data.data?.email || "",
-
         phone: response.data.data?.phone || "",
-
         profileImage: null,
       });
 

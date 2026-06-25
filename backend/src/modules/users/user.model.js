@@ -116,7 +116,7 @@ const userSchema = new Schema(
       {
         type: {
           type: String,
-          enum: ["aadhaar", "passport", "driving_license"],
+          enum: ["aadhaar", "pan", "passport", "driving_license"],
         },
 
         url: String,

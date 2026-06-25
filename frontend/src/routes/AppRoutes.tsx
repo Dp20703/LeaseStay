@@ -56,6 +56,7 @@ import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 /* Other */
 
 import NotFoundPage from "@/pages/NotFoundPage";
+import BecomeOwnerPage from "@/pages/owner/BecomeOwnerPage";
 
 const AppRoutes = () => {
   return (
@@ -94,6 +95,7 @@ const AppRoutes = () => {
         <Route element={<UserDashboardLayout />}>
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/wishlist" element={<WishListPage />} />
+          <Route path="/become_owner" element={<BecomeOwnerPage />} />
           <Route path="/bookings" element={<MyBookingsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/payment/:id" element={<PaymentPage />} />

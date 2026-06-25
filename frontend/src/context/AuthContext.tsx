@@ -149,19 +149,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const values: AuthContextType = {
     user,
-
     setUser,
 
     loading,
-
     fetchCurrentUser,
 
     login,
-
     register,
 
     googleAuth,
-
     logout,
   };
 
