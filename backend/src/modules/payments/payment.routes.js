@@ -1,9 +1,11 @@
 import { Router } from "express";
 import { verifyJWT } from "../../middlewares/auth.middleware.js";
 import { authorizeRoles } from "../../middlewares/role.middleware.js";
-import { razorpayWebhook } from "./payment.webhook.js";
-import * as paymentController from "./payment.controller.js";
 import validate from "../../middlewares/validate.middleware.js";
+
+import * as paymentController from "./payment.controller.js";
+import { razorpayWebhook } from "./payment.webhook.js";
+
 import {
   createOrderValidation,
   verifyPaymentValidation,
@@ -11,11 +13,15 @@ import {
 
 const router = Router();
 
-/*WEBHOOK*/
+/* ----------------------------------
+   WEBHOOK
+---------------------------------- */
 
 router.post("/webhook", razorpayWebhook);
 
-/*TENANT*/
+/* ----------------------------------
+   TENANT
+---------------------------------- */
 
 router.post(
   "/create-order",
@@ -33,9 +39,9 @@ router.post(
 
 router.get("/my-payments", verifyJWT, paymentController.getMyPayments);
 
-router.get("/:paymentId", verifyJWT, paymentController.getPaymentById);
-
-/*OWNER*/
+/* ----------------------------------
+   OWNER
+---------------------------------- */
 
 router.get(
   "/property/:propertyId",
@@ -44,7 +50,16 @@ router.get(
   paymentController.getPropertyPayments,
 );
 
-/*ADMIN*/
+/* ----------------------------------
+   ADMIN
+---------------------------------- */
+
+router.get(
+  "/stats",
+  verifyJWT,
+  authorizeRoles("admin"),
+  paymentController.getPaymentStats,
+);
 
 router.post(
   "/:paymentId/refund",
@@ -53,11 +68,10 @@ router.post(
   paymentController.refundPayment,
 );
 
-router.get(
-  "/stats",
-  verifyJWT,
-  authorizeRoles("admin"),
-  paymentController.getPaymentStats,
-);
+/* ----------------------------------
+   DYNAMIC ROUTES LAST
+---------------------------------- */
+
+router.get("/:paymentId", verifyJWT, paymentController.getPaymentById);
 
 export default router;

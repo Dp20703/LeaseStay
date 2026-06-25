@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 import type { ReactNode } from "react";
 import bookingAPI from "@/services/bookingService";
 import type { Booking } from "@/types/entities/booking.types";
