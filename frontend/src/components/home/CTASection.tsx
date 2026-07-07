@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const CTASection = () => {
   return (
@@ -11,9 +12,12 @@ const CTASection = () => {
             Browse hundreds of verified properties.
           </p>
 
-          <button className="mt-8 ls-btn-secondary dark:ls-btn-primary ">
+          <Link
+            to={"/properties"}
+            className="mt-8 ls-btn-secondary dark:ls-btn-primary "
+          >
             Get Started
-          </button>
+          </Link>
         </div>
       </div>
     </section>

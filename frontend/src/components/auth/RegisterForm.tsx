@@ -43,15 +43,15 @@ const RegisterForm = () => {
       [name]: value,
     }));
 
-    /* REMOVE LIVE ERROR */
+    // /* REMOVE LIVE ERROR */
 
-    if (errors[name as keyof RegisterFormErrors]) {
-      setErrors((prev) => ({
-        ...prev,
+    // if (errors[name as keyof RegisterFormErrors]) {
+    //   setErrors((prev) => ({
+    //     ...prev,
 
-        [name]: "",
-      }));
-    }
+    //     [name]: "",
+    //   }));
+    // }
   };
 
   /* ─────────────────────────────────────────

@@ -9,15 +9,10 @@ const HomePage = () => {
   return (
     <div className="flex flex-col gap-24 pb-24">
       <HeroSection />
-
       <ServicesSection />
-
       <StatsSection />
-
       <FeaturedProperties />
-
       <CTASection />
-
       <TestimonialsSection />
     </div>
   );
