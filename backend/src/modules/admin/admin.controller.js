@@ -19,6 +19,27 @@ import {
   unblockUserService,
   getDashboardStatsService,
 } from "./admin.service.js";
+import { ROLES } from "../../constants/role.constants.js";
+import sendToken from "../../helpers/auth/sendToken.js";
+import { loginUserService } from "../auth/auth.service.js";
+
+// LOGIN
+export const adminLogin = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await loginUserService(email, password);
+
+  if (user.role !== ROLES.ADMIN) {
+    throw new ApiError(403, "Unauthorized");
+  }
+  const token = user.generateAuthToken();
+
+  sendToken(res, token);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "Admin logged in successfully"));
+});
 
 // FETCH ALL USERS
 export const fetchAllUsers = asyncHandler(async (req, res) => {

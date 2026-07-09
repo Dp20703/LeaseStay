@@ -49,45 +49,45 @@ export const registerUserService = async ({
 
 // LOGIN
 
-export const loginUserService = async (email, password) => {
-  const normalizedEmail = email?.trim().toLowerCase();
+  export const loginUserService = async (email, password) => {
+    const normalizedEmail = email?.trim().toLowerCase();
 
-  const user = await User.findOne({ email: normalizedEmail }).select(
-    "+password",
-  );
+    const user = await User.findOne({ email: normalizedEmail }).select(
+      "+password",
+    );
 
-  if (!user) {
-    throw new ApiError(401, "Invalid email or password");
-  }
+    if (!user) {
+      throw new ApiError(401, "Invalid email or password");
+    }
 
-  // BLOCKED USER
+    // BLOCKED USER
 
-  if (user.isBlocked) {
-    throw new ApiError(403, "Your account has been blocked");
-  }
+    if (user.isBlocked) {
+      throw new ApiError(403, "Your account has been blocked");
+    }
 
-  // GOOGLE USER
+    // GOOGLE USER
 
-  if (user.isGoogleUser) {
-    throw new ApiError(401, "Please login using Google");
-  }
+    if (user.isGoogleUser) {
+      throw new ApiError(401, "Please login using Google");
+    }
 
-  /* DELETED ACCOUNT */
+    /* DELETED ACCOUNT */
 
-  if (user.isDeleted) {
-    throw new ApiError(403, "This account has been deleted");
-  }
+    if (user.isDeleted) {
+      throw new ApiError(403, "This account has been deleted");
+    }
 
-  // PASSWORD CHECK
+    // PASSWORD CHECK
 
-  const isPasswordCorrect = await user.comparePassword(password);
+    const isPasswordCorrect = await user.comparePassword(password);
 
-  if (!isPasswordCorrect) {
-    throw new ApiError(401, "Invalid email or password");
-  }
+    if (!isPasswordCorrect) {
+      throw new ApiError(401, "Invalid email or password");
+    }
 
-  // REMOVE PASSWORD
+    // REMOVE PASSWORD
 
-  user.password = undefined;
-  return user;
-};
+    user.password = undefined;
+    return user;
+  };
