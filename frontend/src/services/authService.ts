@@ -19,6 +19,14 @@ export interface AuthResponse {
 ───────────────────────────────────────────── */
 
 const authAPI = {
+  /* adminLogin */
+
+  adminLogin: async (data: LoginFormData) => {
+    const response = await api.post("/admin/login", data);
+    console.log("Admin login res:", response);
+    return response.data;
+  },
+
   /* LOGIN */
 
   login: async (data: LoginFormData) => {

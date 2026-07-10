@@ -57,6 +57,7 @@ import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 
 import NotFoundPage from "@/pages/NotFoundPage";
 import BecomeOwnerPage from "@/pages/owner/BecomeOwnerPage";
+import AdminLogin from "@/pages/admin/AdminLogin";
 
 const AppRoutes = () => {
   return (
@@ -79,6 +80,7 @@ const AppRoutes = () => {
 
       <Route element={<PublicOnlyWrapper />}>
         <Route element={<AuthLayout />}>
+          <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -125,7 +127,7 @@ const AppRoutes = () => {
 
       <Route element={<AdminWrapper />}>
         <Route element={<AdminDashboardLayout />}>
-          <Route path="/admin" element={<AdminDashboardPage />} />
+          <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
         </Route>
       </Route>
 

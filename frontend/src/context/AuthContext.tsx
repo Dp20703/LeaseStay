@@ -90,6 +90,23 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setLoading(false);
     }
   };
+  const adminLogin = async (data: LoginFormData) => {
+    try {
+      setLoading(true);
+
+      const response = await authAPI.adminLogin(data);
+
+      const { token, user } = response.data;
+
+      localStorage.setItem("token", token);
+
+      setUser(user);
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
 
   /* REGISTER */
 
@@ -155,6 +172,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     fetchCurrentUser,
 
     login,
+    adminLogin,
     register,
 
     googleAuth,
