@@ -8,17 +8,20 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { PropertyProvider } from "./context/PropertyContext";
 import "react-toastify/dist/ReactToastify.css";
 import { BookingProvider } from "./context/BookingContext";
+import { AdminProvider } from "./context/AdminContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <BrowserRouter>
         <AuthProvider>
-          <PropertyProvider>
-            <BookingProvider>
-              <App />
-            </BookingProvider>
-          </PropertyProvider>
+          <AdminProvider>
+            <PropertyProvider>
+              <BookingProvider>
+                <App />
+              </BookingProvider>
+            </PropertyProvider>
+          </AdminProvider>
         </AuthProvider>
       </BrowserRouter>
     </GoogleOAuthProvider>

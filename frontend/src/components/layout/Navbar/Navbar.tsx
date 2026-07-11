@@ -72,8 +72,8 @@ const Navbar = () => {
           )}
 
           {user?.role === ROLES.ADMIN && (
-            <NavLink to="/admin" className="ls-btn-primary">
-              Admin
+            <NavLink to="/admin/dashboard" className="ls-btn-primary">
+              Dashboard
             </NavLink>
           )}
         </nav>
