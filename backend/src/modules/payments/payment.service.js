@@ -3,7 +3,7 @@ import Razorpay from "razorpay";
 import Payment from "./payment.model.js";
 import Booking from "../bookings/booking.model.js";
 import Property from "../properties/property.model.js";
-import ApiError from "../../utils/ApiError.js";
+import { ApiError } from "../../helpers/index.js";
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,

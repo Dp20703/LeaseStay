@@ -3,7 +3,7 @@ import { verifyJWT } from "../../middlewares/auth.middleware.js";
 import validate from "../../middlewares/validate.middleware.js";
 import { upload } from "../../config/multer.config.js";
 import { authorizeRoles } from "../../middlewares/role.middleware.js";
-import { ROLES } from "../../constants/role.constants.js";
+import { ROLES } from "../../constants/roles.constants.js";
 import {
   createProperty,
   getAllProperties,

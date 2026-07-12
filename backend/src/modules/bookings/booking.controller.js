@@ -1,19 +1,10 @@
-import {
-  acceptBookingService,
-  cancelBookingService,
-  createBookingService,
-  getMyBookingsService,
-  getOwnerBookingRequestsService,
-  getSingleBookingService,
-  rejectBookingService,
-} from "./booking.service.js";
-import ApiResponse from "../../utils/ApiResponse.js";
-import asyncHandler from "../../utils/asyncHandler.js";
+import * as BookingService from "./booking.service.js";
+import { asyncHandler, ApiResponse } from "../../helpers/index.js";
 
 // CREATE BOOKING
 
 export const createBooking = asyncHandler(async (req, res) => {
-  const booking = await createBookingService({
+  const booking = await BookingService.createBookingService({
     ...req.body,
     tenantId: req.user._id,
   });
@@ -26,7 +17,7 @@ export const createBooking = asyncHandler(async (req, res) => {
 // MY BOOKINGS
 
 export const getMyBookings = asyncHandler(async (req, res) => {
-  const bookings = await getMyBookingsService({
+  const bookings = await BookingService.getMyBookingsService({
     userId: req.user._id,
   });
 
@@ -36,7 +27,7 @@ export const getMyBookings = asyncHandler(async (req, res) => {
 // GET SINGLE BOOKING
 
 export const getSingleBooking = asyncHandler(async (req, res) => {
-  const booking = await getSingleBookingService({
+  const booking = await BookingService.getSingleBookingService({
     bookingId: req.params.id,
     userId: req.user._id,
   });
@@ -47,7 +38,7 @@ export const getSingleBooking = asyncHandler(async (req, res) => {
 // GET OWNER BOOKING
 
 export const getOwnerBookingRequests = asyncHandler(async (req, res) => {
-  const bookingRequest = await getOwnerBookingRequestsService({
+  const bookingRequest = await BookingService.getOwnerBookingRequestsService({
     ownerId: req.user._id,
   });
 
@@ -59,7 +50,7 @@ export const getOwnerBookingRequests = asyncHandler(async (req, res) => {
 // ACCEPT BOOKING
 
 export const acceptBooking = asyncHandler(async (req, res) => {
-  const booking = await acceptBookingService({
+  const booking = await BookingService.acceptBookingService({
     bookingId: req.params.id,
     ownerId: req.user._id,
   });
@@ -74,7 +65,7 @@ export const acceptBooking = asyncHandler(async (req, res) => {
 export const rejectBooking = asyncHandler(async (req, res) => {
   const reason = req.body?.reason || "";
 
-  const booking = await rejectBookingService({
+  const booking = await BookingService.rejectBookingService({
     bookingId: req.params.id,
     ownerId: req.user._id,
     reason,
@@ -88,7 +79,7 @@ export const rejectBooking = asyncHandler(async (req, res) => {
 // CANCEL BOOKING
 
 export const cancelBooking = asyncHandler(async (req, res) => {
-  const booking = await cancelBookingService({
+  const booking = await BookingService.cancelBookingService({
     bookingId: req.params.id,
     tenantId: req.user._id,
   });

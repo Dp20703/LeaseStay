@@ -1,32 +1,11 @@
-import asyncHandler from "../../utils/asyncHandler.js";
-import ApiError from "../../utils/ApiError.js";
-import ApiResponse from "../../utils/ApiResponse.js";
-import {
-  addPropertyImagesService,
-  changePropertyAvailabilityService,
-  contactPropertyOwnerService,
-  createPropertyService,
-  deletePropertyDocumentService,
-  deletePropertyImageService,
-  deletePropertyService,
-  getAllPropertiesService,
-  getFeaturedPropertiesService,
-  getOwnerPropertiesService,
-  getRecommendedPropertiesService,
-  getRelatedPropertiesService,
-  getSinglePropertyService,
-  savePropertyService,
-  setPropertyThumbnailService,
-  unsavePropertyService,
-  updatePropertyService,
-  trackPropertyShareCountService,
-} from "./property.service.js";
+import * as PropertyService from "./property.service.js";
+import { asyncHandler, ApiError, ApiResponse } from "../../helpers/index.js";
 
 // Create a new property listing.
 export const createProperty = asyncHandler(async (req, res) => {
   console.log("Create property req.body", req.body);
   console.log("Create property req.files", req?.files);
-  const property = await createPropertyService({
+  const property = await PropertyService.createPropertyService({
     body: req.body,
     files: req.files,
     ownerId: req.user._id,
@@ -39,7 +18,7 @@ export const createProperty = asyncHandler(async (req, res) => {
 
 // Fetch all approved properties with filtering and pagination.
 export const getAllProperties = asyncHandler(async (req, res) => {
-  const result = await getAllPropertiesService(req.query);
+  const result = await PropertyService.getAllPropertiesService(req.query);
 
   return res
     .status(200)
@@ -50,7 +29,7 @@ export const getAllProperties = asyncHandler(async (req, res) => {
 export const getSingleProperty = asyncHandler(async (req, res) => {
   const { slug } = req.params;
 
-  const property = await getSinglePropertyService(slug);
+  const property = await PropertyService.getSinglePropertyService(slug);
 
   if (!property) {
     throw new ApiError(404, "Property not found");
@@ -63,7 +42,9 @@ export const getSingleProperty = asyncHandler(async (req, res) => {
 
 // Fetch all properties owned by the authenticated user.
 export const getOwnerProperties = asyncHandler(async (req, res) => {
-  const properties = await getOwnerPropertiesService(req.user._id);
+  const properties = await PropertyService.getOwnerPropertiesService(
+    req.user._id,
+  );
 
   return res
     .status(200)
@@ -74,7 +55,7 @@ export const getOwnerProperties = asyncHandler(async (req, res) => {
 
 // Update an existing property listing.
 export const updateProperty = asyncHandler(async (req, res) => {
-  const property = await updatePropertyService({
+  const property = await PropertyService.updatePropertyService({
     propertyId: req.params.id,
     body: req.body,
     files: req.files,
@@ -88,7 +69,7 @@ export const updateProperty = asyncHandler(async (req, res) => {
 
 // Change a property's availability status.
 export const changeAvailabilityStatus = asyncHandler(async (req, res) => {
-  const property = await changePropertyAvailabilityService({
+  const property = await PropertyService.changePropertyAvailabilityService({
     propertyId: req.params.id,
     availabilityStatus: req.body.availabilityStatus,
     user: req.user,
@@ -101,7 +82,7 @@ export const changeAvailabilityStatus = asyncHandler(async (req, res) => {
 
 // Add images to an existing property.
 export const addPropertyImages = asyncHandler(async (req, res) => {
-  const property = await addPropertyImagesService({
+  const property = await PropertyService.addPropertyImagesService({
     propertyId: req.params.id,
     files: req.files,
     user: req.user,
@@ -114,7 +95,7 @@ export const addPropertyImages = asyncHandler(async (req, res) => {
 
 // Delete a property image.
 export const deletePropertyImage = asyncHandler(async (req, res) => {
-  const property = await deletePropertyImageService({
+  const property = await PropertyService.deletePropertyImageService({
     propertyId: req.params.id,
     imageId: req.params.imageId,
     user: req.user,
@@ -129,7 +110,7 @@ export const deletePropertyImage = asyncHandler(async (req, res) => {
 
 // Save a property for the authenticated user.
 export const saveProperty = asyncHandler(async (req, res) => {
-  const result = await savePropertyService({
+  const result = await PropertyService.savePropertyService({
     propertyId: req.params.id,
     userId: req.user._id,
   });
@@ -141,7 +122,7 @@ export const saveProperty = asyncHandler(async (req, res) => {
 
 // Remove a saved property for the authenticated user.
 export const unsaveProperty = asyncHandler(async (req, res) => {
-  const result = await unsavePropertyService({
+  const result = await PropertyService.unsavePropertyService({
     propertyId: req.params.id,
     userId: req.user._id,
   });
@@ -153,7 +134,7 @@ export const unsaveProperty = asyncHandler(async (req, res) => {
 
 // Set a property image as the thumbnail.
 export const setPropertyThumbnail = asyncHandler(async (req, res) => {
-  const property = await setPropertyThumbnailService({
+  const property = await PropertyService.setPropertyThumbnailService({
     propertyId: req.params.id,
     imageId: req.params.imageId,
     user: req.user,
@@ -166,7 +147,7 @@ export const setPropertyThumbnail = asyncHandler(async (req, res) => {
 
 // Delete a property document.
 export const deletePropertyDocument = asyncHandler(async (req, res) => {
-  const property = await deletePropertyDocumentService({
+  const property = await PropertyService.deletePropertyDocumentService({
     propertyId: req.params.id,
     documentId: req.params.documentId,
     user: req.user,
@@ -179,7 +160,7 @@ export const deletePropertyDocument = asyncHandler(async (req, res) => {
 
 // Fetch related properties.
 export const getRelatedProperties = asyncHandler(async (req, res) => {
-  const properties = await getRelatedPropertiesService({
+  const properties = await PropertyService.getRelatedPropertiesService({
     propertyId: req.params.id,
   });
 
@@ -190,7 +171,7 @@ export const getRelatedProperties = asyncHandler(async (req, res) => {
 
 // Contact the property owner.
 export const contactPropertyOwner = asyncHandler(async (req, res) => {
-  const result = await contactPropertyOwnerService({
+  const result = await PropertyService.contactPropertyOwnerService({
     propertyId: req.params.id,
     userId: req.user._id,
     message: req.body.message,
@@ -204,7 +185,9 @@ export const contactPropertyOwner = asyncHandler(async (req, res) => {
 // Fetch featured properties.
 export const getFeaturedProperties = asyncHandler(async (req, res) => {
   console.log("req.query", req.query);
-  const properties = await getFeaturedPropertiesService(req.query);
+  const properties = await PropertyService.getFeaturedPropertiesService(
+    req.query,
+  );
 
   return res
     .status(200)
@@ -219,7 +202,9 @@ export const getFeaturedProperties = asyncHandler(async (req, res) => {
 
 // Fetch recommended properties.
 export const getRecommendedProperties = asyncHandler(async (req, res) => {
-  const properties = await getRecommendedPropertiesService(req.query);
+  const properties = await PropertyService.getRecommendedPropertiesService(
+    req.query,
+  );
 
   return res
     .status(200)
@@ -234,7 +219,7 @@ export const getRecommendedProperties = asyncHandler(async (req, res) => {
 
 // Delete a property listing.
 export const deleteProperty = asyncHandler(async (req, res) => {
-  const property = await deletePropertyService({
+  const property = await PropertyService.deletePropertyService({
     propertyId: req.params.id,
     user: req.user,
   });
@@ -250,7 +235,9 @@ export const deleteProperty = asyncHandler(async (req, res) => {
 
 // Track Property Shares Count.
 export const trackPropertyShareCount = asyncHandler(async (req, res) => {
-  await trackPropertyShareCountService({ propertyId: req.params.id });
+  await PropertyService.trackPropertyShareCountService({
+    propertyId: req.params.id,
+  });
 
   return res.status(200).json(new ApiResponse(200, "Share count incremented"));
 });

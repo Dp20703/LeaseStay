@@ -1,27 +1,8 @@
-import asyncHandler from "../../utils/asyncHandler.js";
-import ApiResponse from "../../utils/ApiResponse.js";
-import ApiError from "../../utils/ApiError.js";
-import {
-  fetchAllUsersService,
-  fetchAllPropertiesService,
-  fetchAllOwnersService,
-  getPendingOwnerVerificationsService,
-  approveOwnerVerificationService,
-  rejectOwnerVerificationService,
-  getPendingPropertyVerificationsService,
-  approvePropertyVerificationService,
-  rejectPropertyVerificationService,
-  getRejectedPropertiesService,
-  getApprovedPropertiesService,
-  hidePropertyService,
-  restorePropertyService,
-  blockUserService,
-  unblockUserService,
-  getDashboardStatsService,
-} from "./admin.service.js";
-import { ROLES } from "../../constants/role.constants.js";
-import sendToken from "../../helpers/auth/sendToken.js";
+import * as AdminService from "./admin.service.js";
+import { asyncHandler, ApiError, ApiResponse } from "../../helpers/index.js";
+import { ROLES } from "../../constants/roles.constants.js";
 import { loginUserService } from "../auth/auth.service.js";
+import sendToken from "../../utils/auth/sendToken.js";
 
 // LOGIN
 export const adminLogin = asyncHandler(async (req, res) => {
@@ -43,7 +24,7 @@ export const adminLogin = asyncHandler(async (req, res) => {
 
 // FETCH ALL USERS
 export const fetchAllUsers = asyncHandler(async (req, res) => {
-  const users = await fetchAllUsersService();
+  const users = await AdminService.fetchAllUsersService();
 
   return res
     .status(200)
@@ -52,7 +33,7 @@ export const fetchAllUsers = asyncHandler(async (req, res) => {
 
 // FETCH ALL OWNERS
 export const fetchAllOwners = asyncHandler(async (req, res) => {
-  const owners = await fetchAllOwnersService();
+  const owners = await AdminService.fetchAllOwnersService();
 
   return res
     .status(200)
@@ -61,7 +42,7 @@ export const fetchAllOwners = asyncHandler(async (req, res) => {
 
 // FETCH ALL PROPERTIES
 export const fetchAllProperties = asyncHandler(async (req, res) => {
-  const properties = await fetchAllPropertiesService();
+  const properties = await AdminService.fetchAllPropertiesService();
 
   return res
     .status(200)
@@ -70,7 +51,7 @@ export const fetchAllProperties = asyncHandler(async (req, res) => {
 
 // GET PENDING OWNER VERIFICATIONS
 export const getPendingOwnerVerifications = asyncHandler(async (req, res) => {
-  const users = await getPendingOwnerVerificationsService();
+  const users = await AdminService.getPendingOwnerVerificationsService();
 
   return res
     .status(200)
@@ -91,7 +72,10 @@ export const approveOwnerVerification = asyncHandler(async (req, res) => {
     throw new ApiError(400, "User ID is required");
   }
 
-  const user = await approveOwnerVerificationService(userId, req.user._id);
+  const user = await AdminService.approveOwnerVerificationService(
+    userId,
+    req.user._id,
+  );
 
   return res
     .status(200)
@@ -109,7 +93,7 @@ export const rejectOwnerVerification = asyncHandler(async (req, res) => {
     throw new ApiError(400, "User ID is required");
   }
 
-  const user = await rejectOwnerVerificationService(
+  const user = await AdminService.rejectOwnerVerificationService(
     userId,
     req.user._id,
     reason,
@@ -125,7 +109,8 @@ export const rejectOwnerVerification = asyncHandler(async (req, res) => {
 // GET PENDING PROPERTY VERIFICATIONS
 export const getPendingPropertyVerifications = asyncHandler(
   async (req, res) => {
-    const properties = await getPendingPropertyVerificationsService();
+    const properties =
+      await AdminService.getPendingPropertyVerificationsService();
 
     return res
       .status(200)
@@ -147,7 +132,7 @@ export const approvePropertyVerification = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Property ID is required");
   }
 
-  const property = await approvePropertyVerificationService(
+  const property = await AdminService.approvePropertyVerificationService(
     propertyId,
     req.user._id,
   );
@@ -172,7 +157,7 @@ export const rejectPropertyVerification = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Property ID is required");
   }
 
-  const property = await rejectPropertyVerificationService(
+  const property = await AdminService.rejectPropertyVerificationService(
     propertyId,
     req.user._id,
     reason,
@@ -191,7 +176,7 @@ export const rejectPropertyVerification = asyncHandler(async (req, res) => {
 
 // GET REJECTED PROPERTIES
 export const getRejectedProperties = asyncHandler(async (req, res) => {
-  const properties = await getRejectedPropertiesService();
+  const properties = await AdminService.getRejectedPropertiesService();
 
   return res
     .status(200)
@@ -206,7 +191,7 @@ export const getRejectedProperties = asyncHandler(async (req, res) => {
 
 // GET APPROVED PROPERTIES
 export const getApprovedProperties = asyncHandler(async (req, res) => {
-  const properties = await getApprovedPropertiesService();
+  const properties = await AdminService.getApprovedPropertiesService();
 
   return res
     .status(200)
@@ -227,7 +212,7 @@ export const hideProperty = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Property ID is required");
   }
 
-  const property = await hidePropertyService(propertyId);
+  const property = await AdminService.hidePropertyService(propertyId);
 
   return res
     .status(200)
@@ -242,7 +227,7 @@ export const restoreProperty = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Property ID is required");
   }
 
-  const property = await restorePropertyService(propertyId);
+  const property = await AdminService.restorePropertyService(propertyId);
 
   return res
     .status(200)
@@ -257,7 +242,7 @@ export const blockUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "User ID is required");
   }
 
-  const user = await blockUserService(userId);
+  const user = await AdminService.blockUserService(userId);
 
   return res
     .status(200)
@@ -272,7 +257,7 @@ export const unblockUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "User ID is required");
   }
 
-  const user = await unblockUserService(userId);
+  const user = await AdminService.unblockUserService(userId);
 
   return res
     .status(200)
@@ -281,7 +266,7 @@ export const unblockUser = asyncHandler(async (req, res) => {
 
 // ADMIN DASHBOARD STATS
 export const getDashboardStats = asyncHandler(async (req, res) => {
-  const stats = await getDashboardStatsService();
+  const stats = await AdminService.getDashboardStatsService();
 
   return res
     .status(200)

@@ -1,8 +1,8 @@
 import Property from "../properties/property.model.js";
 import Booking from "./booking.model.js";
-import ApiError from "../../utils/ApiError.js";
-import { sendMail } from "../../helpers/mail/sendMail.js";
 import User from "../users/user.model.js";
+import { sendMail } from "../../utils/mail/sendMail.js";
+import { ApiError } from "../../helpers/index.js";
 
 const OWNER_POPULATE = "userName email fullName profileImage";
 

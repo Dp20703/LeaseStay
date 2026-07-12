@@ -2,7 +2,7 @@ import express from "express";
 import { verifyJWT } from "../../middlewares/auth.middleware.js";
 import validate from "../../middlewares/validate.middleware.js";
 import { authorizeRoles } from "../../middlewares/role.middleware.js";
-import { ROLES } from "../../constants/role.constants.js";
+import { ROLES } from "../../constants/roles.constants.js";
 import {
   fetchAllUsers,
   fetchAllProperties,

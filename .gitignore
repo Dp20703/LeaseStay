@@ -27,3 +27,4 @@ dist-ssr
 user/
 *.json
 backend/future.md
+*.zip

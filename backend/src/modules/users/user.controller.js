@@ -1,19 +1,10 @@
-import asyncHandler from "../../utils/asyncHandler.js";
-import ApiResponse from "../../utils/ApiResponse.js";
-import {
-  changeEmailService,
-  changePasswordService,
-  deleteAccountService,
-  deleteProfileImageService,
-  getSavedPropertiesService,
-  updateProfileService,
-  applyOwnerService,
-} from "./user.service.js";
+import * as UserService from "./user.service.js";
+import { asyncHandler, ApiResponse } from "../../helpers/index.js";
 
 // UPDATE PROFILE
 
 export const updateProfile = asyncHandler(async (req, res) => {
-  const updatedUser = await updateProfileService({
+  const updatedUser = await UserService.updateProfileService({
     userId: req.user._id,
     body: req.body,
     file: req.file,
@@ -27,7 +18,7 @@ export const updateProfile = asyncHandler(async (req, res) => {
 // CHANGE PASSWORD
 
 export const changePassword = asyncHandler(async (req, res) => {
-  await changePasswordService({
+  await UserService.changePasswordService({
     userId: req.user._id,
     body: req.body,
   });
@@ -40,7 +31,7 @@ export const changePassword = asyncHandler(async (req, res) => {
 // CHANGE EMAIL
 
 export const changeEmail = asyncHandler(async (req, res) => {
-  const updatedUser = await changeEmailService({
+  const updatedUser = await UserService.changeEmailService({
     userId: req.user._id,
     body: req.body,
   });
@@ -53,7 +44,7 @@ export const changeEmail = asyncHandler(async (req, res) => {
 // DELETE PROFILE IMAGE
 
 export const deleteProfileImage = asyncHandler(async (req, res) => {
-  const updatedUser = await deleteProfileImageService(req.user._id);
+  const updatedUser = await UserService.deleteProfileImageService(req.user._id);
 
   return res
     .status(200)
@@ -63,7 +54,9 @@ export const deleteProfileImage = asyncHandler(async (req, res) => {
 // GET SAVED PROPERTIES
 
 export const getSavedProperties = asyncHandler(async (req, res) => {
-  const savedProperties = await getSavedPropertiesService(req.user._id);
+  const savedProperties = await UserService.getSavedPropertiesService(
+    req.user._id,
+  );
 
   return res
     .status(200)
@@ -79,7 +72,7 @@ export const getSavedProperties = asyncHandler(async (req, res) => {
 // DELETE ACCOUNT
 
 export const deleteAccount = asyncHandler(async (req, res) => {
-  await deleteAccountService(req.user._id);
+  await UserService.deleteAccountService(req.user._id);
 
   res.clearCookie("token");
 
@@ -91,7 +84,7 @@ export const deleteAccount = asyncHandler(async (req, res) => {
 // APPLY OWNER
 
 export const applyOwner = asyncHandler(async (req, res) => {
-  const user = await applyOwnerService({
+  const user = await UserService.applyOwnerService({
     userId: req.user._id,
     file: req.file,
     documentType: req.body.documentType,
