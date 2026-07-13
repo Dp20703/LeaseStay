@@ -1,4 +1,4 @@
-const resetWelcomeTemplate = (resetUrl) => {
+const resetPasswordTemplate = (resetUrl) => {
   return `
 
     <div
@@ -63,4 +63,4 @@ const resetWelcomeTemplate = (resetUrl) => {
   `;
 };
 
-export default resetWelcomeTemplate;
+export default resetPasswordTemplate;

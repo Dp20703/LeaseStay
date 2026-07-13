@@ -1,8 +1,7 @@
 import User from "./user.model.js";
+import { CLOUDINARY_FOLDERS, ROLES } from "../../constants/index.js";
 import uploadToCloudinary from "../../utils/cloudinary/uploadToCloudinary.js";
 import deleteFromCloudinary from "../../utils/cloudinary/deleteFromCloudinary.js";
-import { CLOUDINARY_FOLDERS } from "../../constants/cloudinary.constants.js";
-import { ROLES } from "../../constants/roles.constants.js";
 import { getCache, setCache } from "../../utils/redis/redis.utils.js";
 import { ApiError } from "../../helpers/index.js";
 

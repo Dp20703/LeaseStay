@@ -3,7 +3,7 @@ const asyncHandler = (handler) => {
     try {
       await handler(req, res, next);
     } catch (error) {
-      console.log("Catch Error:",error)
+      console.log("Catch Error:", error);
       next(error);
     }
   };

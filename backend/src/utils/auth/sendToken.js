@@ -1,4 +1,4 @@
-import COOKIE_OPTIONS from "../../constants/cookie.constants.js";
+import { COOKIE_OPTIONS } from "../../constants/index.js";
 
 const sendToken = (res, token) => {
   res.cookie("token", token, COOKIE_OPTIONS);

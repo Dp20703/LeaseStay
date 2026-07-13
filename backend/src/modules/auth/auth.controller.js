@@ -6,13 +6,13 @@ import { sendMail } from "../../utils/mail/sendMail.js";
 import { asyncHandler, ApiError, ApiResponse } from "../../helpers/index.js";
 import { registerUserService, loginUserService } from "./auth.service.js";
 import {
-  resetWelcomeTemplate,
+  resetPasswordTemplate,
   welcomeEmailTemplate,
 } from "../../templates/index.js";
 import generateUniqueUsername from "../../utils/auth/generateUniqueUsername.js";
 import generateResetToken from "../../utils/auth/generateResetToken.js";
 import sendToken from "../../utils/auth/sendToken.js";
-import COOKIE_OPTIONS from "../../constants/cookie.constants.js";
+import { COOKIE_OPTIONS } from "../../constants/cookie.constants.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -161,7 +161,7 @@ export const getCurrentUser = asyncHandler(async (req, res) => {
 // LOGOUT
 
 export const logoutUser = asyncHandler(async (req, res) => {
-  res.clearCookie("token", COOKIE_OPTIONS);
+  res.clearCookie("token", { COOKIE_OPTIONS });
 
   return res.status(200).json(new ApiResponse(200, "Logout successful"));
 });
@@ -195,7 +195,7 @@ export const forgotPassword = asyncHandler(async (req, res) => {
   await sendMail({
     to: user.email,
     subject: "Reset Your LeaseStay Password",
-    html: resetWelcomeTemplate(resetUrl),
+    html: resetPasswordTemplate(resetUrl),
   });
 
   return res
