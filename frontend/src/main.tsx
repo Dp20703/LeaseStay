@@ -1,14 +1,14 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "@/styles/index.css";
 import App from "@/App.tsx";
-import { BrowserRouter } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import { PropertyProvider } from "./context/PropertyContext";
+import "@/styles/index.css";
 import "react-toastify/dist/ReactToastify.css";
-import { BookingProvider } from "./context/BookingContext";
-import { AdminProvider } from "./context/AdminContext";
+import { BrowserRouter } from "react-router-dom";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { AuthProvider } from "./modules/auth/context/AuthContext";
+import { BookingProvider } from "./modules/booking/context/BookingContext";
+import { AdminProvider } from "./modules/admin/context/AdminContext";
+import { PropertyProvider } from "./modules/property/context/PropertyContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
