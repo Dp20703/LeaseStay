@@ -1,4 +1,4 @@
-import type { PropertyType } from "../entities/property.types";
+import type { PropertyType } from "./property.types";
 
 export interface PropertyFormData {
   title: string;
@@ -7,7 +7,7 @@ export interface PropertyFormData {
   address: string;
   zipCode: string;
   category: "Rent" | "Sale";
-  propertyType:PropertyType;
+  propertyType: PropertyType;
   size: number;
   price: number;
   bedrooms: number;
