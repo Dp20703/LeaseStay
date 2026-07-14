@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, EyeOff, Lock } from "@/constants/icons";
+import { Eye, EyeOff, Lock } from "@/shared/constants/icons";
 
 type PasswordInputProps = {
   label: string;

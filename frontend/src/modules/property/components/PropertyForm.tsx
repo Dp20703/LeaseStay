@@ -8,11 +8,10 @@ import { PropertyDetails } from "./PropertyDetails";
 import { PropertyAmenitiesDetails } from "./PropertyAmenitiesDetails";
 import PropertyImageUpload from "./PropertyImageUpload";
 import PropertyDocumentsUpload from "./PropertyDocumentsUpload";
-
 import {
   createPropertySchema,
   type CreatePropertyFormData,
-} from "@/validations/property.schema";
+} from "../validations/property.schema";
 
 interface PropertyFormProps {
   loading: boolean;

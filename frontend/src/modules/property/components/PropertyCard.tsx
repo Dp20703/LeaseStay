@@ -1,10 +1,17 @@
-import { useAuth } from "@/hooks/useAuth";
-import { useProperty } from "@/hooks/useProperty";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import type { Property } from "@/types/entities/property.types";
-import { Building2, Bath, Bed, Heart, MapPin, Ruler } from "@/constants/icons";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+import { useProperty } from "../hooks/useProperty";
+import type { Property } from "../types";
+import {
+  Building2,
+  Bath,
+  Bed,
+  Heart,
+  MapPin,
+  Ruler,
+} from "@/shared/constants/icons";
 
 interface PropertyCardProps {
   property: Property;

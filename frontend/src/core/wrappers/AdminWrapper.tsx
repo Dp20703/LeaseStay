@@ -1,21 +1,22 @@
-import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import LoaderScreen from "@/shared/components/common/LoaderScreen";
+import { useAdmin } from "@/modules/admin/hooks/useAdmin";
 import { ROLES } from "@/shared/constants/role.constants";
 
-import LoaderScreen from "@/components/common/LoaderScreen";
-
 const AdminWrapper = () => {
-  const { user, loading } = useAuth();
+  const location = useLocation();
+
+  const { admin, loading } = useAdmin();
 
   if (loading) {
     return <LoaderScreen />;
   }
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
+  if (!admin) {
+    return <Navigate to="/admin/login" state={{ from: location }} replace />;
   }
 
-  if (user.role !== ROLES.ADMIN) {
+  if (admin.role !== ROLES.ADMIN) {
     return <Navigate to="/" replace />;
   }
 

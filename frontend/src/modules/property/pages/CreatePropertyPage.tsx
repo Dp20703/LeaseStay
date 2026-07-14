@@ -1,15 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
-import PropertyForm from "@/components/property/PropertyForm";
-import { useProperty } from "@/hooks/useProperty";
-import { formatValidationErrors } from "@/utils/formatValidationErrors";
+import { useProperty } from "../hooks/useProperty";
+import PropertyForm from "../components/PropertyForm";
+import { formatValidationErrors } from "@/shared/utils/formatValidationErrors";
 
 const CreatePropertyPage = () => {
   const navigate = useNavigate();
 
   const { createProperty, loading } = useProperty();
 
+  // handleSubmit
   const handleSubmit = async (formData: FormData) => {
     try {
       await createProperty(formData);

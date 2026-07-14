@@ -1,8 +1,7 @@
-import Sidebar from "@/shared/components/layout/navigation/Sidebar";
-import AppLayout from "./AppLayout";
 import { ROLES } from "@/shared/constants/role.constants";
-
-import { SIDEBAR_CONFIG } from "@/core/config/sidebar.config";
+import { SIDEBAR_CONFIG } from "@/core/navigation/sidebar.config";
+import Sidebar from "@/shared/components/layout/sidebar/Sidebar";
+import AppLayout from "./AppLayout";
 
 const OwnerLayout = () => {
   return (

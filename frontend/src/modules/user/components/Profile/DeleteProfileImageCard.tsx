@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 import api from "@/core/api/axios";
-import { useAuth } from "@/hooks/useAuth";
 import SettingsSection from "./SettingsSection";
 
 const DeleteProfileImageCard = () => {

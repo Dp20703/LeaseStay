@@ -1,4 +1,4 @@
-import { Moon, Sun } from "@/constants/icons";
+import { Moon, Sun } from "@/shared/constants/icons";
 
 interface ThemeToggleProps {
   darkMode: boolean;

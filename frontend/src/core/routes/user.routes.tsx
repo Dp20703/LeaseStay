@@ -1,6 +1,6 @@
 import { Route } from "react-router-dom";
 
-import ProtectedWrapper from "@/wrappers/ProtectedWrapper";
+import ProtectedWrapper from "../wrappers/ProtectedWrapper";
 import UserLayout from "@/layouts/UserLayout";
 
 import ProfilePage from "@/modules/user/pages/ProfilePage";

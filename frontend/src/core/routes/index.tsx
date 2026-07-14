@@ -5,7 +5,7 @@ import AuthRoutes from "./auth.routes";
 import UserRoutes from "./user.routes";
 import OwnerRoutes from "./owner.routes";
 import AdminRoutes from "./admin.routes";
-import NotFoundPage from "@/shared/pages/NotFoundPage";
+import NotFoundPage from "@/core/pages/NotFoundPage";
 
 const AppRoutes = () => {
   return (

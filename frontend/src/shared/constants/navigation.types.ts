@@ -1,4 +1,4 @@
-import type { IconType } from "@/constants/icons";
+import type { IconType } from "@/shared/constants/icons";
 
 export interface SidebarItem {
   path: string;

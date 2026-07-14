@@ -1,18 +1,17 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-
-import BookingInfo from "@/components/payment/BookingInfo";
-import PaymentSummary from "@/components/payment/PaymentSummary";
-import PaymentButton from "@/components/payment/PaymentButton";
-
-import { useBooking } from "@/hooks/useBooking";
-import { usePayment } from "@/hooks/usePayment";
+import { useBooking } from "@/modules/booking/hooks/useBooking";
+import { usePayment } from "../hooks/usePayment";
+import BookingInfo from "../components/BookingInfo";
+import PaymentSummary from "../components/PaymentSummary";
+import PaymentButton from "../components/PaymentButton";
 
 const PaymentPage = () => {
   const { id } = useParams<{ id: string }>();
 
   const { booking, loading: bookingLoading, getSingleBooking } = useBooking();
   console.log(booking);
+
   useEffect(() => {
     if (!id) return;
 

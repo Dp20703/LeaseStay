@@ -1,11 +1,12 @@
-import BookingCard from "@/components/booking/BookingCard";
-import LoaderScreen from "@/components/common/LoaderScreen";
-import { useBooking } from "@/hooks/useBooking";
 import React, { useEffect } from "react";
+import LoaderScreen from "@/shared/components/common/LoaderScreen";
+import BookingCard from "@/modules/booking/components/BookingCard";
+import { useBooking } from "@/modules/booking/hooks/useBooking";
 
 const OwnerBookingRequestsPage = () => {
   const { loading, bookings, getOwnerBookingRequests } = useBooking();
   console.log(bookings);
+
   useEffect(() => {
     getOwnerBookingRequests();
   }, []);

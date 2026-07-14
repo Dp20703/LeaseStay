@@ -1,6 +1,6 @@
 import type { User } from "@/types/entities/user.types";
 import type { ProfileFormData } from "@/types/forms/profile-form.types";
-import { Camera, Mail, Phone, Shield } from "@/constants/icons";
+import { Camera, Mail, Phone, Shield } from "@/shared/constants/icons";
 
 type ProfileCardProps = {
   user: User;

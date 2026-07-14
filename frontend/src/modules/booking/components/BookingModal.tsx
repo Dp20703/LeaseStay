@@ -1,12 +1,11 @@
+import type { Property } from "@/modules/property/types";
+import BookingForm from "./BookingForm";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-
-import BookingForm from "./BookingForm";
-import type { Property } from "@/types/entities/property.types";
+} from "@/shared/components/ui/dialog/dialog";
 
 interface BookingModalProps {
   open: boolean;

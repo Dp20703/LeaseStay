@@ -3,18 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import type { AxiosError } from "axios";
 
-import { useAuth } from "@/hooks/useAuth";
 import type {
   LoginFormData,
   LoginFormErrors,
-} from "@/types/forms/auth-form.types";
-import { validateLoginForm } from "@/components/auth/login.validation";
-
-import AuthHeader from "@/components/auth/AuthHeader";
-import AuthInput from "@/components/auth/AuthInput";
-import PasswordInput from "@/components/auth/PasswordInput";
-
-import { Mail } from "@/constants/icons";
+} from "@/modules/auth/types/auth-form.types";
+import { Mail } from "@/shared/constants/icons";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+import { validateLoginForm } from "@/modules/auth/components/login.validation";
+import AuthHeader from "@/modules/auth/components/AuthHeader";
+import AuthInput from "@/modules/auth/components/AuthInput";
+import PasswordInput from "@/modules/auth/components/PasswordInput";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -23,11 +21,13 @@ const AdminLogin = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<LoginFormErrors>({});
 
+  // formData
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
   });
 
+  // handleChange
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -44,6 +44,7 @@ const AdminLogin = () => {
     }
   };
 
+  // handleSubmit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 

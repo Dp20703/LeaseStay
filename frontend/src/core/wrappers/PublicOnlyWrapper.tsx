@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
-import LoaderScreen from "@/components/common/LoaderScreen";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+import LoaderScreen from "@/shared/components/common/LoaderScreen";
 
 const PublicOnlyWrapper = () => {
   const { user, loading } = useAuth();

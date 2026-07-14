@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { Mail, MapPin, Phone } from "@/constants/icons";
+import { Mail, MapPin, Phone } from "@/shared/constants/icons";
 
 const ContactPage = () => {
   const [loading, setLoading] = useState(false);

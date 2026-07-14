@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { Pencil } from "@/constants/icons";
+import { Pencil } from "@/shared/constants/icons";
 import api from "@/core/api/axios";
 import type { User } from "@/types/entities/user.types";
 import type { ProfileFormData } from "@/types/forms/profile-form.types";

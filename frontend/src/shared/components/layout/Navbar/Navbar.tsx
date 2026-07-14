@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Menu, Heart, X, User } from "@/constants/icons";
-
-import { useAuth } from "@/hooks/useAuth";
+import { Menu, Heart, X, User } from "@/shared/constants/icons";
 import { ROLES } from "@/shared/constants/role.constants";
-
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 import NavbarLinks from "./NavbarLinks";
 import ThemeToggle from "./ThemeToggle";
 import UserMenu from "./UserMenu";

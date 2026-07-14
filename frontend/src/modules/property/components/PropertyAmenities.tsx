@@ -1,4 +1,4 @@
-import { CheckCircle } from "@/constants/icons";
+import { CheckCircle } from "@/shared/constants/icons";
 
 const PropertyAmenities = ({ amenities }: { amenities: string[] }) => {
   return (

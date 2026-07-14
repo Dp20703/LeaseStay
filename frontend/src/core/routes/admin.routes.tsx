@@ -1,8 +1,9 @@
 import { Route } from "react-router-dom";
 
-import AdminWrapper from "@/shared/wrappers/AdminWrapper";
-import AdminLayout from "@/layouts/AdminLayout";
+// import AdminLayout from "@/layouts/AdminLayout";
 import AdminDashboardPage from "@/modules/admin/pages/AdminDashboardPage";
+import AdminWrapper from "../wrappers/AdminWrapper";
+import AdminLayout from "@/modules/admin/layouts/AdminLayout";
 
 const AdminRoutes = () => {
   return (

@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import type { SidebarItem } from "@/constants/navigation.types";
+import type { SidebarItem } from "@/shared/constants/navigation.types";
 
 interface SidebarProps {
   title: string;

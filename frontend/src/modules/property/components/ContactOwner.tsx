@@ -1,18 +1,20 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { useProperty } from "@/hooks/useProperty";
+import { useProperty } from "../hooks/useProperty";
 
 interface Props {
   propertyId: string;
 }
 
 const ContactOwner = ({ propertyId }: Props) => {
+  // states
   const [message, setMessage] = useState("");
-
   const [loading, setLoading] = useState(false);
 
+  // useProperty
   const { contactOwner } = useProperty();
 
+  // handleSubmit
   const handleSubmit = async () => {
     try {
       setLoading(true);

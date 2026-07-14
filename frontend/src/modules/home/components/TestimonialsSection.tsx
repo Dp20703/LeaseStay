@@ -1,10 +1,5 @@
-import { Star } from "@/constants/icons";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/Card";
+import { Card, CardHeader, CardContent } from "@/shared/components/ui/card";
+import { Star } from "@/shared/constants/icons";
 
 const testimonials = [
   {

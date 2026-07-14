@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { verifyJWT } from "../../middlewares/auth.middleware.js";
 import { authorizeRoles } from "../../middlewares/role.middleware.js";
+import { ROLES } from "../../constants/roles.constants.js";
 import validate from "../../middlewares/validate.middleware.js";
 
 import * as paymentController from "./payment.controller.js";
@@ -46,7 +47,7 @@ router.get("/my-payments", verifyJWT, paymentController.getMyPayments);
 router.get(
   "/property/:propertyId",
   verifyJWT,
-  authorizeRoles("owner", "admin"),
+  authorizeRoles(ROLES.OWNER, ROLES.ADMIN),
   paymentController.getPropertyPayments,
 );
 
@@ -57,14 +58,14 @@ router.get(
 router.get(
   "/stats",
   verifyJWT,
-  authorizeRoles("admin"),
+  authorizeRoles(ROLES.ADMIN),
   paymentController.getPaymentStats,
 );
 
 router.post(
   "/:paymentId/refund",
   verifyJWT,
-  authorizeRoles("admin"),
+  authorizeRoles(ROLES.ADMIN),
   paymentController.refundPayment,
 );
 

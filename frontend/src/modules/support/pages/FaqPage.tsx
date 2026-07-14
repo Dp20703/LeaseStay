@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp } from "@/constants/icons";
+import { ChevronDown, ChevronUp } from "@/shared/constants/icons";
 
 const faqs = [
   {

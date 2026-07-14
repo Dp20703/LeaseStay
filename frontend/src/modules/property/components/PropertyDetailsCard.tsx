@@ -1,4 +1,4 @@
-import { Bed, Bath, Ruler, Home, Tag } from "@/constants/icons";
+import { Bed, Bath, Ruler, Home, Tag } from "@/shared/constants/icons";
 
 const PropertyDetailsCard = ({ property }: any) => {
   return (

@@ -1,6 +1,5 @@
 import { ROLES } from "@/shared/constants/role.constants";
 
-import type { SidebarItem } from "@/constants/navigation.types";
 import {
   Home,
   Plus,
@@ -12,7 +11,8 @@ import {
   CheckCircle,
   LayoutDashboard,
   Settings,
-} from "@/constants/icons";
+} from "@/shared/constants/icons";
+import type { SidebarItem } from "@/shared/constants/navigation.types";
 
 export const SIDEBAR_CONFIG: Record<string, SidebarItem[]> = {
   [ROLES.USER]: [

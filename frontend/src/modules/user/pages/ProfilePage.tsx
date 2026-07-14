@@ -1,14 +1,17 @@
 import { useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
-import ProfileCard from "@/components/profile/ProfileCard";
-import ProfileEditCard from "@/components/profile/ProfileEditCard";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+import ProfileCard from "../components/Profile/ProfileCard";
+import ProfileEditCard from "../components/Profile/ProfileEditCard";
 
 const ProfilePage = () => {
   const { user, setUser, logout } = useAuth();
+
+  // states
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
+  // formData
   const [formData, setFormData] = useState({
     firstName: user?.fullName?.firstName || "",
     lastName: user?.fullName?.lastName || "",

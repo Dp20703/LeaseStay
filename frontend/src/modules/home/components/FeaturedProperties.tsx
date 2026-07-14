@@ -1,6 +1,6 @@
-import PropertyCard from "@/components/property/PropertyCard";
-import { useProperty } from "@/hooks/useProperty";
-import LoaderScreen from "../common/LoaderScreen";
+import PropertyCard from "@/modules/property/components/PropertyCard";
+import { useProperty } from "@/modules/property/hooks/useProperty";
+import LoaderScreen from "@/shared/components/common/LoaderScreen";
 import { useEffect } from "react";
 
 const FeaturedProperties = () => {
@@ -14,6 +14,7 @@ const FeaturedProperties = () => {
     return <LoaderScreen />;
   }
   console.log("properties", featuredProperties);
+
   return (
     <section className="py-24">
       <div className="ls-container">

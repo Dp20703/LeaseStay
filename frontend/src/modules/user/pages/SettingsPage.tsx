@@ -1,7 +1,7 @@
-import ChangeEmailCard from "@/components/profile/ChangeEmailCard";
-import ChangePasswordCard from "@/components/profile/ChangePasswordCard";
-import DeleteProfileImageCard from "@/components/profile/DeleteProfileImageCard";
-import DangerZoneCard from "@/components/profile/DangerZoneCard";
+import ChangeEmailCard from "../components/Profile/ChangeEmailCard";
+import ChangePasswordCard from "../components/Profile/ChangePasswordCard";
+import DangerZoneCard from "../components/Profile/DangerZoneCard";
+import DeleteProfileImageCard from "../components/Profile/DeleteProfileImageCard";
 
 const SettingsPage = () => {
   return (

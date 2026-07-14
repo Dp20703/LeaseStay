@@ -1,3 +1,7 @@
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useBooking } from "../hooks/useBooking";
+import type { Booking } from "../types/booking.types";
 import {
   Calendar,
   MapPin,
@@ -5,13 +9,7 @@ import {
   Home,
   Check,
   X,
-} from "@/constants/icons";
-
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
-
-import { useBooking } from "@/hooks/useBooking";
-import type { Booking } from "@/types/entities/booking.types";
+} from "@/shared/constants/icons";
 
 interface BookingCardProps {
   booking: Booking;
@@ -41,6 +39,7 @@ const BookingCard = ({ booking, isOwnerView = false }: BookingCardProps) => {
     paymentStatus,
   } = booking;
 
+  // handleAccept
   const handleAccept = async () => {
     try {
       await acceptBooking(booking._id);
@@ -51,6 +50,7 @@ const BookingCard = ({ booking, isOwnerView = false }: BookingCardProps) => {
     }
   };
 
+  // handleReject
   const handleReject = async () => {
     try {
       await rejectBooking(booking._id);

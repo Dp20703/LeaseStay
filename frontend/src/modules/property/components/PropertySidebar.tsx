@@ -1,17 +1,18 @@
-import ContactOwner from "./ContactOwner";
-import { IndianRupee, User } from "@/constants/icons";
-import { Mail } from "@/constants/icons";
 import { useState } from "react";
-import BookingModal from "../booking/BookingModal";
-import { useAuth } from "@/hooks/useAuth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { Mail, IndianRupee, User } from "@/shared/constants/icons";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+import BookingModal from "@/modules/booking/components/BookingModal";
+import ContactOwner from "./ContactOwner";
 
 const PropertySidebar = ({ property, showContact, setShowContact }: any) => {
   const [showBooking, setShowBooking] = useState(false);
+
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  // handleBooking
   const handleBooking = () => {
     if (!user) {
       toast.info("Please login to book properties", {

@@ -1,20 +1,25 @@
 import { createContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
-import type { User } from "@/types/entities/user.types";
-import type { LoginFormData } from "@/types/forms/auth-form.types";
-import adminAPI from "@/services/adminService";
+
+import adminService from "../services/adminService";
+
+import type { User } from "@/modules/user/types";
+import type { LoginFormData } from "@/modules/auth/types/auth-form.types";
 
 /* ─────────────────────────────────────────────
    TYPES
 ───────────────────────────────────────────── */
 
 interface AdminContextType {
-  user: User | null;
+  admin: User | null;
   loading: boolean;
-  login: (data: LoginFormData) => Promise<void>;
+
+  adminLogin: (data: LoginFormData) => Promise<void>;
   logout: () => Promise<void>;
-  fetchCurrentUser: () => Promise<void>;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+
+  fetchCurrentAdmin: () => Promise<void>;
+
+  setAdmin: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 interface AdminProviderProps {
@@ -34,84 +39,88 @@ export const AdminContext = createContext<AdminContextType | undefined>(
 ───────────────────────────────────────────── */
 
 export const AdminProvider = ({ children }: AdminProviderProps) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [admin, setAdmin] = useState<User | null>(null);
 
   const [loading, setLoading] = useState(true);
 
-  /* FETCH CURRENT USER */
+  /* ─────────────────────────────────────────────
+     FETCH CURRENT ADMIN
+  ───────────────────────────────────────────── */
 
-  const fetchCurrentUser = async () => {
+  const fetchCurrentAdmin = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("adminToken");
 
       if (!token) {
-        setUser(null);
-
+        setAdmin(null);
         return;
       }
 
-      const response = await adminAPI.getCurrentUser();
+      const response = await adminService.me();
 
-      setUser(response.data);
+      setAdmin(response.data);
     } catch (error) {
-      localStorage.removeItem("token");
+      localStorage.removeItem("adminToken");
 
-      setUser(null);
+      setAdmin(null);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchCurrentUser();
+    fetchCurrentAdmin();
   }, []);
 
-  /* LOGIN */
+  /* ─────────────────────────────────────────────
+     LOGIN
+  ───────────────────────────────────────────── */
 
   const adminLogin = async (data: LoginFormData) => {
     try {
       setLoading(true);
 
-      const response = await adminAPI.adminLogin(data);
+      const response = await adminService.login(data);
 
       const { token, user } = response.data;
 
       localStorage.setItem("adminToken", token);
 
-      setUser(user);
-    } catch (error) {
-      throw error;
+      setAdmin(user);
     } finally {
       setLoading(false);
     }
   };
 
-  /* LOGOUT */
+  /* ─────────────────────────────────────────────
+     LOGOUT
+  ───────────────────────────────────────────── */
 
   const logout = async () => {
     try {
-      await adminAPI.logout();
-    } catch (error) {
-      console.log(error);
+      await adminService.logout();
     } finally {
-      localStorage.removeItem("token");
+      localStorage.removeItem("adminToken");
 
-      setUser(null);
+      setAdmin(null);
     }
   };
 
-  const values: AdminContextType = {
-    user,
-    setUser,
-
-    loading,
-    fetchCurrentUser,
-
-    adminLogin,
-    logout,
-  };
-
   return (
-    <AdminContext.Provider value={values}>{children}</AdminContext.Provider>
+    <AdminContext.Provider
+      value={{
+        admin,
+        loading,
+
+        adminLogin,
+        logout,
+
+        fetchCurrentAdmin,
+
+        setAdmin,
+      }}
+    >
+      {children}
+    </AdminContext.Provider>
   );
 };

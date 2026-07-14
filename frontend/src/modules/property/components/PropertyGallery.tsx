@@ -5,7 +5,7 @@ import {
   ChevronRight,
   Expand,
   X,
-} from "@/constants/icons";
+} from "@/shared/constants/icons";
 import { useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 

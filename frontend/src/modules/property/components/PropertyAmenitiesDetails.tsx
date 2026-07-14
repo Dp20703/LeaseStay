@@ -1,8 +1,7 @@
-import { PropertyAmenities } from "@/types/entities/property.types";
+import PropertyAmenities from "./PropertyAmenities";
 
 interface Props {
   selectedAmenities: string[];
-
   setSelectedAmenities: (value: string[]) => void;
 }
 

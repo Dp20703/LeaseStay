@@ -1,4 +1,4 @@
-import api from "../../../shared/core/api/axios";
+import api from "@/core/api/axios";
 import type { Property } from "@/types/entities/property.types";
 
 /* ─────────────────────────────────────────────

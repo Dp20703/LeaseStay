@@ -1,7 +1,7 @@
-import { createContext, useEffect, useState } from "react";
-import propertyAPI from "@/services/propertyService";
-import type { Property } from "@/types/entities/property.types";
+import { createContext, useState } from "react";
 import type { ReactNode } from "react";
+import type { Property } from "../types";
+import propertyAPI from "../services/propertyService";
 
 interface PropertyContextType {
   properties: Property[];

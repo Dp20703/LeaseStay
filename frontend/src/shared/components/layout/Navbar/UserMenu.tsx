@@ -8,10 +8,9 @@ import {
   User,
   LogOut,
   ChevronDown,
-  Building,
   Shield,
   LayoutDashboard,
-} from "@/constants/icons";
+} from "@/shared/constants/icons";
 
 interface UserMenuProps {
   user: any;

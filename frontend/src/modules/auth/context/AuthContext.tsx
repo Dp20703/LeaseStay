@@ -1,8 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
-import authAPI from "@/services/authService";
-import type { User } from "@/types/entities/user.types";
 import type { RegisterFormData, LoginFormData } from "../types/auth-form.types";
+import type { User } from "@/modules/user/types";
+import authAPI from "../services/authService";
 
 /* ─────────────────────────────────────────────
    TYPES

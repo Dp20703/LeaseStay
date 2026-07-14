@@ -6,6 +6,7 @@ const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // handleSubmit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 

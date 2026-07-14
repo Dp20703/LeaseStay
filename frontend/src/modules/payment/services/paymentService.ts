@@ -1,4 +1,4 @@
-import api from "../../../shared/core/api/axios";
+import api from "@/core/api/axios";
 
 export const createOrder = async (bookingId: string) => {
   const { data } = await api.post("/payments/create-order", { bookingId });

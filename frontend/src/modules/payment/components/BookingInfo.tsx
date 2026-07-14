@@ -1,4 +1,4 @@
-import { Calendar, IndianRupee, MapPin } from "@/constants/icons";
+import { Calendar, IndianRupee, MapPin } from "@/shared/constants/icons";
 import type { Booking } from "@/types/entities/payment.types";
 import { Link } from "react-router-dom";
 

@@ -2,8 +2,8 @@ import { Route } from "react-router-dom";
 
 import AuthLayout from "@/layouts/AuthLayout";
 
-import PublicOnlyWrapper from "@/wrappers/PublicOnlyWrapper";
-import AdminPublicOnlyWrapper from "@/wrappers/AdminPublicOnlyWrapper";
+import PublicOnlyWrapper from "../wrappers/PublicOnlyWrapper";
+import AdminPublicOnlyWrapper from "../wrappers/AdminPublicOnlyWrapper";
 
 import LoginPage from "@/modules/auth/pages/LoginPage";
 import RegisterPage from "@/modules/auth/pages/RegisterPage";

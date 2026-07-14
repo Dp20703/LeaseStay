@@ -1,8 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { ROLES } from "@/shared/constants/role.constants";
-
-import LoaderScreen from "@/components/common/LoaderScreen";
+import LoaderScreen from "@/shared/components/common/LoaderScreen";
 
 const OwnerWrapper = () => {
   const { user, loading } = useAuth();

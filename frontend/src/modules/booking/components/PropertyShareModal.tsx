@@ -6,13 +6,14 @@ import {
   FaFacebook,
   FaTwitter,
   Send,
-} from "@/constants/icons";
+} from "@/shared/constants/icons";
+
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/Dialog";
+} from "@/shared/components/ui/dialog/dialog";
 
 interface PropertyShareModalProps {
   open: boolean;

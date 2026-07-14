@@ -1,6 +1,6 @@
 import { Route } from "react-router-dom";
 
-import OwnerWrapper from "@/wrappers/OwnerWrapper";
+import OwnerWrapper from "../wrappers/OwnerWrapper";
 import OwnerLayout from "@/layouts/OwnerLayout";
 import DashboardPage from "@/modules/owner/pages/DashboardPage";
 import OwnerPropertiesPage from "@/modules/property/pages/OwnerPropertiesPage";

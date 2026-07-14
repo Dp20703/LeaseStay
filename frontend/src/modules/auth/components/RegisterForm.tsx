@@ -1,26 +1,26 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Mail, Phone, User } from "@/constants/icons";
-import { useAuth } from "@/hooks/useAuth";
-import type {
-  RegisterFormData,
-  RegisterFormErrors,
-} from "@/types/forms/auth-form.types";
+import { Mail, Phone, User } from "@/shared/constants/icons";
+import { useAuth } from "../hooks/useAuth";
+import type { RegisterFormData, RegisterFormErrors } from "../types";
 import AuthHeader from "./AuthHeader";
 import RegisterInput from "./RegisterInput";
 import PasswordInput from "./PasswordInput";
 import GoogleAuthButton from "./GoogleAuthButton";
 import { validateRegisterForm } from "./RegisterValidation";
-import { formatValidationErrors } from "@/utils/formatValidationErrors";
+import { formatValidationErrors } from "@/shared/utils/formatValidationErrors";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
+
   const { register } = useAuth();
+
   const [loading, setLoading] = useState(false);
 
   const [errors, setErrors] = useState<RegisterFormErrors>({});
 
+  // formData
   const [formData, setFormData] = useState<RegisterFormData>({
     firstName: "",
     lastName: "",

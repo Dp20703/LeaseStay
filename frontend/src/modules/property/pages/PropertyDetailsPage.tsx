@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import LoaderScreen from "@/components/common/LoaderScreen";
-import PropertyGallery from "@/components/property/PropertyGallery";
-import PropertyHeader from "@/components/property/PropertyHeader";
-import PropertyDetailsCard from "@/components/property/PropertyDetailsCard";
-import PropertyDescription from "@/components/property/PropertyDescription";
-import PropertyAmenities from "@/components/property/PropertyAmenities";
-import PropertySidebar from "@/components/property/PropertySidebar";
-import { useProperty } from "@/hooks/useProperty";
-import { useAuth } from "@/hooks/useAuth";
-import RelatedProperties from "@/components/property/RelatedProperties";
-import PropertyShareModal from "@/components/booking/PropertyShareModal";
+import LoaderScreen from "@/shared/components/common/LoaderScreen";
+import PropertyGallery from "../components/PropertyGallery";
+import PropertyHeader from "../components/PropertyHeader";
+import PropertyDetailsCard from "../components/PropertyDetailsCard";
+import PropertyDescription from "../components/PropertyDescription";
+import { PropertyAmenities } from "../types";
+import PropertySidebar from "../components/PropertySidebar";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+import { useProperty } from "../hooks/useProperty";
+import RelatedProperties from "../components/RelatedProperties";
+import PropertyShareModal from "@/modules/booking/components/PropertyShareModal";
 
 const PropertyDetailsPage = () => {
   const { slug } = useParams();

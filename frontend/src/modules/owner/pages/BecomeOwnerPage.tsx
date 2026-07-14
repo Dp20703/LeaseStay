@@ -1,14 +1,16 @@
 import { useState } from "react";
-import userAPI from "@/services/userService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import userAPI from "@/modules/user/services/userService";
 
 const BecomeOwnerPage = () => {
   const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
   const [documentType, setDocumentType] = useState("aadhaar");
   const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false);
 
+  // handleSubmit
   const handleSubmit = async (e) => {
     e.preventDefault();
 

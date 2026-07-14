@@ -6,7 +6,7 @@ import {
   Home,
   Eye,
   Share2,
-} from "@/constants/icons";
+} from "@/shared/constants/icons";
 
 const PropertyHeader = ({
   property,

@@ -1,4 +1,4 @@
-import { Home, Building, Users } from "@/constants/icons";
+import { Home, Building, Users } from "@/shared/constants/icons";
 
 const services = [
   {

@@ -1,4 +1,4 @@
-import { Building, Handshake, Home, Shield } from "@/constants/icons";
+import { Building, Handshake, Home, Shield } from "@/shared/constants/icons";
 
 const AboutPage = () => {
   return (

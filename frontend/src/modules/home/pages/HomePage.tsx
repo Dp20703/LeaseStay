@@ -1,9 +1,9 @@
-import HeroSection from "@/components/home/HeroSection";
-import ServicesSection from "@/components/home/ServicesSection";
-import StatsSection from "@/components/home/StatsSection";
-import FeaturedProperties from "@/components/home/FeaturedProperties";
-import CTASection from "@/components/home/CTASection";
-import TestimonialsSection from "@/components/home/TestimonialsSection";
+import CTASection from "../components/CTASection";
+import FeaturedProperties from "../components/FeaturedProperties";
+import HeroSection from "../components/HeroSection";
+import ServicesSection from "../components/ServicesSection";
+import StatsSection from "../components/StatsSection";
+import Testimonials from "../components/TestimonialsSection";
 
 const HomePage = () => {
   return (
@@ -13,7 +13,7 @@ const HomePage = () => {
       <StatsSection />
       <FeaturedProperties />
       <CTASection />
-      <TestimonialsSection />
+      <Testimonials />
     </div>
   );
 };
