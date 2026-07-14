@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Outlet } from "react-router-dom";
-import Navbar from "@/shared/components/layout/Navbar/Navbar";
-import Footer from "@/shared/components/layout/Footer";
+import Navbar from "@/shared/components/layout/navbar/Navbar";
+import Footer from "@/shared/components/layout/footer/Footer";
 
 type AppLayoutProps = {
   sidebar: ReactNode;

@@ -7,7 +7,7 @@ import {
   Mail,
   Phone,
   MapPin,
-} from "@/constants/icons";
+} from "@/shared/constants/icons";
 
 const Footer = () => {
   return (
