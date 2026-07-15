@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { useProperty } from "../hooks/useProperty";
+import { useProperty } from "@/modules/property/hooks/useProperty";
 
 interface Props {
   propertyId: string;

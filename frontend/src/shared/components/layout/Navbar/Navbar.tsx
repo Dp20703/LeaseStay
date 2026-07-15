@@ -3,10 +3,10 @@ import { Link, NavLink } from "react-router-dom";
 import { Menu, Heart, X, User } from "@/shared/constants/icons";
 import { ROLES } from "@/shared/constants/role.constants";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import NavbarLinks from "./NavbarLinks";
-import ThemeToggle from "./ThemeToggle";
-import UserMenu from "./UserMenu";
-import MobileMenu from "./MobileMenu";
+import NavbarLinks from "@/shared/components/layout/navbar/NavbarLinks";
+import ThemeToggle from "@/shared/components/layout/navbar/ThemeToggle";
+import UserMenu from "@/shared/components/layout/navbar/UserMenu";
+import MobileMenu from "@/shared/components/layout/navbar/MobileMenu";
 
 const Navbar = () => {
   const { user, logout } = useAuth();

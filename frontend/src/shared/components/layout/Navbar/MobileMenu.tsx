@@ -1,7 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 import { ROLES } from "@/shared/constants/role.constants";
 
-import NavbarLinks from "./NavbarLinks";
+import NavbarLinks from "@/shared/components/layout/navbar/NavbarLinks";
 
 interface Props {
   user: any;

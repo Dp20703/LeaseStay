@@ -1,4 +1,4 @@
-import PropertyAmenities from "./PropertyAmenities";
+import PropertyAmenities from "@/modules/property/components/PropertyAmenities";
 
 interface Props {
   selectedAmenities: string[];

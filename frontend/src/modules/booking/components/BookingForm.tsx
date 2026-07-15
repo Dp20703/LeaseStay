@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { useBooking } from "../hooks/useBooking";
+import { useBooking } from "@/modules/booking/hooks/useBooking";
 import type { Property } from "@/modules/property/types";
 
 interface BookingFormProps {

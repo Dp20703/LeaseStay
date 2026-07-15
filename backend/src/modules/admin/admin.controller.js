@@ -7,6 +7,7 @@ import sendToken from "../../utils/auth/sendToken.js";
 // LOGIN
 export const adminLogin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+  console.log("email,password", email, password);
 
   const user = await loginUserService(email, password);
 

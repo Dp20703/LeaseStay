@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { NAV_LINKS } from "./navbar.constants";
+import { NAV_LINKS } from "@/shared/components/layout/navbar/navbar.constants";
 
 const NavbarLinks = () => {
   return (

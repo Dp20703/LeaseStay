@@ -3,13 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import type { AxiosError } from "axios";
 import { Mail } from "@/shared/constants/icons";
-import { useAuth } from "../hooks/useAuth";
-import type { LoginFormData, LoginFormErrors } from "../types/auth-form.types";
-import { validateLoginForm } from "./login.validation";
-import AuthInput from "./AuthInput";
-import AuthHeader from "./AuthHeader";
-import PasswordInput from "./PasswordInput";
-import GoogleAuthButton from "./GoogleAuthButton";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+import type { LoginFormData, LoginFormErrors } from "@/modules/auth/types/auth-form.types";
+import { validateLoginForm } from "@/modules/auth/components/login.validation";
+import AuthInput from "@/modules/auth/components/AuthInput";
+import AuthHeader from "@/modules/auth/components/AuthHeader";
+import PasswordInput from "@/modules/auth/components/PasswordInput";
+import GoogleAuthButton from "@/modules/auth/components/GoogleAuthButton";
 
 const LoginForm = () => {
   const navigate = useNavigate();

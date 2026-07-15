@@ -1,33 +1,51 @@
-import { Route } from "react-router-dom";
+import type { RouteObject } from "react-router-dom";
 
-import ProtectedWrapper from "../wrappers/ProtectedWrapper";
+import ProtectedWrapper from "@/core/wrappers/ProtectedWrapper";
+
 import UserLayout from "@/layouts/UserLayout";
 
+import MyBookingsPage from "@/modules/booking/pages/MyBookingsPage";
+import BecomeOwnerPage from "@/modules/owner/pages/BecomeOwnerPage";
+import PaymentPage from "@/modules/payment/pages/PaymentPage";
+import WishListPage from "@/modules/property/pages/WishListPage";
 import ProfilePage from "@/modules/user/pages/ProfilePage";
 import SettingsPage from "@/modules/user/pages/SettingsPage";
-import WishListPage from "@/modules/property/pages/WishListPage";
-import BecomeOwnerPage from "@/modules/owner/pages/BecomeOwnerPage";
-import MyBookingsPage from "@/modules/booking/pages/MyBookingsPage";
-import PaymentPage from "@/modules/payment/pages/PaymentPage";
 
-const UserRoutes = () => {
-  return (
-    <Route element={<ProtectedWrapper />}>
-      <Route element={<UserLayout />}>
-        <Route path="/profile" element={<ProfilePage />} />
+const userRoutes: RouteObject[] = [
+  {
+    element: <ProtectedWrapper />,
+    children: [
+      {
+        element: <UserLayout />,
+        children: [
+          {
+            path: "/profile",
+            element: <ProfilePage />,
+          },
+          {
+            path: "/wishlist",
+            element: <WishListPage />,
+          },
+          {
+            path: "/become-owner",
+            element: <BecomeOwnerPage />,
+          },
+          {
+            path: "/bookings",
+            element: <MyBookingsPage />,
+          },
+          {
+            path: "/settings",
+            element: <SettingsPage />,
+          },
+          {
+            path: "/payment/:id",
+            element: <PaymentPage />,
+          },
+        ],
+      },
+    ],
+  },
+];
 
-        <Route path="/wishlist" element={<WishListPage />} />
-
-        <Route path="/become-owner" element={<BecomeOwnerPage />} />
-
-        <Route path="/bookings" element={<MyBookingsPage />} />
-
-        <Route path="/settings" element={<SettingsPage />} />
-
-        <Route path="/payment/:id" element={<PaymentPage />} />
-      </Route>
-    </Route>
-  );
-};
-
-export default UserRoutes;
+export default userRoutes;

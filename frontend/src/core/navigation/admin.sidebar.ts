@@ -1,11 +1,11 @@
 import {
-  LayoutDashboard,
-  Users,
   Building2,
-  Home,
   Calendar,
   CreditCard,
+  Home,
+  LayoutDashboard,
   Settings,
+  Users,
 } from "@/shared/constants/icons";
 
 export const ADMIN_SIDEBAR = [

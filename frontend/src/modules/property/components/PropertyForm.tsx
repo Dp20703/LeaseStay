@@ -2,16 +2,16 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import PropertyBasicInfo from "./PropertyBasicInfo";
-import PropertyLocation from "./PropertyLocation";
-import { PropertyDetails } from "./PropertyDetails";
-import { PropertyAmenitiesDetails } from "./PropertyAmenitiesDetails";
-import PropertyImageUpload from "./PropertyImageUpload";
-import PropertyDocumentsUpload from "./PropertyDocumentsUpload";
+import PropertyBasicInfo from "@/modules/property/components/PropertyBasicInfo";
+import PropertyLocation from "@/modules/property/components/PropertyLocation";
+import { PropertyDetails } from "@/modules/property/components/PropertyDetails";
+import { PropertyAmenitiesDetails } from "@/modules/property/components/PropertyAmenitiesDetails";
+import PropertyImageUpload from "@/modules/property/components/PropertyImageUpload";
+import PropertyDocumentsUpload from "@/modules/property/components/PropertyDocumentsUpload";
 import {
   createPropertySchema,
   type CreatePropertyFormData,
-} from "../validations/property.schema";
+} from "@/modules/property/validations/property.schema";
 
 interface PropertyFormProps {
   loading: boolean;

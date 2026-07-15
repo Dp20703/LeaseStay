@@ -1,16 +1,16 @@
 import { ROLES } from "@/shared/constants/role.constants";
 
 import {
-  Home,
-  Plus,
-  Users,
-  Heart,
-  User,
+  CheckCircle,
   ClipboardCheck,
   ClipboardList,
-  CheckCircle,
+  Heart,
+  Home,
   LayoutDashboard,
+  Plus,
   Settings,
+  User,
+  Users,
 } from "@/shared/constants/icons";
 import type { SidebarItem } from "@/shared/constants/navigation.types";
 

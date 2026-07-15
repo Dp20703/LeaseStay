@@ -2,13 +2,13 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Mail, Phone, User } from "@/shared/constants/icons";
-import { useAuth } from "../hooks/useAuth";
-import type { RegisterFormData, RegisterFormErrors } from "../types";
-import AuthHeader from "./AuthHeader";
-import RegisterInput from "./RegisterInput";
-import PasswordInput from "./PasswordInput";
-import GoogleAuthButton from "./GoogleAuthButton";
-import { validateRegisterForm } from "./RegisterValidation";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+import type { RegisterFormData, RegisterFormErrors } from "@/modules/auth/types";
+import AuthHeader from "@/modules/auth/components/AuthHeader";
+import RegisterInput from "@/modules/auth/components/RegisterInput";
+import PasswordInput from "@/modules/auth/components/PasswordInput";
+import GoogleAuthButton from "@/modules/auth/components/GoogleAuthButton";
+import { validateRegisterForm } from "@/modules/auth/components/RegisterValidation";
 import { formatValidationErrors } from "@/shared/utils/formatValidationErrors";
 
 const RegisterForm = () => {

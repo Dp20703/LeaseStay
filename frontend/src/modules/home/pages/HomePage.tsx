@@ -1,9 +1,9 @@
-import CTASection from "../components/CTASection";
-import FeaturedProperties from "../components/FeaturedProperties";
-import HeroSection from "../components/HeroSection";
-import ServicesSection from "../components/ServicesSection";
-import StatsSection from "../components/StatsSection";
-import Testimonials from "../components/TestimonialsSection";
+import CTASection from "@/modules/home/components/CTASection";
+import FeaturedProperties from "@/modules/home/components/FeaturedProperties";
+import HeroSection from "@/modules/home/components/HeroSection";
+import ServicesSection from "@/modules/home/components/ServicesSection";
+import StatsSection from "@/modules/home/components/StatsSection";
+import Testimonials from "@/modules/home/components/TestimonialsSection";
 
 const HomePage = () => {
   return (

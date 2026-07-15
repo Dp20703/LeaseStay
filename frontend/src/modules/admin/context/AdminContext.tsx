@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
-import adminService from "../services/adminService";
+import adminService from "@/modules/admin/services/adminService";
 
 import type { User } from "@/modules/user/types";
 import type { LoginFormData } from "@/modules/auth/types/auth-form.types";

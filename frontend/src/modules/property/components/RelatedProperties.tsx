@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useProperty } from "../hooks/useProperty";
-import RelatedPropertiesSkeleton from "./RelatedPropertiesSkeleton";
-import PropertyCard from "./PropertyCard";
+import { useProperty } from "@/modules/property/hooks/useProperty";
+import RelatedPropertiesSkeleton from "@/modules/property/components/RelatedPropertiesSkeleton";
+import PropertyCard from "@/modules/property/components/PropertyCard";
 
 interface Props {
   propertyId: string;

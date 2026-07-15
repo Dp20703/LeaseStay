@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { useProperty } from "../hooks/useProperty";
-import type { Property } from "../types";
+import { useProperty } from "@/modules/property/hooks/useProperty";
+import type { Property } from "@/modules/property/types";
 import {
   Building2,
   Bath,

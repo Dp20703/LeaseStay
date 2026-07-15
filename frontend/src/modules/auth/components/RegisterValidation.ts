@@ -1,4 +1,4 @@
-import type { RegisterFormData, RegisterFormErrors } from "../types/index";
+import type { RegisterFormData, RegisterFormErrors } from "@/modules/auth/types/index";
 
 export const validateRegisterForm = (data: RegisterFormData) => {
   const errors: RegisterFormErrors = {};

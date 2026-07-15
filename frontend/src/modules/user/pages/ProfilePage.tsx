@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import ProfileCard from "../components/Profile/ProfileCard";
-import ProfileEditCard from "../components/Profile/ProfileEditCard";
+import ProfileCard from "@/modules/user/components/Profile/ProfileCard";
+import ProfileEditCard from "@/modules/user/components/Profile/ProfileEditCard";
 
 const ProfilePage = () => {
   const { user, setUser, logout } = useAuth();

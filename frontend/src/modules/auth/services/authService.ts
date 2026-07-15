@@ -1,6 +1,6 @@
 import api from "@/core/api/axios";
 import type { User } from "@/types/entities/user.types";
-import type { LoginFormData, RegisterFormData } from "../types/auth-form.types";
+import type { LoginFormData, RegisterFormData } from "@/modules/auth/types/auth-form.types";
 
 /* ─────────────────────────────────────────────
    TYPES

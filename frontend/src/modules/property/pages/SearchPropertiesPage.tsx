@@ -1,5 +1,5 @@
 import { useState } from "react";
-import PropertyCard from "../../../components/property/PropertyCard";
+import PropertyCard from "@/components/property/PropertyCard";
 import { useProperty } from "@/hooks/useProperty";
 
 const SearchPropertiesPage = () => {

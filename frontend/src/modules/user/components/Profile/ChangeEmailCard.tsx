@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import api from "@/core/api/axios";
-import SettingsSection from "./SettingsSection";
+import SettingsSection from "@/modules/user/components/Profile/SettingsSection";
 
 const ChangeEmailCard = () => {
   const [formData, setFormData] = useState({

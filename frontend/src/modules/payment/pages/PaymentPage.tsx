@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useBooking } from "@/modules/booking/hooks/useBooking";
-import { usePayment } from "../hooks/usePayment";
-import BookingInfo from "../components/BookingInfo";
-import PaymentSummary from "../components/PaymentSummary";
-import PaymentButton from "../components/PaymentButton";
+import { usePayment } from "@/modules/payment/hooks/usePayment";
+import BookingInfo from "@/modules/payment/components/BookingInfo";
+import PaymentSummary from "@/modules/payment/components/PaymentSummary";
+import PaymentButton from "@/modules/payment/components/PaymentButton";
 
 const PaymentPage = () => {
   const { id } = useParams<{ id: string }>();

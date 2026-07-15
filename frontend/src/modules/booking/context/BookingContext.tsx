@@ -1,7 +1,7 @@
 import { createContext, useState } from "react";
 import type { ReactNode } from "react";
-import type { Booking } from "../types/booking.types";
-import bookingAPI from "../services/bookingService";
+import type { Booking } from "@/modules/booking/types/booking.types";
+import bookingAPI from "@/modules/booking/services/bookingService";
 
 /* ─────────────────────────────────────────────
    TYPES

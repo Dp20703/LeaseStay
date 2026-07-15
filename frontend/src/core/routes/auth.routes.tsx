@@ -1,44 +1,61 @@
-import { Route } from "react-router-dom";
+import type { RouteObject } from "react-router-dom";
 
 import AuthLayout from "@/layouts/AuthLayout";
 
-import PublicOnlyWrapper from "../wrappers/PublicOnlyWrapper";
-import AdminPublicOnlyWrapper from "../wrappers/AdminPublicOnlyWrapper";
+import AdminPublicOnlyWrapper from "@/core/wrappers/AdminPublicOnlyWrapper";
+import PublicOnlyWrapper from "@/core/wrappers/PublicOnlyWrapper";
 
+import ForgotPasswordPage from "@/modules/auth/pages/ForgotPasswordPage";
 import LoginPage from "@/modules/auth/pages/LoginPage";
 import RegisterPage from "@/modules/auth/pages/RegisterPage";
-import ForgotPasswordPage from "@/modules/auth/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/modules/auth/pages/ResetPasswordPage";
 
 import AdminLoginPage from "@/modules/admin/pages/AdminLogin";
 
-const AuthRoutes = () => {
-  return (
-    <>
-      {/* USER AUTH */}
+const authRoutes: RouteObject[] = [
+  // USER AUTH
+  {
+    element: <PublicOnlyWrapper />,
+    children: [
+      {
+        element: <AuthLayout />,
+        children: [
+          {
+            path: "/login",
+            element: <LoginPage />,
+          },
+          {
+            path: "/register",
+            element: <RegisterPage />,
+          },
+          {
+            path: "/forgot-password",
+            element: <ForgotPasswordPage />,
+          },
+          {
+            path: "/reset-password/:token",
+            element: <ResetPasswordPage />,
+          },
+        ],
+      },
+    ],
+  },
 
-      <Route element={<PublicOnlyWrapper />}>
-        <Route element={<AuthLayout />}>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+  // ADMIN AUTH
+  {
+    element: <AdminPublicOnlyWrapper />,
+    children: [
+      {
+        element: <AuthLayout />,
+        children: [
+          {
+            path: "/admin/login",
+            element: <AdminLoginPage />,
+          },
+        ],
+      },
+    ],
+  },
+];
 
-          <Route
-            path="/reset-password/:token"
-            element={<ResetPasswordPage />}
-          />
-        </Route>
-      </Route>
-
-      {/* ADMIN AUTH */}
-
-      <Route element={<AdminPublicOnlyWrapper />}>
-        <Route element={<AuthLayout />}>
-          <Route path="/admin/login" element={<AdminLoginPage />} />
-        </Route>
-      </Route>
-    </>
-  );
-};
-
-export default AuthRoutes;
+export default authRoutes;

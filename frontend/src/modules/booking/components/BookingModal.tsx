@@ -1,5 +1,5 @@
 import type { Property } from "@/modules/property/types";
-import BookingForm from "./BookingForm";
+import BookingForm from "@/modules/booking/components/BookingForm";
 import {
   Dialog,
   DialogContent,

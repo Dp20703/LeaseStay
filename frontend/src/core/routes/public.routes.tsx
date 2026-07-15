@@ -1,5 +1,7 @@
-import { Route } from "react-router-dom";
+import type { RouteObject } from "react-router-dom";
+
 import MainLayout from "@/layouts/MainLayout";
+
 import HomePage from "@/modules/home/pages/HomePage";
 import AboutPage from "@/modules/about/pages/AboutPage";
 import ContactPage from "@/modules/contact/pages/ContactPage";
@@ -10,26 +12,48 @@ import TermsConditionsPage from "@/modules/legal/pages/TermsConditionsPage";
 import PrivacyPolicyPage from "@/modules/legal/pages/PrivacyPolicyPage";
 import CookiesPolicyPage from "@/modules/legal/pages/CookiesPolicyPage";
 
-const PublicRoutes = () => {
-  return (
-    <Route element={<MainLayout />}>
+const publicRoutes: RouteObject[] = [
+  {
+    element: <MainLayout />,
+    children: [
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+      {
+        path: "/about",
+        element: <AboutPage />,
+      },
+      {
+        path: "/contact",
+        element: <ContactPage />,
+      },
+      {
+        path: "/properties",
+        element: <PropertiesPage />,
+      },
+      {
+        path: "/properties/:slug",
+        element: <PropertyDetailsPage />,
+      },
+      {
+        path: "/faq",
+        element: <FaqPage />,
+      },
+      {
+        path: "/terms",
+        element: <TermsConditionsPage />,
+      },
+      {
+        path: "/privacy-policy",
+        element: <PrivacyPolicyPage />,
+      },
+      {
+        path: "/cookies",
+        element: <CookiesPolicyPage />,
+      },
+    ],
+  },
+];
 
-      <Route path="/" element={<HomePage />} />
-      <Route path="/about" element={<AboutPage />} />
-      <Route path="/contact" element={<ContactPage />} />
-      <Route path="/properties" element={<PropertiesPage />} />
-
-      <Route path="/properties/:slug" element={<PropertyDetailsPage />} />
-
-      <Route path="/faq" element={<FaqPage />} />
-
-      <Route path="/terms" element={<TermsConditionsPage />} />
-
-      <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-
-      <Route path="/cookies" element={<CookiesPolicyPage />} />
-    </Route>
-  );
-};
-
-export default PublicRoutes;
+export default publicRoutes;

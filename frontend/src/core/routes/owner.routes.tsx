@@ -1,31 +1,42 @@
-import { Route } from "react-router-dom";
+import type { RouteObject } from "react-router-dom";
 
-import OwnerWrapper from "../wrappers/OwnerWrapper";
+import OwnerWrapper from "@/core/wrappers/OwnerWrapper";
+
 import OwnerLayout from "@/layouts/OwnerLayout";
+
 import DashboardPage from "@/modules/owner/pages/DashboardPage";
-import OwnerPropertiesPage from "@/modules/property/pages/OwnerPropertiesPage";
 import OwnerBookingRequestsPage from "@/modules/owner/pages/OwnerBookingRequestsPage";
+
 import CreatePropertyPage from "@/modules/property/pages/CreatePropertyPage";
+import OwnerPropertiesPage from "@/modules/property/pages/OwnerPropertiesPage";
 
-const OwnerRoutes = () => {
-  return (
-    <Route element={<OwnerWrapper />}>
-      <Route element={<OwnerLayout />}>
-        <Route path="/owner/dashboard" element={<DashboardPage />} />
-        <Route path="/owner/properties" element={<OwnerPropertiesPage />} />
+const ownerRoutes: RouteObject[] = [
+  {
+    element: <OwnerWrapper />,
+    children: [
+      {
+        element: <OwnerLayout />,
+        children: [
+          {
+            path: "/owner/dashboard",
+            element: <DashboardPage />,
+          },
+          {
+            path: "/owner/properties",
+            element: <OwnerPropertiesPage />,
+          },
+          {
+            path: "/owner/properties/create",
+            element: <CreatePropertyPage />,
+          },
+          {
+            path: "/owner/booking-requests",
+            element: <OwnerBookingRequestsPage />,
+          },
+        ],
+      },
+    ],
+  },
+];
 
-        <Route
-          path="/owner/properties/create"
-          element={<CreatePropertyPage />}
-        />
-
-        <Route
-          path="/owner/booking-requests"
-          element={<OwnerBookingRequestsPage />}
-        />
-      </Route>
-    </Route>
-  );
-};
-
-export default OwnerRoutes;
+export default ownerRoutes;

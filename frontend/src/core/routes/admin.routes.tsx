@@ -1,18 +1,24 @@
-import { Route } from "react-router-dom";
+import type { RouteObject } from "react-router-dom";
 
-// import AdminLayout from "@/layouts/AdminLayout";
-import AdminDashboardPage from "@/modules/admin/pages/AdminDashboardPage";
-import AdminWrapper from "../wrappers/AdminWrapper";
+import AdminWrapper from "@/core/wrappers/AdminWrapper";
 import AdminLayout from "@/modules/admin/layouts/AdminLayout";
+import AdminDashboardPage from "@/modules/admin/pages/AdminDashboardPage";
 
-const AdminRoutes = () => {
-  return (
-    <Route element={<AdminWrapper />}>
-      <Route element={<AdminLayout />}>
-        <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
-      </Route>
-    </Route>
-  );
-};
+const adminRoutes: RouteObject[] = [
+  {
+    element: <AdminWrapper />,
+    children: [
+      {
+        element: <AdminLayout />,
+        children: [
+          {
+            path: "/admin/dashboard",
+            element: <AdminDashboardPage />,
+          },
+        ],
+      },
+    ],
+  },
+];
 
-export default AdminRoutes;
+export default adminRoutes;

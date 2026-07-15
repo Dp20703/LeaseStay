@@ -1,4 +1,4 @@
-import type { PropertyType } from "./property.types";
+import type { PropertyType } from "@/modules/property/types/property.types";
 
 export interface PropertyFormData {
   title: string;

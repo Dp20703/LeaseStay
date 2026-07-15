@@ -1,18 +1,18 @@
+import type { AxiosError } from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import type { AxiosError } from "axios";
 
+import AuthHeader from "@/modules/auth/components/AuthHeader";
+import AuthInput from "@/modules/auth/components/AuthInput";
+import { validateLoginForm } from "@/modules/auth/components/login.validation";
+import PasswordInput from "@/modules/auth/components/PasswordInput";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 import type {
   LoginFormData,
   LoginFormErrors,
 } from "@/modules/auth/types/auth-form.types";
 import { Mail } from "@/shared/constants/icons";
-import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { validateLoginForm } from "@/modules/auth/components/login.validation";
-import AuthHeader from "@/modules/auth/components/AuthHeader";
-import AuthInput from "@/modules/auth/components/AuthInput";
-import PasswordInput from "@/modules/auth/components/PasswordInput";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -57,7 +57,7 @@ const AdminLogin = () => {
 
     try {
       setLoading(true);
-
+      console.log("Formdata:", formData);
       await adminLogin(formData);
 
       toast.success("Welcome back, Admin!");
@@ -67,6 +67,7 @@ const AdminLogin = () => {
       const err = error as AxiosError<{ message: string }>;
 
       toast.error(err.response?.data?.message || "Login failed");
+      navigate("/admin/login");
     } finally {
       setLoading(false);
     }

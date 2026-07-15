@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useBooking } from "../hooks/useBooking";
-import type { Booking } from "../types/booking.types";
+import { useBooking } from "@/modules/booking/hooks/useBooking";
+import type { Booking } from "@/modules/booking/types/booking.types";
 import {
   Calendar,
   MapPin,

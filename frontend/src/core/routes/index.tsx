@@ -1,23 +1,25 @@
-import { Routes, Route } from "react-router-dom";
+import { useRoutes } from "react-router-dom";
 
-import PublicRoutes from "./public.routes";
-import AuthRoutes from "./auth.routes";
-import UserRoutes from "./user.routes";
-import OwnerRoutes from "./owner.routes";
-import AdminRoutes from "./admin.routes";
+import adminRoutes from "./admin.routes";
+import authRoutes from "./auth.routes";
+import ownerRoutes from "./owner.routes";
+import publicRoutes from "./public.routes";
+import userRoutes from "./user.routes";
+
 import NotFoundPage from "@/core/pages/NotFoundPage";
 
 const AppRoutes = () => {
-  return (
-    <Routes>
-      <PublicRoutes />
-      <AuthRoutes />
-      <UserRoutes />
-      <OwnerRoutes />
-      <AdminRoutes />
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
-  );
+  return useRoutes([
+    ...publicRoutes,
+    ...authRoutes,
+    ...userRoutes,
+    ...ownerRoutes,
+    ...adminRoutes,
+    {
+      path: "*",
+      element: <NotFoundPage />,
+    },
+  ]);
 };
 
 export default AppRoutes;

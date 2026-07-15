@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Mail, IndianRupee, User } from "@/shared/constants/icons";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import BookingModal from "@/modules/booking/components/BookingModal";
-import ContactOwner from "./ContactOwner";
+import ContactOwner from "@/modules/property/components/ContactOwner";
 
 const PropertySidebar = ({ property, showContact, setShowContact }: any) => {
   const [showBooking, setShowBooking] = useState(false);
