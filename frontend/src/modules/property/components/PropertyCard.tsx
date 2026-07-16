@@ -48,7 +48,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
   };
 
   return (
-    <div className="ls-card group overflow-hidden rounded-3xl hover:-translate-y-2 transition-all duration-300 hover:shadow-xl">
+    <div className="ls-card group overflow-hidden  hover:-translate-y-2 transition-all duration-300 hover:shadow-xl">
       {/* IMAGE */}
 
       <div className="relative overflow-hidden">

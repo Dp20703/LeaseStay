@@ -21,8 +21,8 @@ const ProfileDropdown = () => {
 
   return (
     <Menu as="div" className="relative">
-      <MenuButton className="flex items-center gap-3 rounded-xl border border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark px-3 py-2 transition hover:border-primary">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white">
+      <MenuButton className="flex items-center gap-3 rounded-xl border border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark px-2.5 py-1.5 transition hover:border-primary">
+        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white">
           {user?.profileImage?.url ? (
             <img
               src={user.profileImage.url}
