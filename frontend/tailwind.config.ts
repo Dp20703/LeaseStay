@@ -1,22 +1,17 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config: Config = {
   darkMode: "class",
 
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
 
   theme: {
     extend: {
-
       /* ─────────────────────────────────────────────
          Colors
       ───────────────────────────────────────────── */
 
       colors: {
-
         /* Brand */
 
         primary: {
@@ -122,7 +117,6 @@ const config: Config = {
 
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
-
         mono: ["'Courier New'", "monospace"],
       },
 
@@ -131,13 +125,9 @@ const config: Config = {
       ───────────────────────────────────────────── */
 
       boxShadow: {
-
         soft: "0 2px 10px rgba(0,0,0,0.05)",
-
         card: "0 1px 3px rgba(0,0,0,0.08)",
-
         modal: "0 8px 32px rgba(0,0,0,0.18)",
-
         navbar: "0 1px 2px rgba(0,0,0,0.04)",
       },
 
@@ -147,15 +137,13 @@ const config: Config = {
 
       container: {
         center: true,
-
         padding: "1rem",
-
         screens: {
-          sm: "40rem",     // 640px
-          md: "48rem",     // 768px
-          lg: "64rem",     // 1024px
-          xl: "80rem",     // 1280px
-          "2xl": "87.5rem" // 1400px
+          sm: "40rem", // 640px
+          md: "48rem", // 768px
+          lg: "64rem", // 1024px
+          xl: "80rem", // 1280px
+          "2xl": "87.5rem", // 1400px
         },
       },
 
@@ -164,11 +152,8 @@ const config: Config = {
       ───────────────────────────────────────────── */
 
       transitionDuration: {
-
         fast: "100ms",
-
         normal: "150ms",
-
         slow: "250ms",
       },
 
@@ -177,7 +162,6 @@ const config: Config = {
       ───────────────────────────────────────────── */
 
       keyframes: {
-
         "fade-in": {
           "0%": {
             opacity: "0",
@@ -238,21 +222,16 @@ const config: Config = {
       ───────────────────────────────────────────── */
 
       animation: {
-
         "fade-in": "fade-in 0.2s ease-out",
-
         "slide-down": "slide-down 0.2s ease-out",
-
         "scale-in": "scale-in 0.2s ease-out",
-
         "bar-pulse": "bar-pulse 1.1s ease-in-out infinite",
-
         blink: "blink 1s step-end infinite",
       },
     },
   },
 
   plugins: [],
-}
+};
 
-export default config
+export default config;
