@@ -8,15 +8,15 @@ import {
   Users,
 } from "@/shared/constants/icons";
 
-import type { LucideIcon } from "lucide-react";
+import type { IconType } from "@/shared/constants/icons";
 
 export interface AdminSidebarItem {
-  label: "Dashboard";
-  path: "/admin/dashboard";
-  icon: LayoutDashboard;
+  label: string;
+  path: string;
+  icon: IconType;
 }
 
-export const ADMIN_SIDEBAR = [
+export const ADMIN_SIDEBAR: AdminSidebarItem[] = [
   {
     label: "Dashboard",
     path: "/admin/dashboard",

@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 
 import ThemeToggle from "../common/ThemeToggle";
+import { NavbarLogo } from "../common";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -26,15 +27,11 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
 
       {/* Drawer */}
 
-      <aside className="fixed left-0 top-0 z-50 flex h-full w-72 flex-col bg-card-light dark:bg-card-dark shadow-xl lg:hidden">
+      <aside className="fixed left-0 top-0 z-50 flex h-full w-64 flex-col bg-card-light dark:bg-card-dark shadow-xl lg:hidden">
         {/* Header */}
 
         <div className="flex items-center justify-between border-b border-border-light dark:border-border-dark p-5">
-          <div>
-            <h2 className="text-xl font-bold text-primary">LeaseStay</h2>
-
-            <p className="text-xs text-text-muted">Rental Marketplace</p>
-          </div>
+          <NavbarLogo />
 
           <button
             onClick={onClose}

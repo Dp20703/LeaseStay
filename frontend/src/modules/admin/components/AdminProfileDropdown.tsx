@@ -73,7 +73,7 @@ const AdminProfileDropdown = () => {
         leaveFrom="opacity-100 scale-100"
         leaveTo="opacity-0 scale-95"
       >
-        <MenuItems className="absolute right-0 mt-3 w-64 origin-top-right rounded-2xl border border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark shadow-xl focus:outline-none">
+        <MenuItems className="absolute right-0 mt-3 w-56 origin-top-right rounded-xl border border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark shadow-xl focus:outline-none">
           {/* HEADER */}
 
           <div className="border-b border-border-light dark:border-border-dark p-4">
@@ -88,11 +88,11 @@ const AdminProfileDropdown = () => {
 
           <div className="p-2">
             <MenuItem>
-              {({ active }) => (
+              {({ focus }) => (
                 <Link
                   to="/admin/dashboard"
                   className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition ${
-                    active ? "bg-surface-light dark:bg-surface-dark" : ""
+                    focus ? "bg-surface-light dark:bg-surface-dark" : ""
                   }`}
                 >
                   <LayoutDashboard size={18} />
@@ -102,11 +102,11 @@ const AdminProfileDropdown = () => {
             </MenuItem>
 
             <MenuItem>
-              {({ active }) => (
+              {({ focus }) => (
                 <Link
                   to="/admin/profile"
                   className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition ${
-                    active ? "bg-surface-light dark:bg-surface-dark" : ""
+                    focus ? "bg-surface-light dark:bg-surface-dark" : ""
                   }`}
                 >
                   <User size={18} />
@@ -116,11 +116,11 @@ const AdminProfileDropdown = () => {
             </MenuItem>
 
             <MenuItem>
-              {({ active }) => (
+              {({ focus }) => (
                 <Link
                   to="/admin/settings"
                   className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition ${
-                    active ? "bg-surface-light dark:bg-surface-dark" : ""
+                    focus ? "bg-surface-light dark:bg-surface-dark" : ""
                   }`}
                 >
                   <Settings size={18} />
@@ -132,11 +132,11 @@ const AdminProfileDropdown = () => {
             <div className="my-2 border-t border-border-light dark:border-border-dark" />
 
             <MenuItem>
-              {({ active }) => (
+              {({ focus }) => (
                 <button
                   onClick={handleLogout}
                   className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm text-red-500 transition ${
-                    active ? "bg-red-50 dark:bg-red-900/20" : ""
+                    focus ? "bg-red-50 dark:bg-red-900/20" : ""
                   }`}
                 >
                   <LogOut size={18} />

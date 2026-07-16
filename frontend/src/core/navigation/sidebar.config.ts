@@ -1,7 +1,6 @@
 import { ROLES } from "@/shared/constants/role.constants";
 
 import {
-  CheckCircle,
   ClipboardCheck,
   ClipboardList,
   Heart,
@@ -10,7 +9,6 @@ import {
   Plus,
   Settings,
   User,
-  Users,
 } from "@/shared/constants/icons";
 import type { SidebarItem } from "@/shared/constants/navigation.types";
 
@@ -59,25 +57,6 @@ export const SIDEBAR_CONFIG: Record<string, SidebarItem[]> = {
       path: "/owner/properties/create",
       label: "Add Property",
       icon: Plus,
-    },
-  ],
-
-  [ROLES.ADMIN]: [
-    {
-      path: "/admin",
-      label: "Dashboard",
-      icon: Home,
-      end: true,
-    },
-    {
-      path: "/admin/users",
-      label: "Users",
-      icon: Users,
-    },
-    {
-      path: "/admin/verifications",
-      label: "Verifications",
-      icon: CheckCircle,
     },
   ],
 };

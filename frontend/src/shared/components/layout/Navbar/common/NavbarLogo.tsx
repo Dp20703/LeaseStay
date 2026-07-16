@@ -12,13 +12,13 @@ const NavbarLogo = ({ admin = false }: NavbarLogoProps) => {
     >
       {/* Logo */}
 
-      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-base font-bold text-white shadow-sm">
+      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-base font-bold text-white shadow-sm">
         LS
       </div>
 
       {/* Text */}
 
-      <div className="hidden sm:block">
+      <div>
         <h1 className="text-base font-bold text-text-light dark:text-text-dark">
           LeaseStay
         </h1>
