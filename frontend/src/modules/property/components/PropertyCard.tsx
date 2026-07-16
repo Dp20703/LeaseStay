@@ -1,17 +1,17 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { useProperty } from "@/modules/property/hooks/useProperty";
 import type { Property } from "@/modules/property/types";
 import {
-  Building2,
   Bath,
   Bed,
+  Building2,
   Heart,
   MapPin,
   Ruler,
 } from "@/shared/constants/icons";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface PropertyCardProps {
   property: Property;

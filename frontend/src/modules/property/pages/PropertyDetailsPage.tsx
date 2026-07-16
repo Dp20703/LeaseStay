@@ -1,17 +1,18 @@
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+import PropertyShareModal from "@/modules/booking/components/PropertyShareModal";
+import PropertyDescription from "@/modules/property/components/PropertyDescription";
+import PropertyDetailsCard from "@/modules/property/components/PropertyDetailsCard";
+import PropertyGallery from "@/modules/property/components/PropertyGallery";
+import PropertyHeader from "@/modules/property/components/PropertyHeader";
+import PropertySidebar from "@/modules/property/components/PropertySidebar";
+import RelatedProperties from "@/modules/property/components/RelatedProperties";
+import { useProperty } from "@/modules/property/hooks/useProperty";
+import LoaderScreen from "@/shared/components/common/LoaderScreen";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import LoaderScreen from "@/shared/components/common/LoaderScreen";
-import PropertyGallery from "@/modules/property/components/PropertyGallery";
-import PropertyHeader from "@/modules/property/components/PropertyHeader";
-import PropertyDetailsCard from "@/modules/property/components/PropertyDetailsCard";
-import PropertyDescription from "@/modules/property/components/PropertyDescription";
-import { PropertyAmenities } from "@/modules/property/types";
-import PropertySidebar from "@/modules/property/components/PropertySidebar";
-import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { useProperty } from "@/modules/property/hooks/useProperty";
-import RelatedProperties from "@/modules/property/components/RelatedProperties";
-import PropertyShareModal from "@/modules/booking/components/PropertyShareModal";
+import { PropertyAmenitiesDetails } from "../components/PropertyAmenitiesDetails";
+import PropertyAmenities from "../components/PropertyAmenities";
 
 const PropertyDetailsPage = () => {
   const { slug } = useParams();
@@ -24,6 +25,7 @@ const PropertyDetailsPage = () => {
     unsaveProperty,
     trackPropertyShareCount,
   } = useProperty();
+
   const { user } = useAuth();
 
   const [showContact, setShowContact] = useState(false);

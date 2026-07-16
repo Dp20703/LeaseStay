@@ -1,33 +1,31 @@
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+import MobileMenu from "@/shared/components/layout/navbar/user/MobileMenu";
+import NavbarLinks from "@/shared/components/layout/navbar/user/NavbarLinks";
+import ThemeToggle from "@/shared/components/layout/navbar/common/ThemeToggle";
+import UserMenu from "@/shared/components/layout/navbar/UserMenu";
+import { Heart, Menu, User, X } from "@/shared/constants/icons";
+import { ROLES } from "@/shared/constants/role.constants";
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Menu, Heart, X, User } from "@/shared/constants/icons";
-import { ROLES } from "@/shared/constants/role.constants";
-import { useAuth } from "@/modules/auth/hooks/useAuth";
-import NavbarLinks from "@/shared/components/layout/navbar/NavbarLinks";
-import ThemeToggle from "@/shared/components/layout/navbar/ThemeToggle";
-import UserMenu from "@/shared/components/layout/navbar/UserMenu";
-import MobileMenu from "@/shared/components/layout/navbar/MobileMenu";
+import { useTheme } from "@/shared/hooks";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
 
   const [menuOpen, setMenuOpen] = useState(false);
-
-  const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem("theme") !== "light";
-  });
+  const { isDark, toggleTheme } = useTheme();
 
   useEffect(() => {
     const root = document.documentElement;
 
-    if (darkMode) {
+    if (isDark) {
       root.classList.add("dark");
       localStorage.setItem("theme", "dark");
     } else {
       root.classList.remove("dark");
       localStorage.setItem("theme", "light");
     }
-  }, [darkMode]);
+  }, [isDark]);
 
   return (
     <header className="ls-navbar">
@@ -77,7 +75,7 @@ const Navbar = () => {
         </nav>
 
         <div className="hidden lg:flex items-center gap-3">
-          <ThemeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
+          <ThemeToggle />
 
           {user ? (
             <UserMenu user={user} logout={logout} />

@@ -1,4 +1,4 @@
-import PropertyAmenities from "@/modules/property/components/PropertyAmenities";
+import PropertyAmenities from "./PropertyAmenities";
 
 interface Props {
   selectedAmenities: string[];
@@ -22,7 +22,7 @@ export const PropertyAmenitiesDetails = ({
       <h2 className="text-xl font-semibold mb-5">Amenities</h2>
 
       <div className="flex flex-wrap gap-3">
-        {PropertyAmenities.map((item) => (
+        {PropertyAmenities?.map((item) => (
           <button
             type="button"
             key={item}

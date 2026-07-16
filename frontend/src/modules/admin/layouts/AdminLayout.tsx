@@ -1,17 +1,25 @@
 import { Outlet } from "react-router-dom";
 
-import AdminNavbar from "@/modules/admin/components/AdminNavbar";
-import AdminSidebar from "@/modules/admin/components/AdminSidebar";
+import AdminNavbar from "../components/AdminNavbar";
+import AdminSidebar from "../components/AdminSidebar";
+import { useState } from "react";
+import AdminMobileSidebar from "../components/AdminMobileSidebar";
 
 const AdminLayout = () => {
+  const [mobileOpen, setMobileOpen] = useState(false);
   return (
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark">
-      <AdminNavbar />
+      <AdminNavbar onSidebarToggle={() => setMobileOpen(true)} />
 
       <div className="flex">
         <AdminSidebar />
 
-        <main className="flex-1 p-6 lg:p-8 overflow-auto">
+        <AdminMobileSidebar
+          open={mobileOpen}
+          onClose={() => setMobileOpen(false)}
+        />
+
+        <main>
           <Outlet />
         </main>
       </div>

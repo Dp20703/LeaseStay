@@ -1,7 +1,7 @@
+import Footer from "@/shared/components/layout/footer/Footer";
+import UserNavbar from "@/shared/components/layout/navbar/user/UserNavbar";
 import type { ReactNode } from "react";
 import { Outlet } from "react-router-dom";
-import Navbar from "@/shared/components/layout/navbar/Navbar";
-import Footer from "@/shared/components/layout/footer/Footer";
 
 type AppLayoutProps = {
   sidebar: ReactNode;
@@ -10,7 +10,7 @@ type AppLayoutProps = {
 const AppLayout = ({ sidebar }: AppLayoutProps) => {
   return (
     <div className="ls-page flex flex-col min-h-screen">
-      <Navbar />
+      <UserNavbar />
 
       <main className="flex-1 py-10">
         <div className="ls-container">

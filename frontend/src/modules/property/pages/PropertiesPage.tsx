@@ -1,7 +1,7 @@
-import { useEffect } from "react";
-import LoaderScreen from "@/shared/components/common/LoaderScreen";
 import PropertyCard from "@/modules/property/components/PropertyCard";
 import { useProperty } from "@/modules/property/hooks/useProperty";
+import LoaderScreen from "@/shared/components/common/LoaderScreen";
+import { useEffect } from "react";
 
 const PropertiesPage = () => {
   const { fetchProperties, properties, loading } = useProperty();
