@@ -1,20 +1,20 @@
-import User from "../users/user.model.js";
-import Property from "./property.model.js";
-import { ROLES } from "../../constants/roles.constants.js";
-import { sendMail } from "../../utils/mail/sendMail.js";
-import QueryBuilder from "../../helpers/queryBuilder.js";
-import { generateSlug } from "../../utils/slug/generateSlug.js";
-import { ApiError } from "../../helpers/index.js";
 import { CLOUDINARY_FOLDERS } from "../../constants/index.js";
-import { PROPERTY_STATUS } from "./property.constants.js";
-import uploadToCloudinary from "../../utils/cloudinary/uploadToCloudinary.js";
+import { ROLES } from "../../constants/roles.constants.js";
+import { ApiError } from "../../helpers/index.js";
+import QueryBuilder from "../../helpers/queryBuilder.js";
 import deleteFromCloudinary from "../../utils/cloudinary/deleteFromCloudinary.js";
+import uploadToCloudinary from "../../utils/cloudinary/uploadToCloudinary.js";
+import { sendMail } from "../../utils/mail/sendMail.js";
 import {
   deleteCache,
   deleteCacheByPattern,
   getCache,
   setCache,
 } from "../../utils/redis/redis.utils.js";
+import { generateSlug } from "../../utils/slug/generateSlug.js";
+import User from "../users/user.model.js";
+import { PROPERTY_STATUS } from "./property.constants.js";
+import Property from "./property.model.js";
 
 // Populate owner
 const OWNER_POPULATE = "userName email fullName profileImage";

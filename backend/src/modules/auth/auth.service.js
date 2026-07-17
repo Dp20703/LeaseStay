@@ -1,5 +1,6 @@
-import User from "../users/user.model.js";
 import { ApiError } from "../../helpers/index.js";
+import { getCache, setCache } from "../../utils/redis/redis.utils.js";
+import User from "../users/user.model.js";
 
 // REGISTER
 
@@ -89,5 +90,30 @@ export const loginUserService = async (email, password) => {
   // REMOVE PASSWORD
 
   user.password = undefined;
+  return user;
+};
+
+// CURRENT USER
+
+export const getCurrentUserService = async (userId) => {
+  const cacheKey = `user:${userId}`;
+
+  const cachedUser = await getCache(cacheKey);
+
+  if (cachedUser) {
+    console.log("FROM REDIS");
+    return cachedUser;
+  }
+
+  console.log("FROM MONGODB");
+
+  const user = await User.findById(userId).select("-password -token").lean();
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  await setCache(cacheKey, user, 300); // 5 minutes
+
   return user;
 };

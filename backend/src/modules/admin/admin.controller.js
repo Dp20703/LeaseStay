@@ -20,7 +20,9 @@ export const adminLogin = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, user, "Admin logged in successfully"));
+    .json(
+      new ApiResponse(200, "Admin logged in successfully", { user, token }),
+    );
 });
 
 // FETCH ALL USERS

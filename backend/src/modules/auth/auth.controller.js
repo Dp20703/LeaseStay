@@ -1,18 +1,18 @@
 import crypto from "crypto";
-import jwt from "jsonwebtoken";
-import User from "../users/user.model.js";
 import { OAuth2Client } from "google-auth-library";
-import { sendMail } from "../../utils/mail/sendMail.js";
-import { asyncHandler, ApiError, ApiResponse } from "../../helpers/index.js";
-import { registerUserService, loginUserService } from "./auth.service.js";
+import jwt from "jsonwebtoken";
+import { COOKIE_OPTIONS } from "../../constants/cookie.constants.js";
+import { ApiError, ApiResponse, asyncHandler } from "../../helpers/index.js";
 import {
   resetPasswordTemplate,
   welcomeEmailTemplate,
 } from "../../templates/index.js";
-import generateUniqueUsername from "../../utils/auth/generateUniqueUsername.js";
 import generateResetToken from "../../utils/auth/generateResetToken.js";
+import generateUniqueUsername from "../../utils/auth/generateUniqueUsername.js";
 import sendToken from "../../utils/auth/sendToken.js";
-import { COOKIE_OPTIONS } from "../../constants/cookie.constants.js";
+import { sendMail } from "../../utils/mail/sendMail.js";
+import User from "../users/user.model.js";
+import * as AuthService from "./auth.service.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -31,7 +31,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 
   // CREATE USER
 
-  const user = await registerUserService({
+  const user = await AuthService.registerUserService({
     userName,
     email,
     password,
@@ -65,7 +65,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 export const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await loginUserService(email, password);
+  const user = await AuthService.loginUserService(email, password);
 
   const token = user.generateAuthToken();
 
@@ -153,9 +153,11 @@ export const googleAuth = asyncHandler(async (req, res) => {
 // CURRENT USER
 
 export const getCurrentUser = asyncHandler(async (req, res) => {
+  const user = await AuthService.getCurrentUserService(req.user._id);
+
   return res
     .status(200)
-    .json(new ApiResponse(200, "Current user fetched", req.user));
+    .json(new ApiResponse(200, "Current user fetched", user));
 });
 
 // LOGOUT

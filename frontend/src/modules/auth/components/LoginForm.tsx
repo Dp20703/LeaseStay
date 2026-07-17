@@ -4,12 +4,16 @@ import { toast } from "react-toastify";
 import type { AxiosError } from "axios";
 import { Mail } from "@/shared/constants/icons";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import type { LoginFormData, LoginFormErrors } from "@/modules/auth/types/auth-form.types";
+import type {
+  LoginFormData,
+  LoginFormErrors,
+} from "@/modules/auth/types/auth-form.types";
 import { validateLoginForm } from "@/modules/auth/components/login.validation";
 import AuthInput from "@/modules/auth/components/AuthInput";
 import AuthHeader from "@/modules/auth/components/AuthHeader";
 import PasswordInput from "@/modules/auth/components/PasswordInput";
 import GoogleAuthButton from "@/modules/auth/components/GoogleAuthButton";
+import { ThemeToggle } from "@/shared/components/layout/navbar/common";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -72,88 +76,93 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="ls-card p-10">
-      <AuthHeader
-        title="Welcome Back"
-        subtitle="Login to continue exploring properties."
-      />
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* EMAIL */}
-
-        <AuthInput
-          label="Email"
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          error={errors.email}
-          icon={<Mail />}
-          placeholder="Enter email"
-          autoComplete="email"
+    <div className="mx-auto w-full max-w-md">
+      <div className="ls-card border border-border-light/60 bg-surface-light/90 px-8 py-4 backdrop-blur-xl shadow-[0_20px_80px_rgba(0,0,0,.18)] dark:border-border-dark dark:bg-surface-dark/90">
+        <div className="absolute right-6 top-6 z-30">
+          <ThemeToggle />
+        </div>
+        <AuthHeader
+          title="Welcome Back"
+          subtitle="Login to continue exploring properties."
         />
 
-        {/* PASSWORD */}
+        <form onSubmit={handleSubmit} className="space-y-3">
+          {/* EMAIL */}
 
-        <PasswordInput
-          label="Password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          error={errors.password}
-        />
+          <AuthInput
+            label="Email"
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            error={errors.email}
+            icon={<Mail />}
+            placeholder="Enter your email"
+            autoComplete="email"
+          />
 
-        {/* FORGOT */}
+          {/* PASSWORD */}
 
-        <div className="flex justify-end">
-          <Link
-            to="/forgot-password"
-            className="text-sm text-primary hover:underline"
-          >
-            Forgot Password?
-          </Link>
-        </div>
+          <PasswordInput
+            label="Password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            error={errors.password}
+          />
 
-        {/* BUTTON */}
+          {/* FORGOT */}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="ls-btn-primary w-full disabled:opacity-70 disabled:cursor-not-allowed"
-        >
-          {loading ? "Logging In..." : "Login"}
-        </button>
-
-        {/* DIVIDER */}
-
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-border-light dark:border-border-dark" />
+          <div className="flex justify-end">
+            <Link
+              to="/forgot-password"
+              className="text-sm text-primary hover:underline"
+            >
+              Forgot Password?
+            </Link>
           </div>
 
-          <div className="relative flex justify-center text-sm">
-            <span className="bg-card-light dark:bg-card-dark px-4 text-text-muted">
-              OR
-            </span>
-          </div>
-        </div>
+          {/* BUTTON */}
 
-        {/* GOOGLE */}
-
-        <GoogleAuthButton />
-
-        {/* REGISTER */}
-
-        <p className="text-center text-sm text-text-muted dark:text-text-darkMuted">
-          Don&apos;t have an account?{" "}
-          <Link
-            to="/register"
-            className="text-primary font-medium hover:underline"
+          <button
+            type="submit"
+            disabled={loading}
+            className="ls-btn-primary w-full disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            Register
-          </Link>
-        </p>
-      </form>
+            {loading ? "Logging In..." : "Login"}
+          </button>
+
+          {/* DIVIDER */}
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-border-light dark:border-border-dark" />
+            </div>
+
+            <div className="relative flex justify-center text-sm">
+              <span className="bg-card-light dark:bg-card-dark px-4 text-text-muted">
+                OR
+              </span>
+            </div>
+          </div>
+
+          {/* GOOGLE */}
+
+          <GoogleAuthButton />
+
+          {/* REGISTER */}
+
+          <p className="text-center text-sm text-text-muted dark:text-text-darkMuted">
+            Don&apos;t have an account?{" "}
+            <Link
+              to="/register"
+              className="text-primary font-medium hover:underline"
+            >
+              Register
+            </Link>
+          </p>
+        </form>
+      </div>
     </div>
   );
 };

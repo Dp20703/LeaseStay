@@ -18,7 +18,6 @@ interface AdminContextType {
   logout: () => Promise<void>;
 
   fetchCurrentAdmin: () => Promise<void>;
-
   setAdmin: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
@@ -40,7 +39,6 @@ export const AdminContext = createContext<AdminContextType | undefined>(
 
 export const AdminProvider = ({ children }: AdminProviderProps) => {
   const [admin, setAdmin] = useState<User | null>(null);
-
   const [loading, setLoading] = useState(true);
 
   /* ─────────────────────────────────────────────
@@ -60,6 +58,7 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
 
       setAdmin(response.data);
     } catch (error) {
+      console.log("fetchCurrentAdmin catch error:", error);
       localStorage.removeItem("adminToken");
 
       setAdmin(null);

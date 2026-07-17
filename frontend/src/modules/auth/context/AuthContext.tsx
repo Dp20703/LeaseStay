@@ -1,6 +1,9 @@
 import { createContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
-import type { RegisterFormData, LoginFormData } from "@/modules/auth/types/auth-form.types";
+import type {
+  RegisterFormData,
+  LoginFormData,
+} from "@/modules/auth/types/auth-form.types";
 import type { User } from "@/modules/user/types";
 import authAPI from "@/modules/auth/services/authService";
 
@@ -87,24 +90,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setLoading(false);
     }
   };
-  const adminLogin = async (data: LoginFormData) => {
-    try {
-      setLoading(true);
-
-      const response = await authAPI.adminLogin(data);
-
-      const { token, user } = response.data;
-
-      localStorage.setItem("adminToken", token);
-
-      setUser(user);
-    } catch (error) {
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  };
-
   /* REGISTER */
 
   const register = async (data: RegisterFormData) => {
@@ -169,7 +154,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     fetchCurrentUser,
 
     login,
-    adminLogin,
     register,
 
     googleAuth,

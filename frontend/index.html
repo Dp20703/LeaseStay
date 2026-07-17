@@ -8,11 +8,11 @@
   <meta name="description" content="LeaseStay — find and rent spaces easily. Listings, bookings and secure payments." />
   <meta name="theme-color" content="#0d9488" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="manifest" href="/manifest.webmanifest" />
+  <!-- <link rel="manifest" href="/manifest.webmanifest" /> -->
   <link rel="preconnect" href="https://checkout.razorpay.com" crossorigin />
   <!-- Preload main assets (adjust paths/names to your build output) -->
-  <link rel="preload" as="style" href="/assets/styles.css" />
-  <link rel="preload" as="script" href="/assets/main.js" />
+  <!-- <link rel="preload" as="style" href="/assets/styles.css" /> -->
+  <!-- <link rel="preload" as="script" href="/assets/main.js" /> -->
   <title>LeaseStay — Rent your space</title>
 </head>
 
@@ -23,7 +23,7 @@
   <script src="https://checkout.razorpay.com/v1/checkout.js" async crossorigin="anonymous"></script>
 
   <!-- Production bundle (use your real build path; keep type=module for modern browsers) -->
-  <script type="module" src="/assets/main.js" defer></script>
+  <script type="module" src="src/main.tsx" defer></script>
 
   <noscript>
     This application requires JavaScript to run. Please enable JavaScript in your browser.
