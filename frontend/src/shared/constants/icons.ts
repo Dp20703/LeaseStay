@@ -29,6 +29,7 @@ export {
   Expand,
   Eye,
   EyeOff,
+  FileText,
   Filter,
   Handshake,
   Heart,

@@ -3,7 +3,7 @@ import AdminLayout from "@/modules/admin/layouts/AdminLayout";
 import {
   Bookings,
   Dashboard,
-  Owners,
+  OwnersPage,
   Payments,
   Properties,
   Settings,
@@ -28,7 +28,7 @@ const adminRoutes: RouteObject[] = [
           },
           {
             path: "/admin/Owners",
-            element: <Owners />,
+            element: <OwnersPage />,
           },
           {
             path: "/admin/properties",
