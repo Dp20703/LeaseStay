@@ -1,8 +1,15 @@
-import type { RouteObject } from "react-router-dom";
-
 import AdminWrapper from "@/core/wrappers/AdminWrapper";
 import AdminLayout from "@/modules/admin/layouts/AdminLayout";
-import AdminDashboardPage from "@/modules/admin/pages/AdminDashboardPage";
+import {
+  Bookings,
+  Dashboard,
+  Owners,
+  Payments,
+  Properties,
+  Settings,
+  Users,
+} from "@/modules/admin/pages";
+import type { RouteObject } from "react-router-dom";
 
 const adminRoutes: RouteObject[] = [
   {
@@ -13,7 +20,31 @@ const adminRoutes: RouteObject[] = [
         children: [
           {
             path: "/admin/dashboard",
-            element: <AdminDashboardPage />,
+            element: <Dashboard />,
+          },
+          {
+            path: "/admin/users",
+            element: <Users />,
+          },
+          {
+            path: "/admin/Owners",
+            element: <Owners />,
+          },
+          {
+            path: "/admin/properties",
+            element: <Properties />,
+          },
+          {
+            path: "/admin/bookings",
+            element: <Bookings />,
+          },
+          {
+            path: "/admin/payments",
+            element: <Payments />,
+          },
+          {
+            path: "/admin/settings",
+            element: <Settings />,
           },
         ],
       },

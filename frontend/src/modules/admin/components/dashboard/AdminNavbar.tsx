@@ -61,7 +61,7 @@ const AdminNavbar = ({ onSidebarToggle }: AdminNavbarProps) => {
           <button
             type="button"
             aria-label="Notifications"
-            className="relative rounded-xl p-2 transition-colors hover:bg-surface-light dark:hover:bg-surface-dark"
+            className="relative rounded-xl p-2 transition-colors hover:bg-primary hover:text-white dark:hover:bg-primary"
           >
             <Bell size={20} />
 

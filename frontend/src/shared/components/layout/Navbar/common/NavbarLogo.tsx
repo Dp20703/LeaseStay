@@ -12,7 +12,7 @@ const NavbarLogo = ({ admin = false }: NavbarLogoProps) => {
     >
       {/* Logo */}
 
-      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-base font-bold text-white shadow-sm">
+      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-base font-bold text-white shadow-sm">
         LS
       </div>
 

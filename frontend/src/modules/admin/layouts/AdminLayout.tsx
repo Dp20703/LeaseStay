@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
 
-import AdminNavbar from "../components/AdminNavbar";
-import AdminSidebar from "../components/AdminSidebar";
 import { useState } from "react";
-import AdminMobileSidebar from "../components/AdminMobileSidebar";
+import AdminMobileSidebar from "../components/dashboard/AdminMobileSidebar";
+import AdminNavbar from "../components/dashboard/AdminNavbar";
+import AdminSidebar from "../components/dashboard/AdminSidebar";
 
 const AdminLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);

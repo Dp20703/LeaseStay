@@ -1,5 +1,5 @@
-import { NavLink } from "react-router-dom";
 import clsx from "clsx";
+import { NavLink } from "react-router-dom";
 
 import { ADMIN_SIDEBAR } from "@/core/navigation/admin.sidebar";
 
@@ -7,14 +7,6 @@ const AdminSidebar = () => {
   return (
     <aside className="hidden lg:flex h-[calc(100vh-64px)] w-72 shrink-0 flex-col border-r border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark">
       {/* HEADER */}
-
-      <div className="border-b border-border-light dark:border-border-dark p-6">
-        <h2 className="text-lg font-bold text-text-light dark:text-text-dark">
-          Navigation
-        </h2>
-
-        <p className="mt-1 text-sm text-text-muted">LeaseStay Administration</p>
-      </div>
 
       {/* NAVIGATION */}
 
