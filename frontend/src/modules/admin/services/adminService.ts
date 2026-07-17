@@ -3,9 +3,8 @@ import api from "@/core/api/axios";
 import type { LoginFormData } from "@/modules/auth/types/auth-form.types";
 
 import type { User } from "@/modules/user/types";
-import type { Property } from "@/modules/property/types";
 
-/* ─────────────────────────────────────────────
+/* ────────────────────────────────────9─────────
    TYPES
 ───────────────────────────────────────────── */
 

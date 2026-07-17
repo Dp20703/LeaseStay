@@ -9,7 +9,7 @@ import {
   Users,
   XCircle,
 } from "@/shared/constants/icons";
-import type { DashboardData } from "./types/dashboard.types";
+import type { DashboardData } from "../../types/dashboard.types";
 
 type Props = {
   dashboard: DashboardData;

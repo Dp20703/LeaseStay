@@ -7,7 +7,7 @@ import {
   Payments,
   Properties,
   Settings,
-  Users,
+  UsersPage,
 } from "@/modules/admin/pages";
 import type { RouteObject } from "react-router-dom";
 
@@ -24,7 +24,7 @@ const adminRoutes: RouteObject[] = [
           },
           {
             path: "/admin/users",
-            element: <Users />,
+            element: <UsersPage />,
           },
           {
             path: "/admin/Owners",

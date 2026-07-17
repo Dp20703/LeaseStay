@@ -4,6 +4,14 @@ import Owners from "./Owners";
 import Payments from "./Payments";
 import Properties from "./Properties";
 import Settings from "./Settings";
-import Users from "./Users";
+import UsersPage from "./UsersPage";
 
-export { Bookings, Dashboard, Owners, Payments, Properties, Settings, Users };
+export {
+  Bookings,
+  Dashboard,
+  Owners,
+  Payments,
+  Properties,
+  Settings,
+  UsersPage,
+};

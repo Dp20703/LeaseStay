@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getDashboardStats } from "../services/dashboard.service";
+import { getDashboardStats } from "../services/dashboardService";
 
 const useDashboard = () => {
   const [dashboard, setDashboard] = useState(null);

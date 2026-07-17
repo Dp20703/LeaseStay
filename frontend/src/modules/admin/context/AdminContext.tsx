@@ -115,7 +115,6 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
         logout,
 
         fetchCurrentAdmin,
-
         setAdmin,
       }}
     >

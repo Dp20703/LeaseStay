@@ -1,13 +1,12 @@
-import * as AdminService from "./admin.service.js";
-import { asyncHandler, ApiError, ApiResponse } from "../../helpers/index.js";
 import { ROLES } from "../../constants/roles.constants.js";
-import { loginUserService } from "../auth/auth.service.js";
+import { ApiError, ApiResponse, asyncHandler } from "../../helpers/index.js";
 import sendToken from "../../utils/auth/sendToken.js";
+import { loginUserService } from "../auth/auth.service.js";
+import * as AdminService from "./admin.service.js";
 
 // LOGIN
 export const adminLogin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  console.log("email,password", email, password);
 
   const user = await loginUserService(email, password);
 

@@ -5,7 +5,7 @@ import {
   DashboardSkeleton,
   DashboardStats,
 } from "../components/dashboard";
-import useDashboard from "../components/dashboard/hooks/useDashboard";
+import useDashboard from "../hooks/useDashboard";
 
 const Dashboard = () => {
   const { dashboard, loading, refresh } = useDashboard();
