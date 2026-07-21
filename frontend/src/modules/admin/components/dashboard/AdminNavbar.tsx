@@ -1,12 +1,9 @@
-import { useState } from "react";
-
-import { Bell, Menu, Search } from "@/shared/constants/icons";
-
 import {
   NavbarLogo,
   ThemeToggle,
 } from "@/shared/components/layout/navbar/common";
-
+import { Bell, Menu, Search } from "@/shared/constants/icons";
+import { useState } from "react";
 import AdminProfileDropdown from "./AdminProfileDropdown";
 
 interface AdminNavbarProps {

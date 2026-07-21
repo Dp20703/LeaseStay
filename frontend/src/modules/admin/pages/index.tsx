@@ -1,3 +1,4 @@
+import AdminProfilePage from "./AdminProfilePage";
 import Bookings from "./Bookings";
 import Dashboard from "./Dashboard";
 import OwnersPage from "./OwnersPage";
@@ -7,6 +8,7 @@ import SettingsPage from "./SettingsPage";
 import UsersPage from "./UsersPage";
 
 export {
+  AdminProfilePage,
   Bookings,
   Dashboard,
   OwnersPage,

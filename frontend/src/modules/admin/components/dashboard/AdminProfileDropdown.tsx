@@ -7,9 +7,9 @@ import {
 } from "@/shared/constants/icons";
 import {
   Menu,
+  MenuButton,
   MenuItem,
   MenuItems,
-  MenuButton,
   Transition,
 } from "@headlessui/react";
 import { Fragment } from "react";

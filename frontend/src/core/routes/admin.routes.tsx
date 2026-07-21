@@ -1,13 +1,14 @@
 import AdminWrapper from "@/core/wrappers/AdminWrapper";
 import AdminLayout from "@/modules/admin/layouts/AdminLayout";
 import {
-  Bookings,
-  Dashboard,
-  OwnersPage,
-  Payments,
-  Properties,
-  SettingsPage,
-  UsersPage,
+    AdminProfilePage,
+    Bookings,
+    Dashboard,
+    OwnersPage,
+    Payments,
+    Properties,
+    SettingsPage,
+    UsersPage
 } from "@/modules/admin/pages";
 import type { RouteObject } from "react-router-dom";
 
@@ -45,6 +46,10 @@ const adminRoutes: RouteObject[] = [
           {
             path: "/admin/settings",
             element: <SettingsPage />,
+          },
+          {
+            path: "/admin/profile",
+            element: <AdminProfilePage />,
           },
         ],
       },
