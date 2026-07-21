@@ -189,6 +189,30 @@ router.get(
 );
 
 /* ─────────────────────────────────────────────
+   SETTINGS
+───────────────────────────────────────────── */
+router.patch(
+  "/settings/profile",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  AdminController.updateAdminProfile,
+);
+
+router.patch(
+  "/settings/password",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  AdminController.updateAdminPassword,
+);
+
+router.patch(
+  "/settings/preferences",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  AdminController.updatePlatformPreferences,
+);
+
+/* ─────────────────────────────────────────────
    DASHBOARD
 ───────────────────────────────────────────── */
 

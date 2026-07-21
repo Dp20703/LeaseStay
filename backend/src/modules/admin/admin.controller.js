@@ -342,6 +342,43 @@ export const getPaymentStats = asyncHandler(async (req, res) => {
   return res.status(200, "Payment stats fetched successfully", stats);
 });
 
+// UPDATE ADMIN PROFILE
+export const updateAdminProfile = asyncHandler(async (req, res) => {
+  const updatedAdmin = await AdminService.updateAdminProfileService(
+    req.user._id,
+    req.body,
+  );
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Profile updated successfully", updatedAdmin));
+});
+
+// UPDATE ADMIN PASSWORD
+export const updateAdminPassword = asyncHandler(async (req, res) => {
+  const result = await AdminService.updateAdminPasswordService(
+    req.user._id,
+    req.body,
+  );
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Password updated successfully", result));
+});
+
+// UPDATE PLATFORM PREFERENCES
+export const updatePlatformPreferences = asyncHandler(async (req, res) => {
+  const preferences = await AdminService.updatePlatformPreferencesService(
+    req.body,
+  );
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, "Preferences updated successfully", preferences),
+    );
+});
+
 // ADMIN DASHBOARD STATS
 export const getDashboardStats = asyncHandler(async (req, res) => {
   const stats = await AdminService.getDashboardStatsService();

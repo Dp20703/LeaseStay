@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import { ROLES } from "../../constants/index.js";
 import { ApiError } from "../../helpers/index.js";
 import Booking from "../bookings/booking.model.js";
@@ -282,6 +283,56 @@ export const getPaymentStatsService = async () => {
     successfulCount,
     pendingCount,
   };
+};
+
+/* ─────────────────────────────────────────────
+   SETTINGS RELATED SERVICES
+───────────────────────────────────────────── */
+
+// UPDATE ADMIN PROFILE
+export const updateAdminProfileService = async (adminId, profileData) => {
+  const { fullName, email } = profileData;
+
+  const admin = await User.findById(adminId);
+  if (!admin) {
+    throw new ApiError(404, "Admin not found");
+  }
+
+  if (fullName) admin.fullName = fullName;
+  if (email) admin.email = email;
+
+  await admin.save();
+  return await User.findById(adminId).select("-password");
+};
+
+// UPDATE ADMIN PASSWORD
+export const updateAdminPasswordService = async (adminId, passwordData) => {
+  const { currentPassword, newPassword } = passwordData;
+
+  const admin = await User.findById(adminId);
+  if (!admin) {
+    throw new ApiError(404, "Admin not found");
+  }
+
+  // Verify current password
+  const isPasswordValid = await bcrypt.compare(currentPassword, admin.password);
+  if (!isPasswordValid) {
+    throw new ApiError(400, "Incorrect current password");
+  }
+
+  // Hash new password
+  const salt = await bcrypt.genSalt(10);
+  admin.password = await bcrypt.hash(newPassword, salt);
+
+  await admin.save();
+  return { message: "Password updated successfully" };
+};
+
+// UPDATE PLATFORM PREFERENCES (Stored on Admin or global system config model)
+export const updatePlatformPreferencesService = async (preferencesData) => {
+  // If you save preferences to a System/Settings collection or an Admin document, update it here.
+  // For demonstration, we return the payload as confirmation.
+  return preferencesData;
 };
 
 // ADMIN DASHBOARD STATS

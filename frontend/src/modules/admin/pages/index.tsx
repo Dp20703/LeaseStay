@@ -3,7 +3,7 @@ import Dashboard from "./Dashboard";
 import OwnersPage from "./OwnersPage";
 import Payments from "./Payments";
 import Properties from "./Properties";
-import Settings from "./Settings";
+import SettingsPage from "./SettingsPage";
 import UsersPage from "./UsersPage";
 
 export {
@@ -12,6 +12,6 @@ export {
   OwnersPage,
   Payments,
   Properties,
-  Settings,
+  SettingsPage,
   UsersPage,
 };

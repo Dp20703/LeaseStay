@@ -6,7 +6,7 @@ import {
   OwnersPage,
   Payments,
   Properties,
-  Settings,
+  SettingsPage,
   UsersPage,
 } from "@/modules/admin/pages";
 import type { RouteObject } from "react-router-dom";
@@ -44,7 +44,7 @@ const adminRoutes: RouteObject[] = [
           },
           {
             path: "/admin/settings",
-            element: <Settings />,
+            element: <SettingsPage />,
           },
         ],
       },

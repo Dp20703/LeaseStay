@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import { NavLink } from "react-router-dom";
-
 import { ADMIN_SIDEBAR } from "@/core/navigation/admin.sidebar";
 
 const AdminSidebar = () => {
