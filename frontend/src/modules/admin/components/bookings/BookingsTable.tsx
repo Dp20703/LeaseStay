@@ -1,3 +1,4 @@
+import { IndianRupee } from "@/shared/constants/icons";
 import {
   Ban,
   Building2,
@@ -5,7 +6,6 @@ import {
   CheckCheck,
   CheckCircle2,
   Clock,
-  DollarSign,
   Inbox,
   MapPin,
   User,
@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import React from "react";
 import type { IBooking } from "../../types/bookings.types";
-import { IndianRupee } from "@/shared/constants/icons";
 
 // Helper to safely extract names whether they are strings or objects
 const formatFullName = (name: any): string => {

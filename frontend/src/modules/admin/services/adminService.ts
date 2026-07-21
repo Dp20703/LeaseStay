@@ -187,6 +187,19 @@ const adminService = {
   },
 
   /* ─────────────────────────────────────────────
+     PAYMENTS
+  ───────────────────────────────────────────── */
+  getPayments: async () => {
+    const response = await api.get("/admin/payments");
+    return response.data;
+  },
+
+  getPaymentStats: async () => {
+    const response = await api.get("/admin/payments/stats");
+    return response.data;
+  },
+
+  /* ─────────────────────────────────────────────
      DASHBOARD
   ───────────────────────────────────────────── */
 

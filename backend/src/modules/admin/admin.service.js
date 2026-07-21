@@ -1,6 +1,7 @@
 import { ROLES } from "../../constants/index.js";
 import { ApiError } from "../../helpers/index.js";
 import Booking from "../bookings/booking.model.js";
+import Payment from "../payments/payment.model.js";
 import Property from "../properties/property.model.js";
 import User from "../users/user.model.js";
 
@@ -241,6 +242,46 @@ export const updatePaymentStatusService = async (bookingId, paymentStatus) => {
 
   if (!updatedBooking) throw new ApiError(404, "Booking not found");
   return updatedBooking;
+};
+
+/* ─────────────────────────────────────────────
+   PAYMENTS RELATED SERVICES
+───────────────────────────────────────────── */
+
+// FETCH ALL PAYMENTS
+export const fetchAllPaymentsService = async () => {
+  return await Payment.find()
+    .populate("property", "title location")
+    .populate("tenant", "fullName email profileImage")
+    .populate("landlord", "fullName email profileImage")
+    .populate("booking", "bookingReference")
+    .sort({ createdAt: -1 });
+};
+
+// GET PAYMENT REVENUE STATS
+export const getPaymentStatsService = async () => {
+  const stats = await Payment.getStats();
+
+  // Calculate aggregate totals
+  let totalRevenue = 0;
+  let successfulCount = 0;
+  let pendingCount = 0;
+
+  stats.forEach((item) => {
+    if (item._id === "paid") {
+      totalRevenue += item.totalAmount;
+      successfulCount += item.count;
+    } else if (item._id === "pending" || item._id === "created") {
+      pendingCount += item.count;
+    }
+  });
+
+  return {
+    stats,
+    totalRevenue,
+    successfulCount,
+    pendingCount,
+  };
 };
 
 // ADMIN DASHBOARD STATS

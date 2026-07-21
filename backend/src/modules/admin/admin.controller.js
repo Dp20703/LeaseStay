@@ -326,6 +326,22 @@ export const updatePaymentStatus = asyncHandler(async (req, res) => {
     );
 });
 
+// FETCH ALL PAYMENTS
+export const fetchAllPayments = asyncHandler(async (req, res) => {
+  const payments = await AdminService.fetchAllPaymentsService();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Payments fetched successfully", payments));
+});
+
+// GET PAYMENT STATS
+export const getPaymentStats = asyncHandler(async (req, res) => {
+  const stats = await AdminService.getPaymentStatsService();
+
+  return res.status(200, "Payment stats fetched successfully", stats);
+});
+
 // ADMIN DASHBOARD STATS
 export const getDashboardStats = asyncHandler(async (req, res) => {
   const stats = await AdminService.getDashboardStatsService();

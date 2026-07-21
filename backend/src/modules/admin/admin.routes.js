@@ -173,6 +173,22 @@ router.patch(
 );
 
 /* ─────────────────────────────────────────────
+   PAYMENTS
+───────────────────────────────────────────── */
+router.get(
+  "/payments",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  AdminController.fetchAllPayments,
+);
+router.get(
+  "/payments/stats",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  AdminController.getPaymentStats,
+);
+
+/* ─────────────────────────────────────────────
    DASHBOARD
 ───────────────────────────────────────────── */
 
