@@ -266,6 +266,66 @@ export const unblockUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "User unblocked successfully", user));
 });
 
+/* ─────────────────────────────────────────────
+   BOOKINGS CONTROLLERS
+───────────────────────────────────────────── */
+
+export const getAllBookings = asyncHandler(async (req, res) => {
+  const bookings = await AdminService.getAllBookingsService();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Bookings fetched successfully", bookings));
+});
+
+export const updateBookingStatus = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  if (!id || !status) {
+    throw new ApiError(400, "Booking ID and status are required");
+  }
+
+  const updatedBooking = await AdminService.updateBookingStatusService(
+    id,
+    status,
+  );
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        "Booking status updated successfully",
+        updatedBooking,
+      ),
+    );
+});
+
+export const updatePaymentStatus = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { paymentStatus } = req.body;
+
+  if (!id || !paymentStatus) {
+    throw new ApiError(400, "Booking ID and payment status are required");
+  }
+
+  const updatedBooking = await AdminService.updatePaymentStatusService(
+    id,
+    paymentStatus,
+  );
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        "Payment status updated successfully",
+        updatedBooking,
+      ),
+    );
+});
+
 // ADMIN DASHBOARD STATS
 export const getDashboardStats = asyncHandler(async (req, res) => {
   const stats = await AdminService.getDashboardStatsService();

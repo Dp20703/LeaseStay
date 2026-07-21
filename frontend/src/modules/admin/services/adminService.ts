@@ -1,7 +1,5 @@
 import api from "@/core/api/axios";
-
 import type { LoginFormData } from "@/modules/auth/types/auth-form.types";
-
 import type { User } from "@/modules/user/types";
 
 /* ────────────────────────────────────9─────────
@@ -159,6 +157,32 @@ const adminService = {
       `/admin/property-verifications/${propertyId}/restore`,
     );
 
+    return response.data;
+  },
+
+  /* ─────────────────────────────────────────────
+     BOOKINGS
+  ───────────────────────────────────────────── */
+
+  getBookings: async () => {
+    const response = await api.get("/admin/bookings");
+    return response.data;
+  },
+
+  updateBookingStatus: async (bookingId: string, status: string) => {
+    const response = await api.patch(`/admin/bookings/${bookingId}/status`, {
+      status,
+    });
+    return response.data;
+  },
+
+  updatePaymentStatus: async (bookingId: string, paymentStatus: string) => {
+    const response = await api.patch(
+      `/admin/bookings/${bookingId}/payment-status`,
+      {
+        paymentStatus,
+      },
+    );
     return response.data;
   },
 

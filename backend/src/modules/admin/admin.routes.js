@@ -1,51 +1,43 @@
 import express from "express";
-import { verifyJWT } from "../../middlewares/auth.middleware.js";
-import validate from "../../middlewares/validate.middleware.js";
-import { authorizeRoles } from "../../middlewares/role.middleware.js";
 import { ROLES } from "../../constants/roles.constants.js";
-import {
-  fetchAllUsers,
-  fetchAllProperties,
-  fetchAllOwners,
-  getPendingOwnerVerifications,
-  approveOwnerVerification,
-  rejectOwnerVerification,
-  getPendingPropertyVerifications,
-  approvePropertyVerification,
-  rejectPropertyVerification,
-  getRejectedProperties,
-  getApprovedProperties,
-  hideProperty,
-  restoreProperty,
-  blockUser,
-  unblockUser,
-  getDashboardStats,
-  adminLogin,
-} from "./admin.controller.js";
+import { verifyJWT } from "../../middlewares/auth.middleware.js";
+import { authorizeRoles } from "../../middlewares/role.middleware.js";
+import validate from "../../middlewares/validate.middleware.js";
+import * as AdminController from "./admin.controller.js";
 import {
   approveOwnerVerificationValidation,
-  rejectOwnerVerificationValidation,
   approvePropertyVerificationValidation,
+  rejectOwnerVerificationValidation,
   rejectPropertyVerificationValidation,
 } from "./admin.validation.js";
 
 const router = express.Router();
 
 // LOGIN
-router.post("/login", adminLogin);
+router.post("/login", AdminController.adminLogin);
 
 // FIND USERS
-router.get("/users", verifyJWT, authorizeRoles(ROLES.ADMIN), fetchAllUsers);
+router.get(
+  "/users",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  AdminController.fetchAllUsers,
+);
 
 // FIND OWNERS
-router.get("/owners", verifyJWT, authorizeRoles(ROLES.ADMIN), fetchAllOwners);
+router.get(
+  "/owners",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  AdminController.fetchAllOwners,
+);
 
 // FIND PROPERTIES
 router.get(
   "/properties",
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
-  fetchAllProperties,
+  AdminController.fetchAllProperties,
 );
 
 // OWNER VERIFICATION
@@ -53,7 +45,7 @@ router.get(
   "/owner-verifications/pending",
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
-  getPendingOwnerVerifications,
+  AdminController.getPendingOwnerVerifications,
 );
 
 router.patch(
@@ -62,7 +54,7 @@ router.patch(
   validate,
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
-  approveOwnerVerification,
+  AdminController.approveOwnerVerification,
 );
 
 router.patch(
@@ -71,7 +63,7 @@ router.patch(
   validate,
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
-  rejectOwnerVerification,
+  AdminController.rejectOwnerVerification,
 );
 
 // PROPERTY VERIFICATION
@@ -79,7 +71,7 @@ router.get(
   "/property-verifications/pending",
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
-  getPendingPropertyVerifications,
+  AdminController.getPendingPropertyVerifications,
 );
 
 router.patch(
@@ -88,7 +80,7 @@ router.patch(
   validate,
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
-  approvePropertyVerification,
+  AdminController.approvePropertyVerification,
 );
 
 router.patch(
@@ -97,7 +89,7 @@ router.patch(
   validate,
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
-  rejectPropertyVerification,
+  AdminController.rejectPropertyVerification,
 );
 
 /* ─────────────────────────────────────────────
@@ -109,7 +101,7 @@ router.get(
   "/property-verifications/rejected",
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
-  getRejectedProperties,
+  AdminController.getRejectedProperties,
 );
 
 // GET APPROVED PROPERTIES
@@ -117,7 +109,7 @@ router.get(
   "/property-verifications/approved",
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
-  getApprovedProperties,
+  AdminController.getApprovedProperties,
 );
 
 // HIDE PROPERTY
@@ -125,7 +117,7 @@ router.patch(
   "/property-verifications/:propertyId/hide",
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
-  hideProperty,
+  AdminController.hideProperty,
 );
 
 // RESTORE PROPERTY
@@ -133,7 +125,7 @@ router.patch(
   "/property-verifications/:propertyId/restore",
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
-  restoreProperty,
+  AdminController.restoreProperty,
 );
 
 /* ─────────────────────────────────────────────
@@ -145,7 +137,7 @@ router.patch(
   "/users/:userId/block",
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
-  blockUser,
+  AdminController.blockUser,
 );
 
 // UNBLOCK USER
@@ -153,7 +145,31 @@ router.patch(
   "/users/:userId/unblock",
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
-  unblockUser,
+  AdminController.unblockUser,
+);
+
+/* ─────────────────────────────────────────────
+   BOOKINGS
+───────────────────────────────────────────── */
+router.get(
+  "/bookings",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  AdminController.getAllBookings,
+);
+
+router.patch(
+  "/bookings/:id/status",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  AdminController.updateBookingStatus,
+);
+
+router.patch(
+  "/bookings/:id/payment-status",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  AdminController.updatePaymentStatus,
 );
 
 /* ─────────────────────────────────────────────
@@ -165,7 +181,7 @@ router.get(
   "/dashboard/stats",
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
-  getDashboardStats,
+  AdminController.getDashboardStats,
 );
 
 export default router;

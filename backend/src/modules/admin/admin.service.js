@@ -1,7 +1,8 @@
-import User from "../users/user.model.js";
-import Property from "../properties/property.model.js";
-import { ApiError } from "../../helpers/index.js";
 import { ROLES } from "../../constants/index.js";
+import { ApiError } from "../../helpers/index.js";
+import Booking from "../bookings/booking.model.js";
+import Property from "../properties/property.model.js";
+import User from "../users/user.model.js";
 
 // Populate owner
 const OWNER_POPULATE = "userName fullName profileImage";
@@ -36,7 +37,6 @@ export const getPendingOwnerVerificationsService = async () => {
 };
 
 // APPROVE OWNER VERIFICATION
-
 export const approveOwnerVerificationService = async (userId, adminId) => {
   const user = await User.findById(userId);
 
@@ -50,7 +50,6 @@ export const approveOwnerVerificationService = async (userId, adminId) => {
   user.ownerVerifiedBy = adminId;
 
   await user.save();
-
   return user;
 };
 
@@ -76,7 +75,6 @@ export const rejectOwnerVerificationService = async (
   user.ownerVerifiedBy = adminId;
 
   await user.save();
-
   return user;
 };
 
@@ -103,7 +101,6 @@ export const approvePropertyVerificationService = async (
   property.verifiedBy = adminId;
 
   await property.save();
-
   return property.populate("owner", OWNER_POPULATE);
 };
 
@@ -125,7 +122,6 @@ export const rejectPropertyVerificationService = async (
   property.verifiedBy = adminId;
 
   await property.save();
-
   return property.populate("owner", OWNER_POPULATE);
 };
 
@@ -153,7 +149,6 @@ export const hidePropertyService = async (propertyId) => {
 
   property.status = "Hidden";
   await property.save();
-
   return await property.populate("owner", OWNER_POPULATE);
 };
 
@@ -167,7 +162,6 @@ export const restorePropertyService = async (propertyId) => {
 
   property.status = "Approved";
   await property.save();
-
   return await property.populate("owner", OWNER_POPULATE);
 };
 
@@ -181,7 +175,6 @@ export const blockUserService = async (userId) => {
 
   user.isBlocked = true;
   await user.save();
-
   return await User.findById(userId).select("-password");
 };
 
@@ -195,8 +188,59 @@ export const unblockUserService = async (userId) => {
 
   user.isBlocked = false;
   await user.save();
-
   return await User.findById(userId).select("-password");
+};
+
+/* ─────────────────────────────────────────────
+   BOOKINGS RELATED SERVICES
+───────────────────────────────────────────── */
+
+export const getAllBookingsService = async () => {
+  const bookings = await Booking.find()
+    .populate("property", "title location images")
+    .populate("tenant", "fullName email profileImage")
+    .populate("owner", "fullName email profileImage")
+    .sort({ createdAt: -1 }); // Newest first
+
+  return bookings;
+};
+
+export const updateBookingStatusService = async (bookingId, status) => {
+  const validStatuses = [
+    "pending",
+    "accepted",
+    "rejected",
+    "cancelled",
+    "completed",
+  ];
+  if (!validStatuses.includes(status)) {
+    throw new ApiError(400, "Invalid booking status");
+  }
+
+  const updatedBooking = await Booking.findByIdAndUpdate(
+    bookingId,
+    { status },
+    { new: true, runValidators: true },
+  );
+
+  if (!updatedBooking) throw new ApiError(404, "Booking not found");
+  return updatedBooking;
+};
+
+export const updatePaymentStatusService = async (bookingId, paymentStatus) => {
+  const validStatuses = ["pending", "paid", "failed", "refunded"];
+  if (!validStatuses.includes(paymentStatus)) {
+    throw new ApiError(400, "Invalid payment status");
+  }
+
+  const updatedBooking = await Booking.findByIdAndUpdate(
+    bookingId,
+    { paymentStatus },
+    { new: true, runValidators: true },
+  );
+
+  if (!updatedBooking) throw new ApiError(404, "Booking not found");
+  return updatedBooking;
 };
 
 // ADMIN DASHBOARD STATS
