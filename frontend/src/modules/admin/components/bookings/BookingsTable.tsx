@@ -127,7 +127,7 @@ export const BookingsTable: React.FC<BookingsTableProps> = ({
           {bookings.map((booking) => {
             const tenantName = formatFullName(booking.tenant?.fullName);
             const ownerName = formatFullName(booking.owner?.fullName);
-            const propertyImage = booking.property?.images?.[0];
+            const propertyImage = booking.property?.images?.[0]?.url;
 
             return (
               <tr key={booking._id}>

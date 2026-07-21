@@ -131,7 +131,7 @@ export const PropertiesTable: React.FC<PropertiesTableProps> = ({
                   <div className="flex items-center gap-4">
                     {property.images && property.images.length > 0 ? (
                       <img
-                        src={property.images[0]}
+                        src={property.thumbnail.url}
                         alt={property.title}
                         className="w-16 h-12 rounded-lg object-cover"
                       />
