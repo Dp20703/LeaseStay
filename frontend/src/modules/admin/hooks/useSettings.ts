@@ -1,7 +1,6 @@
 import { useState } from "react";
 import settingsService from "../services/settingService";
 import type {
-  IAdminProfile,
   IPlatformPreferences,
   ISecurityPayload,
 } from "../types/settings.types";
@@ -11,8 +10,9 @@ export const useSettings = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const [profile, setProfile] = useState<IAdminProfile>({
-    fullName: "",
+  // Initialize fullName as an object with firstName and lastName
+  const [profile, setProfile] = useState<any>({
+    fullName: { firstName: "", lastName: "" },
     email: "",
   });
 

@@ -1,13 +1,13 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import express from "express";
+import compression from "compression";
+import cookieParser from "cookie-parser";
 import cors from "cors";
+import express from "express";
+import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import morgan from "morgan";
-import rateLimit from "express-rate-limit";
-import cookieParser from "cookie-parser";
-import compression from "compression";
 
 import routes from "./routes/index.js";
 
@@ -26,13 +26,16 @@ app.use(morgan("dev"));
 
 /* RATE LIMIT */
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  message: "Too many requests, please try again later.",
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per `window`
+  message: "Too many requests from this IP, please try again later.",
+  // ADD THIS LINE to skip CORS preflight requests:
+  skip: (req) => req.method === "OPTIONS",
 });
 
-app.use(limiter);
+// Apply to all /api/v1 routes
+app.use("/api/v1", apiLimiter);
 
 /* CORS */
 

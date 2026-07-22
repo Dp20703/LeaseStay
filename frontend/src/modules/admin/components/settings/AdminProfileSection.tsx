@@ -1,10 +1,9 @@
 import { Mail, User } from "lucide-react";
 import React from "react";
-import type { IAdminProfile } from "../../types/settings.types";
 
 interface AdminProfileSectionProps {
-  profile: IAdminProfile;
-  setProfile: React.Dispatch<React.SetStateAction<IAdminProfile>>;
+  profile: any;
+  setProfile: React.Dispatch<React.SetStateAction<any>>;
   onSubmit: (e: React.FormEvent) => void;
   isLoading: boolean;
 }
@@ -15,31 +14,67 @@ export const AdminProfileSection: React.FC<AdminProfileSectionProps> = ({
   onSubmit,
   isLoading,
 }) => {
+  // Safely extract names to prevent undefined errors on initial load
+  const firstName = profile?.fullName?.firstName || "";
+  const lastName = profile?.fullName?.lastName || "";
+
   return (
     <div className="ls-card p-6">
       <h2 className="text-lg font-semibold text-text-light dark:text-text-dark mb-4">
         Admin Profile Information
       </h2>
       <form onSubmit={onSubmit} className="space-y-4">
-        <div>
-          <label className="ls-label">Full Name</label>
-          <div className="relative">
-            <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <User className="w-5 h-5 text-text-muted" />
-            </span>
-            <input
-              type="text"
-              className="ls-input pl-10"
-              value={profile.fullName}
-              onChange={(e) =>
-                setProfile({ ...profile, fullName: e.target.value })
-              }
-              placeholder="Admin Name"
-              required
-            />
+        {/* Name Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="ls-label">First Name</label>
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <User className="w-5 h-5 text-text-muted" />
+              </span>
+              <input
+                type="text"
+                className="ls-input pl-10"
+                value={firstName}
+                onChange={(e) =>
+                  setProfile({
+                    ...profile,
+                    fullName: {
+                      ...profile.fullName,
+                      firstName: e.target.value,
+                    },
+                  })
+                }
+                placeholder="First Name"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="ls-label">Last Name</label>
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <User className="w-5 h-5 text-text-muted" />
+              </span>
+              <input
+                type="text"
+                className="ls-input pl-10"
+                value={lastName}
+                onChange={(e) =>
+                  setProfile({
+                    ...profile,
+                    fullName: { ...profile.fullName, lastName: e.target.value },
+                  })
+                }
+                placeholder="Last Name"
+                required
+              />
+            </div>
           </div>
         </div>
 
+        {/* Email Address */}
         <div>
           <label className="ls-label">Email Address</label>
           <div className="relative">
@@ -49,7 +84,7 @@ export const AdminProfileSection: React.FC<AdminProfileSectionProps> = ({
             <input
               type="email"
               className="ls-input pl-10"
-              value={profile.email}
+              value={profile.email || ""}
               onChange={(e) =>
                 setProfile({ ...profile, email: e.target.value })
               }
