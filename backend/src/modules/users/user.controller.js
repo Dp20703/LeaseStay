@@ -1,5 +1,5 @@
+import { ApiResponse, asyncHandler } from "../../helpers/index.js";
 import * as UserService from "./user.service.js";
-import { asyncHandler, ApiResponse } from "../../helpers/index.js";
 
 // UPDATE PROFILE
 

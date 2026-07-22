@@ -1,13 +1,13 @@
-import type { User } from "@/types/entities/user.types";
-import type { ProfileFormData } from "@/types/forms/profile-form.types";
 import { Camera, Mail, Phone, Shield } from "@/shared/constants/icons";
+import React from "react";
+import type { User } from "../../types";
 
 type ProfileCardProps = {
   user: User;
   isEditing: boolean;
   previewImage: string | null;
-  setPreviewImage: (value: string) => void;
-  setFormData: ProfileFormData;
+  setPreviewImage: (value: string | null) => void;
+  setFormData: React.Dispatch<React.SetStateAction<any>>;
 };
 
 const ProfileCard = ({
@@ -19,7 +19,6 @@ const ProfileCard = ({
 }: ProfileCardProps) => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-
     if (!file) return;
 
     setFormData((prev: any) => ({
@@ -34,12 +33,11 @@ const ProfileCard = ({
     <div className="lg:col-span-1">
       <div className="ls-card p-8 text-center lg:sticky lg:top-24">
         {/* Image */}
-
         <div className="relative w-fit mx-auto">
           <img
             src={
               previewImage ||
-              user?.profileImage ||
+              user?.profileImage?.url ||
               "https://randomuser.me/api/portraits/men/32.jpg"
             }
             alt="profile"
@@ -47,53 +45,52 @@ const ProfileCard = ({
           />
 
           {isEditing && (
-            <label className="absolute bottom-2 right-2 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center cursor-pointer">
+            <label className="absolute bottom-2 right-2 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center cursor-pointer hover:bg-primary-dark transition-colors">
               <input
                 type="file"
                 className="hidden"
                 accept="image/*"
                 onChange={handleImageChange}
               />
-
               <Camera className="text-sm" />
             </label>
           )}
         </div>
 
         {/* Name */}
-
         <h2 className="text-2xl font-bold mt-6">
           {user?.fullName?.firstName} {user?.fullName?.lastName}
         </h2>
 
         {/* Username */}
-
         <p className="text-primary mt-2">@{user?.userName}</p>
 
         {/* Role */}
-
         <div className="mt-5">
-          <span className="ls-badge ls-badge-success">{user?.role}</span>
+          <span className="ls-badge ls-badge-success uppercase">
+            {user?.role}
+          </span>
         </div>
 
         {/* Info */}
-
-        <div className="mt-8 space-y-4 text-left">
+        <div className="mt-8 space-y-4 text-left text-text-muted dark:text-text-darkMuted">
           <div className="flex items-center gap-3">
             <Mail className="text-sm" />
-            <span className="text-sm">{user?.email}</span>
+            <span className="text-sm text-text-light dark:text-text-dark">
+              {user?.email}
+            </span>
           </div>
 
           <div className="flex items-center gap-3">
             <Phone className="text-sm" />
-
-            <span className="text-sm">{user?.phone || "N/A"}</span>
+            <span className="text-sm text-text-light dark:text-text-dark">
+              {user?.phone || "N/A"}
+            </span>
           </div>
 
           <div className="flex items-center gap-3">
             <Shield className="text-sm" />
-
-            <span className="text-sm">
+            <span className="text-sm text-text-light dark:text-text-dark">
               {user?.isVerified ? "Verified" : "Not Verified"}
             </span>
           </div>

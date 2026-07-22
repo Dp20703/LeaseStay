@@ -1,8 +1,8 @@
-import { toast } from "react-toastify";
-import { Pencil } from "@/shared/constants/icons";
 import api from "@/core/api/axios";
-import type { User } from "@/types/entities/user.types";
-import type { ProfileFormData } from "@/types/forms/profile-form.types";
+import { Pencil } from "@/shared/constants/icons";
+import React from "react";
+import { toast } from "react-toastify";
+import type { ProfileFormData, User } from "../../types";
 
 type ProfileEditCardProps = {
   user: User;
@@ -14,24 +14,22 @@ type ProfileEditCardProps = {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   formData: ProfileFormData;
   setFormData: React.Dispatch<React.SetStateAction<ProfileFormData>>;
+  setPreviewImage: React.Dispatch<React.SetStateAction<string | null>>; // Added
 };
 
 const ProfileEditCard = ({
   user,
   setUser,
-
   logout,
   isEditing,
   setIsEditing,
-
   loading,
   setLoading,
-
   formData,
   setFormData,
+  setPreviewImage,
 }: ProfileEditCardProps) => {
   // RESET FORM
-
   const resetFormData = () => ({
     firstName: user?.fullName?.firstName || "",
     lastName: user?.fullName?.lastName || "",
@@ -42,25 +40,20 @@ const ProfileEditCard = ({
   });
 
   // HANDLE CHANGE
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    setFormData((prev) => ({
+    setFormData((prev: any) => ({
       ...prev,
-
       [name]: value,
     }));
   };
 
   // HANDLE SAVE
-
   const handleSave = async () => {
     try {
       setLoading(true);
 
       const updatedFormData = new FormData();
-
       updatedFormData.append("firstName", formData.firstName);
       updatedFormData.append("lastName", formData.lastName);
       updatedFormData.append("userName", formData.userName);
@@ -80,12 +73,12 @@ const ProfileEditCard = ({
         },
       );
 
-      // UPDATE USER
+      console.log("UPDATE PROFILE RES:", response);
 
+      // UPDATE USER
       setUser(response.data.data);
 
       // RESET FORM WITH NEW DATA
-
       setFormData({
         firstName: response.data.data.fullName?.firstName || "",
         lastName: response.data.data.fullName?.lastName || "",
@@ -95,8 +88,10 @@ const ProfileEditCard = ({
         profileImage: null,
       });
 
-      toast.success(response.data.message || "Profile updated successfully");
+      // Clear the temporary local preview image blob
+      setPreviewImage(null);
 
+      toast.success(response.data.message || "Profile updated successfully");
       setIsEditing(false);
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Profile update failed");
@@ -106,10 +101,9 @@ const ProfileEditCard = ({
   };
 
   // HANDLE CANCEL
-
   const handleCancel = () => {
     setFormData(resetFormData());
-
+    setPreviewImage(null); // Clear the image preview
     setIsEditing(false);
   };
 
@@ -117,11 +111,9 @@ const ProfileEditCard = ({
     <div className="lg:col-span-2">
       <div className="ls-card p-8">
         {/* HEADER */}
-
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-3xl font-bold">Profile Settings</h2>
-
             <p className="text-text-muted dark:text-text-darkMuted mt-2">
               Manage your account information.
             </p>
@@ -139,13 +131,11 @@ const ProfileEditCard = ({
         </div>
 
         {/* FORM */}
-
         <div className="grid md:grid-cols-2 gap-6 mt-10">
           {/* FIRST NAME */}
 
           <div>
             <label className="ls-label">First Name</label>
-
             <input
               type="text"
               name="firstName"
@@ -161,7 +151,6 @@ const ProfileEditCard = ({
 
           <div>
             <label className="ls-label">Last Name</label>
-
             <input
               type="text"
               name="lastName"
@@ -177,7 +166,6 @@ const ProfileEditCard = ({
 
           <div>
             <label className="ls-label">Username</label>
-
             <input
               type="text"
               name="userName"
@@ -193,7 +181,6 @@ const ProfileEditCard = ({
 
           <div>
             <label className="ls-label">Email</label>
-
             <input
               type="email"
               value={formData.email}
@@ -206,7 +193,6 @@ const ProfileEditCard = ({
 
           <div className="md:col-span-2">
             <label className="ls-label">Phone</label>
-
             <input
               type="text"
               name="phone"
@@ -220,7 +206,6 @@ const ProfileEditCard = ({
         </div>
 
         {/* ACTIONS */}
-
         {isEditing && (
           <div className="flex flex-wrap gap-4 mt-10">
             <button
@@ -242,7 +227,6 @@ const ProfileEditCard = ({
         )}
 
         {/* LOGOUT */}
-
         <div className="pt-10 mt-10 border-t border-border-light dark:border-border-dark">
           <button onClick={logout} className="ls-btn-danger">
             Logout

@@ -3,19 +3,19 @@ import { upload } from "../../config/multer.config.js";
 import { verifyJWT } from "../../middlewares/auth.middleware.js";
 import validate from "../../middlewares/validate.middleware.js";
 import {
-  updateProfile,
-  changePassword,
+  applyOwner,
   changeEmail,
+  changePassword,
+  deleteAccount,
   deleteProfileImage,
   getSavedProperties,
-  deleteAccount,
-  applyOwner,
+  updateProfile,
 } from "./user.controller.js";
 import {
-  updateProfileValidation,
-  changePasswordValidation,
-  changeEmailValidation,
   applyOwnerValidation,
+  changeEmailValidation,
+  changePasswordValidation,
+  updateProfileValidation,
 } from "./user.validation.js";
 
 const router = express.Router();

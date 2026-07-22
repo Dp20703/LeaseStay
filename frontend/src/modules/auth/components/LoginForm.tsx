@@ -62,7 +62,7 @@ const LoginForm = () => {
     try {
       setLoading(true);
 
-      login(formData);
+      await login(formData);
 
       toast.success("Login Successfull");
 

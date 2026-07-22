@@ -25,7 +25,6 @@ const ProfilePage = () => {
     <section>
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Left */}
-
         <ProfileCard
           user={user}
           isEditing={isEditing}
@@ -35,7 +34,6 @@ const ProfilePage = () => {
         />
 
         {/* Right */}
-
         <ProfileEditCard
           user={user}
           setUser={setUser}
@@ -46,6 +44,7 @@ const ProfilePage = () => {
           setLoading={setLoading}
           formData={formData}
           setFormData={setFormData}
+          setPreviewImage={setPreviewImage} // Added this to reset preview
         />
       </div>
     </section>

@@ -1,6 +1,9 @@
 import api from "@/core/api/axios";
-import type { User } from "@/types/entities/user.types";
-import type { LoginFormData, RegisterFormData } from "@/modules/auth/types/auth-form.types";
+import type {
+  LoginFormData,
+  RegisterFormData,
+} from "@/modules/auth/types/auth-form.types";
+import type { User } from "@/modules/user/types";
 
 /* ─────────────────────────────────────────────
    TYPES
@@ -38,17 +41,11 @@ const authAPI = {
     const formData = new FormData();
 
     formData.append("userName", data.userName);
-
     formData.append("email", data.email);
-
     formData.append("password", data.password);
-
     formData.append("confirmPassword", data.confirmPassword);
-
     formData.append("phone", data.phone);
-
     formData.append("firstName", data.firstName);
-
     formData.append("lastName", data.lastName);
 
     const response = await api.post("/auth/register", formData);

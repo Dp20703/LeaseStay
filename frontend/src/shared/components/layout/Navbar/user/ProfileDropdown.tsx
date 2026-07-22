@@ -25,7 +25,7 @@ const ProfileDropdown = () => {
         <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white">
           {user?.profileImage?.url ? (
             <img
-              src={user.profileImage.url}
+              src={user?.profileImage?.url}
               alt={user.fullName.firstName}
               className="h-full w-full rounded-full object-cover"
             />

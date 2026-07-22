@@ -24,9 +24,8 @@ dist-ssr
 *.sln
 *.sw?
 .env
-user2/
-*.json
-backend/future.md
-*.zip
 
+
+*.json
+*.zip
 *.md

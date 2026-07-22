@@ -59,6 +59,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       setUser(response.data);
     } catch (error) {
+      console.log("Error:", error);
       localStorage.removeItem("token");
 
       setUser(null);
@@ -79,13 +80,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       const response = await authAPI.login(data);
 
+      console.log("response:", response);
+
       const { token, user } = response.data;
 
       localStorage.setItem("userToken", token);
 
       setUser(user);
-    } catch (error) {
-      throw error;
     } finally {
       setLoading(false);
     }
@@ -105,8 +106,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
         setUser(user);
       }
-    } catch (error) {
-      throw error;
     } finally {
       setLoading(false);
     }
