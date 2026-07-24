@@ -62,7 +62,10 @@ export const OwnerDetailsDrawer: React.FC<OwnerDetailsDrawerProps> = ({
           <div className="flex flex-col items-center text-center space-y-3 pb-6 border-b border-border-light dark:border-border-dark">
             {owner.profileImage ? (
               <img
-                src={owner.profileImage}
+                src={
+                  owner.profileImage.url ||
+                  "https://plus.unsplash.com/premium_photo-1677252438411-9a930d7a5168?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                }
                 alt={displayName}
                 className="w-24 h-24 rounded-full object-cover shadow-soft"
               />

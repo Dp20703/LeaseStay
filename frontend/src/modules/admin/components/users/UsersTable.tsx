@@ -27,7 +27,6 @@ export const UsersTable: React.FC<UsersTableProps> = ({
   onToggleBlock,
 }) => {
   if (isLoading) {
-    // ... (Keep existing loading skeleton code)
     return (
       <div className="ls-table-wrapper">
         <table className="ls-table">
@@ -73,7 +72,6 @@ export const UsersTable: React.FC<UsersTableProps> = ({
   }
 
   if (!users.length) {
-    // ... (Keep existing empty state code)
     return (
       <div className="ls-card ls-empty flex flex-col items-center justify-center gap-3">
         <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
@@ -111,7 +109,10 @@ export const UsersTable: React.FC<UsersTableProps> = ({
                   <div className="flex items-center gap-3">
                     {user.profileImage ? (
                       <img
-                        src={user?.profileImage}
+                        src={
+                          user?.profileImage?.url ||
+                          "https://plus.unsplash.com/premium_photo-1677252438411-9a930d7a5168?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        }
                         alt={displayName}
                         className="w-10 h-10 rounded-full object-cover"
                       />

@@ -162,7 +162,10 @@ export const PropertiesTable: React.FC<PropertiesTableProps> = ({
                   <div className="flex items-center gap-2">
                     {property.owner?.profileImage ? (
                       <img
-                        src={property.owner.profileImage}
+                        src={
+                          property.owner.profileImage.url ||
+                          "https://plus.unsplash.com/premium_photo-1677252438411-9a930d7a5168?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        }
                         alt={ownerDisplayName}
                         className="w-8 h-8 rounded-full object-cover"
                       />
