@@ -1,7 +1,7 @@
+import SettingsSection from "@/modules/user/components/Profile/SettingsSection";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import api from "@/core/api/axios";
-import SettingsSection from "@/modules/user/components/Profile/SettingsSection";
+import userAPI from "../../services/userService";
 
 const ChangeEmailCard = () => {
   const [formData, setFormData] = useState({
@@ -24,13 +24,13 @@ const ChangeEmailCard = () => {
     try {
       setLoading(true);
 
-      const response = await api.patch("/users/change-email", formData);
+      const response = await userAPI.changeEmail(formData);
 
-      toast.success(response.data.message);
+      toast.success(response?.message);
 
       setFormData({ newEmail: "", password: "" });
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Email update failed");
+      toast.error(error?.response?.message || "Email update failed");
     } finally {
       setLoading(false);
     }

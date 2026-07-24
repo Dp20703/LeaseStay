@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import userAPI from "@/modules/user/services/userService";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const BecomeOwnerPage = () => {
   const navigate = useNavigate();
@@ -25,7 +25,9 @@ const BecomeOwnerPage = () => {
       formData.append("documentType", documentType);
       formData.append("verificationDocument", file);
 
-      await userAPI.applyForOwner(formData);
+      const res = await userAPI.applyForOwner(formData);
+
+      console.log("Become owner res:", res);
 
       toast.success("Owner verification request submitted successfully.");
       navigate("/");

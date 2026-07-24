@@ -1,8 +1,8 @@
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+import SettingsSection from "@/modules/user/components/Profile/SettingsSection";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { useAuth } from "@/modules/auth/hooks/useAuth";
-import api from "@/core/api/axios";
-import SettingsSection from "@/modules/user/components/Profile/SettingsSection";
+import userAPI from "../../services/userService";
 
 const DeleteProfileImageCard = () => {
   const { setUser } = useAuth();
@@ -17,13 +17,13 @@ const DeleteProfileImageCard = () => {
     try {
       setLoading(true);
 
-      const response = await api.delete("/users/delete-profile-image");
+      const response = await userAPI.deleteProfileImage();
 
-      setUser(response.data.data);
+      setUser(response?.data);
 
-      toast.success(response.data.message);
+      toast.success(response?.message);
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Failed to remove image");
+      toast.error(error?.response?.message || "Failed to remove image");
     } finally {
       setLoading(false);
     }

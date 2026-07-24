@@ -1,7 +1,7 @@
-import { useState } from "react";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import ProfileCard from "@/modules/user/components/Profile/ProfileCard";
 import ProfileEditCard from "@/modules/user/components/Profile/ProfileEditCard";
+import { useState } from "react";
 
 const ProfilePage = () => {
   const { user, setUser, logout } = useAuth();
@@ -44,7 +44,7 @@ const ProfilePage = () => {
           setLoading={setLoading}
           formData={formData}
           setFormData={setFormData}
-          setPreviewImage={setPreviewImage} // Added this to reset preview
+          setPreviewImage={setPreviewImage}
         />
       </div>
     </section>

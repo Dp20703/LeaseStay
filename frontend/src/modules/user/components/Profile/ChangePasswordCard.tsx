@@ -1,7 +1,7 @@
+import SettingsSection from "@/modules/user/components/Profile/SettingsSection";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import api from "@/core/api/axios";
-import SettingsSection from "@/modules/user/components/Profile/SettingsSection";
+import userAPI from "../../services/userService";
 
 const ChangePasswordCard = () => {
   const [formData, setFormData] = useState({
@@ -24,13 +24,12 @@ const ChangePasswordCard = () => {
     try {
       setLoading(true);
 
-      const response = await api.patch("/users/change-password", formData);
+      const response = await userAPI.changePassword(formData);
 
-      toast.success(response.data.message);
-
+      toast.success(response?.message);
       setFormData({ currentPassword: "", newPassword: "" });
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Password update failed");
+      toast.error(error?.response?.message || "Password update failed");
     } finally {
       setLoading(false);
     }

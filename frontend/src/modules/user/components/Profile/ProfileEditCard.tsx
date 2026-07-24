@@ -1,7 +1,7 @@
-import api from "@/core/api/axios";
 import { Pencil } from "@/shared/constants/icons";
 import React from "react";
 import { toast } from "react-toastify";
+import userAPI from "../../services/userService";
 import type { ProfileFormData, User } from "../../types";
 
 type ProfileEditCardProps = {
@@ -63,38 +63,28 @@ const ProfileEditCard = ({
         updatedFormData.append("profileImage", formData.profileImage);
       }
 
-      const response = await api.patch(
-        "/users/update-profile",
-        updatedFormData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        },
-      );
-
-      console.log("UPDATE PROFILE RES:", response);
-
+      const response = await userAPI.updateProfile(updatedFormData);
+      console.log(response);
       // UPDATE USER
-      setUser(response.data.data);
+      setUser(response.data);
 
       // RESET FORM WITH NEW DATA
       setFormData({
-        firstName: response.data.data.fullName?.firstName || "",
-        lastName: response.data.data.fullName?.lastName || "",
-        userName: response.data.data?.userName || "",
-        email: response.data.data?.email || "",
-        phone: response.data.data?.phone || "",
+        firstName: response.data.fullName?.firstName || "",
+        lastName: response.data.fullName?.lastName || "",
+        userName: response.data?.userName || "",
+        email: response.data?.email || "",
+        phone: response.data?.phone || "",
         profileImage: null,
       });
 
       // Clear the temporary local preview image blob
       setPreviewImage(null);
 
-      toast.success(response.data.message || "Profile updated successfully");
+      toast.success(response?.message || "Profile updated successfully");
       setIsEditing(false);
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Profile update failed");
+      toast.error(error?.response?.message || "Profile update failed");
     } finally {
       setLoading(false);
     }

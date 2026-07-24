@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import api from "@/core/api/axios";
+import userAPI from "../../services/userService";
 
 const DangerZoneCard = () => {
   const navigate = useNavigate();
@@ -18,15 +19,15 @@ const DangerZoneCard = () => {
     }
 
     try {
-      const response = await api.delete("/users/delete-account");
+      const response = await userAPI.deleteAccount();
 
-      toast.success(response.data.message);
+      toast.success(response?.message);
 
       logout();
 
       navigate("/");
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Failed to delete account");
+      toast.error(error?.response?.message || "Failed to delete account");
     }
   };
 

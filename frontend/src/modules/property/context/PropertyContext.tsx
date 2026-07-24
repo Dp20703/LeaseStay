@@ -168,7 +168,6 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
 
       const response = await propertyAPI.getFeaturedProperties();
 
-      console.log("res:", response);
       setFeaturedProperties(response.data);
 
       return response.data;
