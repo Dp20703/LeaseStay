@@ -30,6 +30,11 @@ export const SIDEBAR_CONFIG: Record<string, SidebarItem[]> = {
       icon: ClipboardCheck,
     },
     {
+      path: "/become-owner",
+      label: "Become owner",
+      icon: User,
+    },
+    {
       path: "/settings",
       label: "Settings",
       icon: Settings,

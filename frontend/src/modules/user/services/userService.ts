@@ -21,18 +21,6 @@ export interface MessageResponse {
 ───────────────────────────────────────────── */
 
 const userAPI = {
-  /* APPLY OWNER */
-
-  applyForOwner: async (formData: FormData) => {
-    const response = await api.post("/users/apply-owner", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    return response.data;
-  },
-
   /* UPDATE PROFILE */
 
   updateProfile: async (formData: FormData) => {

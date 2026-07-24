@@ -58,7 +58,7 @@ router.delete("/delete-account", verifyJWT, deleteAccount);
 
 // APPLY OWNER
 router.post(
-  "/apply-owner",
+  "/become-owner",
   verifyJWT,
   upload.single("verificationDocument"),
   validate(applyOwnerValidation),

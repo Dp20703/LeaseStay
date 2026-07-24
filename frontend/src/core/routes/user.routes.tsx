@@ -4,7 +4,7 @@ import ProtectedWrapper from "@/core/wrappers/ProtectedWrapper";
 import UserLayout from "@/layouts/UserLayout";
 
 import MyBookingsPage from "@/modules/booking/pages/MyBookingsPage";
-import BecomeOwnerPage from "@/modules/user/pages/BecomeOwnerPage";
+import BecomeOwnerPage from "@/modules/owner/pages/BecomeOwnerPage";
 import PaymentPage from "@/modules/payment/pages/PaymentPage";
 import WishListPage from "@/modules/property/pages/WishListPage";
 import ProfilePage from "@/modules/user/pages/ProfilePage";
