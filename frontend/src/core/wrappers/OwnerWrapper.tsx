@@ -1,17 +1,17 @@
-import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { ROLES } from "@/shared/constants/role.constants";
 import LoaderScreen from "@/shared/components/common/LoaderScreen";
+import { ROLES } from "@/shared/constants/role.constants";
+import { Navigate, Outlet } from "react-router-dom";
 
 const OwnerWrapper = () => {
   const { user, loading } = useAuth();
-
+  
   if (loading) {
     return <LoaderScreen />;
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+       return <Navigate to="/login" replace />;
   }
 
   if (user.role !== ROLES.OWNER) {

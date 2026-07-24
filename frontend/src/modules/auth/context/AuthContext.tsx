@@ -1,11 +1,11 @@
-import { createContext, useEffect, useState } from "react";
-import type { ReactNode } from "react";
+import authAPI from "@/modules/auth/services/authService";
 import type {
-  RegisterFormData,
   LoginFormData,
+  RegisterFormData,
 } from "@/modules/auth/types/auth-form.types";
 import type { User } from "@/modules/user/types";
-import authAPI from "@/modules/auth/services/authService";
+import type { ReactNode } from "react";
+import { createContext, useEffect, useState } from "react";
 
 /* ─────────────────────────────────────────────
    TYPES
@@ -47,21 +47,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const fetchCurrentUser = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("userToken");
 
       if (!token) {
         setUser(null);
-
         return;
       }
 
       const response = await authAPI.getCurrentUser();
-
       setUser(response.data);
     } catch (error) {
-      console.log("Error:", error);
-      localStorage.removeItem("token");
+      console.log("ME ERROR:", error);
 
+      localStorage.removeItem("userToken");
       setUser(null);
     } finally {
       setLoading(false);
@@ -79,13 +77,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setLoading(true);
 
       const response = await authAPI.login(data);
-
-      console.log("response:", response);
-
       const { token, user } = response.data;
 
       localStorage.setItem("userToken", token);
-
       setUser(user);
     } finally {
       setLoading(false);
@@ -103,7 +97,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       if (token) {
         localStorage.setItem("userToken", token);
-
         setUser(user);
       }
     } finally {
@@ -139,8 +132,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     } catch (error) {
       console.log(error);
     } finally {
-      localStorage.removeItem("token");
-
+      localStorage.removeItem("userToken");
       setUser(null);
     }
   };

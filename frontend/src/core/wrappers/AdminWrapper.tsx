@@ -1,7 +1,7 @@
-import { Navigate, Outlet, useLocation } from "react-router-dom";
-import LoaderScreen from "@/shared/components/common/LoaderScreen";
 import { useAdmin } from "@/modules/admin/hooks/useAdmin";
+import LoaderScreen from "@/shared/components/common/LoaderScreen";
 import { ROLES } from "@/shared/constants/role.constants";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 const AdminWrapper = () => {
   const location = useLocation();

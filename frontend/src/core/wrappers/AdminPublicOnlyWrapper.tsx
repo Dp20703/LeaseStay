@@ -1,6 +1,6 @@
-import { Navigate, Outlet } from "react-router-dom";
-import LoaderScreen from "@/shared/components/common/LoaderScreen";
 import { useAdmin } from "@/modules/admin/hooks/useAdmin";
+import LoaderScreen from "@/shared/components/common/LoaderScreen";
+import { Navigate, Outlet } from "react-router-dom";
 
 const AdminPublicOnlyWrapper = () => {
   const { admin, loading } = useAdmin();
