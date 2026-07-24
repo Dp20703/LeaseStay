@@ -4,7 +4,7 @@ import ApiError from "../helpers/ApiError.js";
 const validate = (validations) => {
   return async (req, res, next) => {
     console.log("BEFORE VALIDATION REQ BODY:", req.body);
-    console.log("BEFORE VALIDATION REQ FILES:", req.files);
+    console.log("BEFORE VALIDATION REQ FILES:", req.file || req.files);
     await Promise.all(validations.map((validation) => validation.run(req)));
 
     const errors = validationResult(req);

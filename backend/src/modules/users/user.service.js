@@ -50,35 +50,45 @@ export const updateProfileService = async ({ userId, body, file }) => {
   // PROFILE IMAGE
 
   if (file) {
-    const oldImage = user.profileImage;
+    console.log("File in server:", file);
 
-    /* UPLOAD NEW IMAGE */
+    // Clone old image (avoid reference issues)
+    const oldImage = user.profileImage
+      ? {
+          url: user.profileImage.url,
+          publicId: user.profileImage.publicId,
+        }
+      : null;
 
+    // Upload new image first
     const { url, publicId } = await uploadToCloudinary(
       file,
       CLOUDINARY_FOLDERS.PROFILE_IMAGES,
     );
 
-    /* SAVE NEW IMAGE */
+    console.log("New Image:", { url, publicId });
 
+    // Replace MongoDB object
     user.profileImage = {
       url,
       publicId,
       uploadedAt: new Date(),
     };
 
-    /* DELETE OLD IMAGE */
-
+    // Delete old image from Cloudinary
     if (oldImage?.publicId) {
       try {
+        console.log("Deleting old image:", oldImage.publicId);
+
         await deleteFromCloudinary(oldImage.publicId);
       } catch (error) {
-        console.log("Old image delete failed:", error.message);
+        console.error("Failed to delete old image:", error.message);
       }
     }
   }
 
   // SAVE USER
+
   await user.save();
 
   user.password = undefined;
@@ -161,39 +171,43 @@ export const changeEmailService = async ({ userId, body }) => {
 // DELETE PROFIE IMAGE
 
 export const deleteProfileImageService = async (userId) => {
+  // FIND USER
+
   const user = await User.findById(userId);
 
   if (!user) {
     throw new ApiError(404, "User not found");
   }
 
-  /* PROFILE IMAGE EXISTS */
+  // PROFILE IMAGE EXISTS
 
   if (!user.profileImage?.publicId) {
     throw new ApiError(404, "Profile image not found");
   }
 
-  /* DELETE CLOUDINARY IMAGE */
+  // DELETE IMAGE FROM CLOUDINARY
 
   try {
     await deleteFromCloudinary(user.profileImage.publicId);
   } catch (error) {
-    console.log("Profile image delete failed:", error.message);
+    console.error("Profile image delete failed:", error.message);
 
     throw new ApiError(500, "Failed to delete profile image");
   }
 
-  /* REMOVE IMAGE FROM DB */
+  // REMOVE PROFILE IMAGE OBJECT FROM MONGODB
 
-  user.profileImage = {
-    url: "",
-    publicId: "",
-    uploadedAt: null,
-  };
+  user.profileImage = undefined;
+  // Alternatively:
+  // user.set("profileImage", undefined);
 
   await user.save();
 
-  return await User.findById(user._id).select("-password");
+  // REMOVE PASSWORD FROM RESPONSE
+
+  user.password = undefined;
+
+  return user;
 };
 
 // GET SAVED PROPERTIES
