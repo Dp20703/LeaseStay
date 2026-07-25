@@ -7,6 +7,7 @@ export {
   BadgeCheck,
   Bath,
   Bed,
+  BedDouble,
   Bell,
   Building,
   Building2,

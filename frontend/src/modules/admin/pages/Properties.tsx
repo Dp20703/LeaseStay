@@ -1,7 +1,8 @@
-import { AlertCircle, Home } from "lucide-react";
+import { AlertCircle, Home } from "@/shared/constants/icons";
 import React, { useState } from "react";
 import { PropertiesFilterBar } from "../components/properties/PropertiesFilterBar";
 import { PropertiesTable } from "../components/properties/PropertiesTable";
+import { PropertyDetailsDrawer } from "../components/properties/PropertyDetailsDrawer";
 import { PropertyVerificationModal } from "../components/properties/PropertyVerificationModal";
 import { useProperties } from "../hooks/useProperties";
 import type { IProperty } from "../types/properties.types";
@@ -24,17 +25,24 @@ export const Properties: React.FC = () => {
   // Local UI State for Modal and View Drawer
   const [selectedPropertyForReject, setSelectedPropertyForReject] =
     useState<IProperty | null>(null);
-  const [isRejectModalOpen, setIsRejectModalOpen] = useState<boolean>(false);
-
-  // Note: Ready for a PropertyDetailsDrawer if you decide to implement one
   const [selectedPropertyForView, setSelectedPropertyForView] =
     useState<IProperty | null>(null);
+
+  const [isViewDrawerOpen, setIsViewDrawerOpen] = useState(false);
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState<boolean>(false);
 
   // --- View Handlers ---
   const handleViewProperty = (property: IProperty) => {
     setSelectedPropertyForView(property);
-    // In the future: setIsViewDrawerOpen(true);
-    console.log("View property details:", property);
+    setIsViewDrawerOpen(true);
+  };
+
+  const handleCloseViewDrawer = () => {
+    setIsViewDrawerOpen(false);
+
+    setTimeout(() => {
+      setSelectedPropertyForView(null);
+    }, 300);
   };
 
   // --- Verification & Moderation Handlers ---
@@ -112,6 +120,12 @@ export const Properties: React.FC = () => {
         isOpen={isRejectModalOpen}
         onClose={handleCloseRejectModal}
         onConfirm={handleConfirmReject}
+      />
+
+      <PropertyDetailsDrawer
+        property={selectedPropertyForView}
+        isOpen={isViewDrawerOpen}
+        onClose={handleCloseViewDrawer}
       />
     </div>
   );
