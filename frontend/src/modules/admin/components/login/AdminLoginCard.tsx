@@ -15,7 +15,7 @@ import type {
 import { Mail, Shield } from "@/shared/constants/icons";
 
 import { ThemeToggle } from "@/shared/components/layout/navbar/common";
-import { useAdmin } from "../../hooks/useAdmin";
+import { useAdmin } from "../../hooks";
 
 const AdminLoginCard = () => {
   const navigate = useNavigate();

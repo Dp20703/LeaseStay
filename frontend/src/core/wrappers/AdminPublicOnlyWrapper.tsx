@@ -1,4 +1,4 @@
-import { useAdmin } from "@/modules/admin/hooks/useAdmin";
+import { useAdmin } from "@/modules/admin/hooks";
 import LoaderScreen from "@/shared/components/common/LoaderScreen";
 import { Navigate, Outlet } from "react-router-dom";
 

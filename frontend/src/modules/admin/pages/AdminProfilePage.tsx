@@ -14,7 +14,7 @@ const formatFullName = (name: any): string => {
 };
 
 export const AdminProfilePage: React.FC = () => {
-  const { admin, setAdmin } = useAdmin;
+  const { admin, setAdmin } = useAdmin();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   if (isLoading) {

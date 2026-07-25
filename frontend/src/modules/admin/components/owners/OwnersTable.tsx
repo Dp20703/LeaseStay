@@ -28,7 +28,8 @@ export const OwnersTable: React.FC<OwnersTableProps> = ({
   onApprove,
   onReject,
 }) => {
-  // Loading State
+  console.log("owners in table:", owners);
+
   if (isLoading) {
     return (
       <div className="ls-table-wrapper">

@@ -15,8 +15,8 @@ import {
 import { Fragment } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { useAdmin } from "../../hooks/useAdmin";
 import { toast } from "react-toastify";
+import { useAdmin } from "../../hooks";
 
 const AdminProfileDropdown = () => {
   const navigate = useNavigate();

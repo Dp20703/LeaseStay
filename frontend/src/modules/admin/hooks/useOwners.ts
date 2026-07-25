@@ -14,7 +14,7 @@ export const useOwners = () => {
     limit: 10,
   });
 
-  // Fetch initial data
+  // Fetch ALL initial data
   const fetchOwners = useCallback(async () => {
     setIsLoading(true);
     setError(null);
@@ -41,9 +41,36 @@ export const useOwners = () => {
     }
   }, []);
 
+  // Fetch ONLY Pending Owner Verifications
+  const fetchPendingOwnerVerifications = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const data = await adminOwnerService.getPendingOwnerVerifications();
+
+      let ownerArray: IOwner[] = [];
+      if (Array.isArray(data)) {
+        ownerArray = data;
+      } else if (data && Array.isArray(data.data)) {
+        ownerArray = data.data;
+      }
+
+      setOwners(ownerArray);
+    } catch (err: any) {
+      const errorMessage =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to fetch pending owner verifications.";
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
+    fetchPendingOwnerVerifications();
     fetchOwners();
-  }, [fetchOwners]);
+  }, [fetchOwners, fetchPendingOwnerVerifications]);
 
   // Handle Approve Owner Verification with Optimistic UI Update
   const approveOwner = async (userId: string) => {
@@ -140,5 +167,6 @@ export const useOwners = () => {
     approveOwner,
     rejectOwner,
     refreshOwners: fetchOwners,
+    fetchPendingOwnerVerifications,
   };
 };

@@ -4,7 +4,7 @@ import { OwnerDetailsDrawer } from "../components/owners/OwnerDetailsDrawer";
 import { OwnersFilterBar } from "../components/owners/OwnersFilterBar";
 import { OwnersTable } from "../components/owners/OwnersTable";
 import { OwnerVerificationModal } from "../components/owners/OwnerVerificationModal";
-import { useOwners } from "../hooks/useOwners";
+import { useOwners } from "../hooks";
 import type { IOwner } from "../types/owners.types";
 
 export const OwnersPage: React.FC = () => {
@@ -42,6 +42,7 @@ export const OwnersPage: React.FC = () => {
 
   // --- Verification Handlers ---
   const handleApprove = (ownerId: string) => {
+    console.log("handle approved:", ownerId);
     approveOwner(ownerId);
   };
 

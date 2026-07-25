@@ -50,8 +50,7 @@ router.get(
 
 router.patch(
   "/owner-verifications/:userId/approve",
-  approveOwnerVerificationValidation,
-  validate,
+  validate(approveOwnerVerificationValidation),
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
   AdminController.approveOwnerVerification,
@@ -59,8 +58,7 @@ router.patch(
 
 router.patch(
   "/owner-verifications/:userId/reject",
-  rejectOwnerVerificationValidation,
-  validate,
+  validate(rejectOwnerVerificationValidation),
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
   AdminController.rejectOwnerVerification,
@@ -76,8 +74,7 @@ router.get(
 
 router.patch(
   "/property-verifications/:propertyId/approve",
-  approvePropertyVerificationValidation,
-  validate,
+  validate(approvePropertyVerificationValidation),
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
   AdminController.approvePropertyVerification,
@@ -85,8 +82,7 @@ router.patch(
 
 router.patch(
   "/property-verifications/:propertyId/reject",
-  rejectPropertyVerificationValidation,
-  validate,
+  validate(rejectPropertyVerificationValidation),
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
   AdminController.rejectPropertyVerification,
