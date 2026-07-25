@@ -1,4 +1,4 @@
-import PropertyAmenities from "./PropertyAmenities";
+import { PropertyAmenities } from "../types";
 
 interface Props {
   selectedAmenities: string[];

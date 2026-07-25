@@ -6,10 +6,7 @@ export type PropertyStatus =
   | "Hidden"
   | "Inactive";
 
-export type PropertyAvailabilityStatus =
-  | "available"
-  | "occupied"
-  | "reserved";
+export type PropertyAvailabilityStatus = "available" | "occupied" | "reserved";
 
 export type PropertyType =
   | "Apartment"

@@ -21,7 +21,7 @@ export const SettingsPage: React.FC = () => {
   } = useSettings();
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto animate-fade-in p-10">
+    <div className="space-y-6 max-w-4xl mx-auto animate-fade-in">
       {/* Page Header */}
       <div>
         <h1 className="text-2xl font-bold text-text-light dark:text-text-dark flex items-center gap-2">

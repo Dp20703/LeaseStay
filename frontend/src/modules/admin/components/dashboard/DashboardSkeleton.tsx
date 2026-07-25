@@ -1,6 +1,6 @@
 const DashboardSkeleton = () => {
   return (
-    <div className="space-y-8 animate-pulse p-10">
+    <div className="space-y-8 animate-pulse">
       <div className="space-y-3">
         <div className="h-8 w-56 rounded bg-muted" />
         <div className="h-4 w-80 rounded bg-muted" />

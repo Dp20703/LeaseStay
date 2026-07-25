@@ -40,7 +40,6 @@ const DetailRow = ({ icon, label, value }: any) => (
 
     <div>
       <p className="text-sm text-muted-foreground">{label}</p>
-
       <p className="font-semibold">{value}</p>
     </div>
   </div>

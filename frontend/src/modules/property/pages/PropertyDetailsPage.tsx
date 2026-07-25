@@ -11,7 +11,6 @@ import LoaderScreen from "@/shared/components/common/LoaderScreen";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { PropertyAmenitiesDetails } from "../components/PropertyAmenitiesDetails";
 import PropertyAmenities from "../components/PropertyAmenities";
 
 const PropertyDetailsPage = () => {
@@ -90,9 +89,8 @@ const PropertyDetailsPage = () => {
           showContact={showContact}
           setShowContact={setShowContact}
         />
-
-        <RelatedProperties propertyId={property._id} />
       </div>
+      <RelatedProperties propertyId={property._id} />
 
       {shareOpen && (
         <PropertyShareModal

@@ -1,8 +1,10 @@
 import {
+  MobileMenuButton,
   NavbarLogo,
+  NotificationButton,
+  SearchInput,
   ThemeToggle,
 } from "@/shared/components/layout/navbar/common";
-import { Bell, Menu, Search } from "@/shared/constants/icons";
 import { useState } from "react";
 import AdminProfileDropdown from "./AdminProfileDropdown";
 
@@ -19,15 +21,7 @@ const AdminNavbar = ({ onSidebarToggle }: AdminNavbarProps) => {
         {/* LEFT */}
 
         <div className="flex items-center gap-4">
-          <button
-            type="button"
-            aria-label="Open sidebar"
-            onClick={onSidebarToggle}
-            className="rounded-xl p-2 transition-colors hover:bg-surface-light dark:hover:bg-surface-dark lg:hidden"
-          >
-            <Menu size={22} />
-          </button>
-
+          <MobileMenuButton onClick={onSidebarToggle} />
           <NavbarLogo admin />
         </div>
 
@@ -35,17 +29,10 @@ const AdminNavbar = ({ onSidebarToggle }: AdminNavbarProps) => {
 
         <div className="hidden flex-1 justify-center xl:flex">
           <div className="relative w-full max-w-xl">
-            <Search
-              size={18}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"
-            />
-
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+            <SearchInput
               placeholder="Search users, owners, properties..."
-              className="ls-input pl-11"
+              value={search}
+              setSearch={setSearch}
             />
           </div>
         </div>
@@ -54,17 +41,7 @@ const AdminNavbar = ({ onSidebarToggle }: AdminNavbarProps) => {
 
         <div className="flex items-center gap-2 lg:gap-3">
           <ThemeToggle />
-
-          <button
-            type="button"
-            aria-label="Notifications"
-            className="relative rounded-xl p-2 transition-colors hover:bg-primary hover:text-white dark:hover:bg-primary"
-          >
-            <Bell size={20} />
-
-            <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500" />
-          </button>
-
+          <NotificationButton />
           <AdminProfileDropdown />
         </div>
       </div>

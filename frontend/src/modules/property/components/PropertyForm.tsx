@@ -20,7 +20,6 @@ interface PropertyFormProps {
 
 const PropertyForm = ({ loading, onSubmit }: PropertyFormProps) => {
   const [images, setImages] = useState<FileList | null>(null);
-
   const [documents, setDocuments] = useState<FileList | null>(null);
 
   const [fileErrors, setFileErrors] = useState({

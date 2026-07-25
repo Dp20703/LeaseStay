@@ -41,7 +41,6 @@ export const PropertiesTable: React.FC<PropertiesTableProps> = ({
   onHide,
   onRestore,
 }) => {
-  // Loading State
   if (isLoading) {
     return (
       <div className="ls-table-wrapper">
@@ -211,7 +210,7 @@ export const PropertiesTable: React.FC<PropertiesTableProps> = ({
 
                 {/* Price */}
                 <td className="text-sm font-semibold text-text-light dark:text-text-dark">
-                  ${property.price.toLocaleString()}
+                  ₹{property.price.toLocaleString()}
                 </td>
 
                 {/* Actions */}

@@ -1,5 +1,6 @@
 import { Edit3, Mail, Shield, User } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useAdmin } from "../hooks";
 
 const formatFullName = (name: any): string => {
@@ -14,16 +15,9 @@ const formatFullName = (name: any): string => {
 };
 
 export const AdminProfilePage: React.FC = () => {
-  const { admin, setAdmin } = useAdmin();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { admin } = useAdmin();
 
-  if (isLoading) {
-    return (
-      <div className="ls-container py-12 flex justify-center items-center min-h-[50vh]">
-        <div className="ls-spinner"></div>
-      </div>
-    );
-  }
+  const navigate = useNavigate();
 
   const displayName = formatFullName(admin?.fullName);
   const displayEmail = admin?.email || "";
@@ -31,7 +25,7 @@ export const AdminProfilePage: React.FC = () => {
   const avatarUrl = admin?.profileImage?.url;
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 animate-fade-in py-6 p-10">
+    <div className="max-w-2xl mx-auto space-y-6 animate-fade-in py-6">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-text-light dark:text-text-dark flex items-center gap-2">
