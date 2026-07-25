@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
-import adminService from "../services/adminService";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { adminPaymentService } from "../services";
 import type { IPayment, IPaymentsFilterState } from "../types/payments.types";
 
 export const usePayments = () => {
@@ -20,8 +20,8 @@ export const usePayments = () => {
     setError(null);
     try {
       const [paymentsRes, statsRes] = await Promise.all([
-        adminService.getPayments(),
-        adminService.getPaymentStats(),
+        adminPaymentService.getPayments(),
+        adminPaymentService.getPaymentStats(),
       ]);
 
       const paymentArray = Array.isArray(paymentsRes)

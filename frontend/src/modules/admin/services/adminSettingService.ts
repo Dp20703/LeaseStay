@@ -5,7 +5,7 @@ import type {
   ISecurityPayload,
 } from "../types/settings.types";
 
-const settingsService = {
+const adminSettingsService = {
   updateProfile: async (data: IAdminProfile) => {
     const response = await api.patch("/admin/settings/profile", data);
     return response.data;
@@ -22,4 +22,4 @@ const settingsService = {
   },
 };
 
-export default settingsService;
+export default adminSettingsService;

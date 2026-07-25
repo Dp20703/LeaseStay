@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import adminService from "../services/adminService";
+import { adminOwnerService } from "../services";
 import type { IOwner, IOwnersFilterState } from "../types/owners.types";
 
 export const useOwners = () => {
@@ -19,7 +19,7 @@ export const useOwners = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await adminService.getOwners();
+      const data = await adminOwnerService.getOwners();
 
       // Robust array extraction to prevent .map/.filter crashes
       let ownerArray: IOwner[] = [];
@@ -54,7 +54,7 @@ export const useOwners = () => {
           o._id === userId ? { ...o, ownerVerificationStatus: "approved" } : o,
         ),
       );
-      await adminService.approveOwnerVerification(userId);
+      await adminOwnerService.approveOwnerVerification(userId);
     } catch (err) {
       // Revert on failure
       fetchOwners();
@@ -76,7 +76,7 @@ export const useOwners = () => {
             : o,
         ),
       );
-      await adminService.rejectOwnerVerification(userId, reason);
+      await adminOwnerService.rejectOwnerVerification(userId, reason);
     } catch (err) {
       // Revert on failure
       fetchOwners();

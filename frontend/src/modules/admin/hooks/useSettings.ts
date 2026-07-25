@@ -1,5 +1,5 @@
 import { useState } from "react";
-import settingsService from "../services/settingService";
+import { adminSettingsService } from "../services";
 import type {
   IPlatformPreferences,
   ISecurityPayload,
@@ -34,7 +34,7 @@ export const useSettings = () => {
     setError(null);
     setSuccessMessage(null);
     try {
-      await settingsService.updateProfile(profile);
+      await adminSettingsService.updateProfile(profile);
       setSuccessMessage("Profile updated successfully.");
     } catch (err: any) {
       setError(err?.response?.data?.message || "Failed to update profile.");
@@ -53,7 +53,7 @@ export const useSettings = () => {
     setError(null);
     setSuccessMessage(null);
     try {
-      await settingsService.updatePassword(security);
+      await adminSettingsService.updatePassword(security);
       setSuccessMessage("Password updated successfully.");
       setSecurity({
         currentPassword: "",
@@ -71,7 +71,7 @@ export const useSettings = () => {
     const updated = { ...preferences, [key]: !preferences[key] };
     setPreferences(updated);
     try {
-      await settingsService.updatePreferences(updated);
+      await adminSettingsService.updatePreferences(updated);
     } catch (err) {
       console.error("Failed to update preferences", err);
     }

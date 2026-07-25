@@ -1,16 +1,20 @@
-import { createContext, useEffect, useState } from "react";
-import type { ReactNode } from "react";
-
-import adminService from "@/modules/admin/services/adminService";
-
-import type { User } from "@/modules/user/types";
 import type { LoginFormData } from "@/modules/auth/types/auth-form.types";
+import type { User } from "@/modules/user/types";
+import type { ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { adminAuthService } from "../services";
 
 /* ─────────────────────────────────────────────
    TYPES
 ───────────────────────────────────────────── */
 
-interface AdminContextType {
+export interface AdminContextType {
   admin: User | null;
   loading: boolean;
 
@@ -45,41 +49,42 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
      FETCH CURRENT ADMIN
   ───────────────────────────────────────────── */
 
-  const fetchCurrentAdmin = async () => {
+  const fetchCurrentAdmin = useCallback(async () => {
     try {
       const token = localStorage.getItem("adminToken");
 
       if (!token) {
         setAdmin(null);
+        setLoading(false);
         return;
       }
 
-      const response = await adminService.me();
+      const response = await adminAuthService.me();
 
       setAdmin(response.data);
     } catch (error) {
-      console.log("fetchCurrentAdmin catch error:", error);
-      localStorage.removeItem("adminToken");
+      console.error("Failed to fetch current admin:", error);
 
+      localStorage.removeItem("adminToken");
       setAdmin(null);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchCurrentAdmin();
-  }, []);
+  }, [fetchCurrentAdmin]);
 
   /* ─────────────────────────────────────────────
      LOGIN
   ───────────────────────────────────────────── */
 
-  const adminLogin = async (data: LoginFormData) => {
+  const adminLogin = useCallback(async (data: LoginFormData) => {
     try {
       setLoading(true);
 
-      const response = await adminService.login(data);
+      const response = await adminAuthService.login(data);
 
       const { token, user } = response.data;
 
@@ -89,36 +94,40 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   /* ─────────────────────────────────────────────
      LOGOUT
   ───────────────────────────────────────────── */
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     try {
-      await adminService.logout();
+      await adminAuthService.logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
     } finally {
       localStorage.removeItem("adminToken");
-
       setAdmin(null);
     }
-  };
+  }, []);
+
+  /* ─────────────────────────────────────────────
+     VALUES
+  ───────────────────────────────────────────── */
+
+  const value = useMemo(
+    () => ({
+      admin,
+      loading,
+      adminLogin,
+      logout,
+      fetchCurrentAdmin,
+      setAdmin,
+    }),
+    [admin, loading, adminLogin, logout, fetchCurrentAdmin],
+  );
 
   return (
-    <AdminContext.Provider
-      value={{
-        admin,
-        loading,
-
-        adminLogin,
-        logout,
-
-        fetchCurrentAdmin,
-        setAdmin,
-      }}
-    >
-      {children}
-    </AdminContext.Provider>
+    <AdminContext.Provider value={value}>{children}</AdminContext.Provider>
   );
 };

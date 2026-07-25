@@ -1,39 +1,35 @@
 import type { LucideIcon } from "lucide-react";
 
-export interface DashboardData {
-  // Stat Cards
+export interface AdminDashboardData {
+  // KPI Cards
   totalUsers: number;
   totalOwners: number;
   totalProperties: number;
   totalBookings: number;
   totalPayments: number;
+  totalRevenue: number;
 
-  // Small Stats
+  // Pending
   pendingOwnerVerifications: number;
   pendingPropertyVerifications: number;
 
+  // Property Stats
   approvedProperties: number;
   rejectedProperties: number;
   hiddenProperties: number;
 
-  // These aren't returned yet by the backend
+  // Growth
   newUsersThisWeek?: number;
   bookingGrowth?: number;
   paymentGrowth?: number;
 
-  // Revenue
-  totalRevenue?: number;
-
-  monthlyRevenue: MonthlyRevenue[];
-
   // Charts
+  monthlyRevenue: MonthlyRevenue[];
   propertyStatus: PropertyStatus;
 
-  // Lists
+  // Tables
   recentActivities: Activity[];
-
   pendingOwnerList: PendingOwner[];
-
   pendingPropertyList: PendingProperty[];
 }
 

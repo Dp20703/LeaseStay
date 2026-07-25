@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import adminService from "../services/adminService";
+import { adminPropertyService } from "../services";
 import type {
   IPropertiesFilterState,
   IProperty,
@@ -22,7 +22,7 @@ export const useProperties = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await adminService.getProperties();
+      const data = await adminPropertyService.getProperties();
 
       // Robust array extraction to prevent crashes
       let propertyArray: IProperty[] = [];
@@ -57,7 +57,7 @@ export const useProperties = () => {
           p._id === propertyId ? { ...p, status: "Approved" } : p,
         ),
       );
-      await adminService.approveProperty(propertyId);
+      await adminPropertyService.approveProperty(propertyId);
     } catch (err) {
       fetchProperties(); // Revert on failure
       console.error("Failed to approve property", err);
@@ -73,7 +73,7 @@ export const useProperties = () => {
             : p,
         ),
       );
-      await adminService.rejectProperty(propertyId, reason);
+      await adminPropertyService.rejectProperty(propertyId, reason);
     } catch (err) {
       fetchProperties(); // Revert
       console.error("Failed to reject property", err);
@@ -87,7 +87,7 @@ export const useProperties = () => {
           p._id === propertyId ? { ...p, status: "Hidden" } : p,
         ),
       );
-      await adminService.hideProperty(propertyId);
+      await adminPropertyService.hideProperty(propertyId);
     } catch (err) {
       fetchProperties(); // Revert
       console.error("Failed to hide property", err);
@@ -101,7 +101,7 @@ export const useProperties = () => {
           p._id === propertyId ? { ...p, status: "Approved" } : p,
         ),
       );
-      await adminService.restoreProperty(propertyId);
+      await adminPropertyService.restoreProperty(propertyId);
     } catch (err) {
       fetchProperties(); // Revert
       console.error("Failed to restore property", err);

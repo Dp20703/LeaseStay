@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import adminService from "../services/adminService";
+import { adminUserService } from "../services";
 import type { IUser, IUsersFilterState } from "../types/users.types";
 
 export const useUsers = () => {
@@ -19,7 +19,7 @@ export const useUsers = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await adminService.getUsers();
+      const data = await adminUserService.getUsers();
 
       // Robust array extraction to guarantee users is always an array
       let userArray: IUser[] = [];
@@ -57,9 +57,9 @@ export const useUsers = () => {
       );
 
       if (currentStatus) {
-        await adminService.unblockUser(userId);
+        await adminUserService.unblockUser(userId);
       } else {
-        await adminService.blockUser(userId);
+        await adminUserService.blockUser(userId);
       }
     } catch (err) {
       // Revert on failure

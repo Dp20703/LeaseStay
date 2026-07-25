@@ -5,10 +5,10 @@ import {
   DashboardSkeleton,
   DashboardStats,
 } from "../components/dashboard";
-import useDashboard from "../hooks/useDashboard";
+import { useDashboard } from "../hooks";
 
 const Dashboard = () => {
-  const { dashboard, loading, refresh } = useDashboard();
+  const { dashboard, loading, refreshDashboard } = useDashboard();
   console.log("dashboard:", dashboard);
   if (loading) {
     return <DashboardSkeleton />;
@@ -16,7 +16,7 @@ const Dashboard = () => {
 
   return (
     <section className="space-y-8 p-10">
-      <DashboardHeader refresh={refresh} />
+      <DashboardHeader refresh={refreshDashboard} />
       <DashboardStats stats={dashboard} />
       <DashboardCharts dashboard={dashboard} />
       <DashboardBottom dashboard={dashboard} />

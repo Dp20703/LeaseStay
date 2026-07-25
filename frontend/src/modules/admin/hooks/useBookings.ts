@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import adminService from "../services/adminService";
+import { adminBookingService } from "../services";
 import type { IBooking, IBookingsFilterState } from "../types/bookings.types";
 
 export const useBookings = () => {
@@ -19,7 +19,7 @@ export const useBookings = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await adminService.getBookings();
+      const data = await adminBookingService.getBookings();
 
       // Robust array extraction to prevent crashes
       let bookingArray: IBooking[] = [];
@@ -58,7 +58,7 @@ export const useBookings = () => {
           b._id === bookingId ? { ...b, status: newStatus } : b,
         ),
       );
-      await adminService.updateBookingStatus(bookingId, newStatus);
+      await adminBookingService.updateBookingStatus(bookingId, newStatus);
     } catch (err) {
       fetchBookings(); // Revert on failure
       console.error("Failed to update booking status", err);
@@ -76,7 +76,10 @@ export const useBookings = () => {
           b._id === bookingId ? { ...b, paymentStatus: newPaymentStatus } : b,
         ),
       );
-      await adminService.updatePaymentStatus(bookingId, newPaymentStatus);
+      await adminBookingService.updatePaymentStatus(
+        bookingId,
+        newPaymentStatus,
+      );
     } catch (err) {
       fetchBookings(); // Revert
       console.error("Failed to update payment status", err);

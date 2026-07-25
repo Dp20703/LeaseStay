@@ -16,6 +16,7 @@ import { Fragment } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useAdmin } from "../../hooks/useAdmin";
+import { toast } from "react-toastify";
 
 const AdminProfileDropdown = () => {
   const navigate = useNavigate();
@@ -25,8 +26,12 @@ const AdminProfileDropdown = () => {
   const handleLogout = async () => {
     await logout();
 
-    navigate("/admin/login", {
-      replace: true,
+    toast.success("Logout Successfully!", {
+      onClose: () => {
+        navigate("/admin/login", {
+          replace: true,
+        });
+      },
     });
   };
 

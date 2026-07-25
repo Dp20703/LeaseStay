@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { User, Mail, Shield, Edit3 } from "lucide-react";
-import adminService from "../services/adminService";
+import { Edit3, Mail, Shield, User } from "lucide-react";
+import React, { useState } from "react";
+import { useAdmin } from "../hooks";
 
 const formatFullName = (name: any): string => {
   if (!name) return "Administrator";
@@ -15,25 +14,8 @@ const formatFullName = (name: any): string => {
 };
 
 export const AdminProfilePage: React.FC = () => {
-  const navigate = useNavigate();
-  const [admin, setAdmin] = useState<any>(null);
+  const { admin, setAdmin } = useAdmin;
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const fetchAdminProfile = async () => {
-      try {
-        const response = await adminService.me();
-        const userData = response?.data || response?.user || response;
-        setAdmin(userData);
-      } catch (err) {
-        console.error("Failed to fetch admin profile", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchAdminProfile();
-  }, []);
 
   if (isLoading) {
     return (

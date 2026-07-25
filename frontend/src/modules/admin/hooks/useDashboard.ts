@@ -1,30 +1,36 @@
-import { useEffect, useState } from "react";
-import { getDashboardStats } from "../services/dashboardService";
+import { useCallback, useEffect, useState } from "react";
+import { adminDashboardService } from "../services";
+import type { AdminDashboardData } from "../types";
 
-const useDashboard = () => {
-  const [dashboard, setDashboard] = useState(null);
-
+export const useDashboard = () => {
+  const [dashboard, setDashboard] = useState<AdminDashboardData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const fetchDashboard = async () => {
+  const fetchDashboard = useCallback(async () => {
     try {
-      const response = await getDashboardStats();
+      setLoading(true);
+      setError(null);
 
-      setDashboard(response);
+      const response = await adminDashboardService.getDashboardStats();
+
+      setDashboard(response.data);
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Failed to load dashboard.");
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchDashboard();
-  }, []);
+  }, [fetchDashboard]);
 
   return {
     dashboard,
     loading,
-    refresh: fetchDashboard,
+    error,
+    fetchDashboard,
+    refreshDashboard: fetchDashboard,
   };
 };
-
-export default useDashboard;
