@@ -10,12 +10,17 @@ const AdminLayout = () => {
 
   return (
     <div className="min-h-screen bg-surface-light dark:bg-surface-dark">
-      <AdminNavbar />
+      <AdminNavbar onSidebarToggle={() => setMobileOpen(true)} />
 
       <div className="flex h-[calc(100vh-4rem)]">
         <AdminSidebar />
 
-        <main className="flex-1 overflow-y-auto overflow-x-auto p-6">
+        <AdminMobileSidebar
+          open={mobileOpen}
+          onClose={() => setMobileOpen(false)}
+        />
+
+        <main className="flex-1 min-w-0 overflow-auto p-6">
           <Outlet />
         </main>
       </div>

@@ -3,7 +3,7 @@ import { asyncHandler, ApiResponse } from "../../helpers/index.js";
 
 export const createOrder = asyncHandler(async (req, res) => {
   const result = await paymentService.createOrder(
-    req.user.id,
+    req.user._id,
     req.body.bookingId,
   );
 
@@ -21,7 +21,7 @@ export const verifyPayment = asyncHandler(async (req, res) => {
 });
 
 export const getMyPayments = asyncHandler(async (req, res) => {
-  const payments = await paymentService.getMyPayments(req.user.id);
+  const payments = await paymentService.getMyPayments(req.user._id);
 
   return res
     .status(200)
@@ -42,7 +42,7 @@ export const getPaymentById = asyncHandler(async (req, res) => {
 export const getPropertyPayments = asyncHandler(async (req, res) => {
   const payments = await paymentService.getPropertyPayments(
     req.params.propertyId,
-    req.user.id,
+    req.user._id,
   );
 
   return res

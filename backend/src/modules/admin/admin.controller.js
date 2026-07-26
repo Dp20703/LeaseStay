@@ -54,7 +54,7 @@ export const fetchAllProperties = asyncHandler(async (req, res) => {
 // GET PENDING OWNER VERIFICATIONS
 export const getPendingOwnerVerifications = asyncHandler(async (req, res) => {
   const users = await AdminService.getPendingOwnerVerificationsService();
-  console.log("Pending owners verification:", users);
+
   return res
     .status(200)
     .json(
@@ -69,7 +69,7 @@ export const getPendingOwnerVerifications = asyncHandler(async (req, res) => {
 // APPROVE OWNER VERIFICATION
 export const approveOwnerVerification = asyncHandler(async (req, res) => {
   const { userId } = req.params;
-  console.log("userid:", userId);
+
   if (!userId) {
     throw new ApiError(400, "User ID is required");
   }

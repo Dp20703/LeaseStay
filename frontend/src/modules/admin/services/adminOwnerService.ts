@@ -32,7 +32,7 @@ const adminOwnerService = {
         reason,
       },
     );
-
+    console.log("respnse of rejection:", response);
     return response.data;
   },
 };

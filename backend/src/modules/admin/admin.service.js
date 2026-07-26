@@ -61,6 +61,9 @@ export const rejectOwnerVerificationService = async (
   adminId,
   reason,
 ) => {
+  console.log("userid:",userId)
+  console.log("adminId:",adminId)
+  console.log("reason:",reason)
   const user = await User.findById(userId);
 
   if (!user) {

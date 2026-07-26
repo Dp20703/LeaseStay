@@ -101,8 +101,8 @@ export const UsersTable: React.FC<UsersTableProps> = ({
         </thead>
         <tbody>
           {users.map((user) => {
-            const displayName = formatFullName(user.fullName); // Safely parse name
-
+            const displayName = formatFullName(user.fullName);
+            console.log(("Role:", user.role));
             return (
               <tr key={user._id}>
                 <td>

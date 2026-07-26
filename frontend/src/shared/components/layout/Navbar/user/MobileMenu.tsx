@@ -1,10 +1,8 @@
-import { X } from "lucide-react";
-import { NavLink } from "react-router-dom";
-
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-
-import ThemeToggle from "../common/ThemeToggle";
+import { X } from "@/shared/constants/icons";
+import { NavLink } from "react-router-dom";
 import { NavbarLogo } from "../common";
+import ThemeToggle from "../common/ThemeToggle";
 
 interface MobileMenuProps {
   isOpen: boolean;
