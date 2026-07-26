@@ -1,39 +1,67 @@
 import api from "@/core/api/axios";
 
+import type { IOwner } from "../types/owners.types";
+
+/* ─────────────────────────────────────────────
+   TYPES
+───────────────────────────────────────────── */
+
+export interface OwnersResponse {
+  data: IOwner[];
+}
+
+export interface OwnerResponse {
+  data: IOwner;
+}
+
+/* ─────────────────────────────────────────────
+   OWNER API
+───────────────────────────────────────────── */
+
 const adminOwnerService = {
-  /* ─────────────────────────────────────────────
-     OWNERS
-  ───────────────────────────────────────────── */
+  /* ALL OWNERS */
 
-  getOwners: async () => {
-    const response = await api.get("/admin/owners");
-    console.log("All owners res:", response);
-    return response.data;
+  getOwners: async (): Promise<IOwner[]> => {
+    const { data } = await api.get<OwnersResponse>("/admin/owners");
+
+    return data.data;
   },
 
-  getPendingOwnerVerifications: async () => {
-    const response = await api.get("/admin/owner-verifications/pending");
+  /* PENDING OWNER VERIFICATIONS */
 
-    return response.data;
+  getPendingOwnerVerifications: async (): Promise<IOwner[]> => {
+    const { data } = await api.get<OwnersResponse>(
+      "/admin/owner-verifications/pending",
+    );
+
+    return data.data;
   },
 
-  approveOwnerVerification: async (userId: string) => {
-    const response = await api.patch(
+  /* APPROVE OWNER */
+
+  approveOwnerVerification: async (userId: string): Promise<IOwner> => {
+    const { data } = await api.patch<OwnerResponse>(
       `/admin/owner-verifications/${userId}/approve`,
     );
 
-    return response.data;
+    return data.data;
   },
 
-  rejectOwnerVerification: async (userId: string, reason: string) => {
-    const response = await api.patch(
+  /* REJECT OWNER */
+
+  rejectOwnerVerification: async (
+    userId: string,
+    reason: string,
+  ): Promise<IOwner> => {
+    const { data } = await api.patch<OwnerResponse>(
       `/admin/owner-verifications/${userId}/reject`,
       {
         reason,
       },
     );
-    console.log("respnse of rejection:", response);
-    return response.data;
+
+    return data.data;
   },
 };
+
 export default adminOwnerService;

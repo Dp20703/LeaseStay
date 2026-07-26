@@ -19,17 +19,9 @@ export const useOwners = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await adminOwnerService.getOwners();
+      const owners = await adminOwnerService.getOwners();
 
-      // Robust array extraction to prevent .map/.filter crashes
-      let ownerArray: IOwner[] = [];
-      if (Array.isArray(data)) {
-        ownerArray = data;
-      } else if (data && Array.isArray(data.data)) {
-        ownerArray = data.data;
-      }
-
-      setOwners(ownerArray);
+      setOwners(owners);
     } catch (err: any) {
       const errorMessage =
         err?.response?.data?.message ||
@@ -46,16 +38,9 @@ export const useOwners = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await adminOwnerService.getPendingOwnerVerifications();
+      const owners = await adminOwnerService.getPendingOwnerVerifications();
 
-      let ownerArray: IOwner[] = [];
-      if (Array.isArray(data)) {
-        ownerArray = data;
-      } else if (data && Array.isArray(data.data)) {
-        ownerArray = data.data;
-      }
-
-      setOwners(ownerArray);
+      setOwners(owners);
     } catch (err: any) {
       const errorMessage =
         err?.response?.data?.message ||
@@ -68,46 +53,28 @@ export const useOwners = () => {
   }, []);
 
   useEffect(() => {
-    fetchPendingOwnerVerifications();
     fetchOwners();
-  }, [fetchOwners, fetchPendingOwnerVerifications]);
+  }, [fetchOwners]);
 
   // Handle Approve Owner Verification with Optimistic UI Update
   const approveOwner = async (userId: string) => {
     try {
-      // Optimistically update the UI to feel instant
-      setOwners((prev) =>
-        prev.map((o) =>
-          o._id === userId ? { ...o, ownerVerificationStatus: "approved" } : o,
-        ),
-      );
       await adminOwnerService.approveOwnerVerification(userId);
+
+      await fetchOwners();
     } catch (err) {
-      // Revert on failure
-      fetchOwners();
-      console.error("Failed to approve owner", err);
+      console.error(err);
     }
   };
 
   // Handle Reject Owner Verification with Optimistic UI Update
   const rejectOwner = async (userId: string, reason: string) => {
     try {
-      setOwners((prev) =>
-        prev.map((o) =>
-          o._id === userId
-            ? {
-                ...o,
-                ownerVerificationStatus: "rejected",
-                ownerVerificationRejectedReason: reason,
-              }
-            : o,
-        ),
-      );
       await adminOwnerService.rejectOwnerVerification(userId, reason);
+
+      await fetchOwners();
     } catch (err) {
-      // Revert on failure
-      fetchOwners();
-      console.error("Failed to reject owner", err);
+      console.error(err);
     }
   };
 

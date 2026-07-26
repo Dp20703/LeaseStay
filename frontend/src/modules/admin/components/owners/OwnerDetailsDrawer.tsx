@@ -37,7 +37,7 @@ export const OwnerDetailsDrawer: React.FC<OwnerDetailsDrawerProps> = ({
   const displayName = formatFullName(owner.fullName);
 
   return (
-    <div className="ls-overlay" onClick={onClose}>
+    <div className="ls-overlay py-4" onClick={onClose}>
       <div
         className="ls-modal w-full max-w-md ml-auto mr-0 h-full max-h-screen rounded-none sm:rounded-l-2xl flex flex-col animate-slide-down sm:animate-none"
         onClick={(e) => e.stopPropagation()}
