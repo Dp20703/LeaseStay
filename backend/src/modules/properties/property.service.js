@@ -1,9 +1,10 @@
-import { CLOUDINARY_FOLDERS } from "../../constants/index.js";
-import { ROLES } from "../../constants/roles.constants.js";
+import { CLOUDINARY_FOLDERS, ROLES } from "../../constants/index.js";
 import { ApiError } from "../../helpers/index.js";
 import QueryBuilder from "../../helpers/queryBuilder.js";
-import deleteFromCloudinary from "../../utils/cloudinary/deleteFromCloudinary.js";
-import uploadToCloudinary from "../../utils/cloudinary/uploadToCloudinary.js";
+import {
+  deleteFromCloudinary,
+  uploadToCloudinary,
+} from "../../utils/cloudinary/index.js";
 import { sendMail } from "../../utils/mail/sendMail.js";
 import {
   deleteCache,
@@ -121,7 +122,11 @@ export const createPropertyService = async ({ body, files, ownerId }) => {
 
 // Fetch approved properties with filtering, search, sorting, and pagination.
 export const getAllPropertiesService = async (queryString) => {
-  const cacheKey = `properties:${new URLSearchParams(queryString || {}).toString() || "all"}`;
+  const cacheKey = `properties:${
+    new URLSearchParams(queryString || {}).toString() || "all"
+  }`;
+
+  /* CHECK CACHE */
 
   const cachedProperties = await getCache(cacheKey);
 
@@ -134,18 +139,30 @@ export const getAllPropertiesService = async (queryString) => {
 
   const resultPerPage = Number(queryString.limit) || 10;
 
-  const totalProperties = await Property.countDocuments({
-    status: "Approved",
-    isDeleted: false,
-  });
+  /* BASE FILTER
+     Only approved & non-deleted properties
+  */
 
-  const queryBuilder = new QueryBuilder(Property.find(), queryString)
+  const baseQuery = {
+    status: PROPERTY_STATUS.APPROVED,
+    isDeleted: false,
+  };
+
+  /* TOTAL COUNT */
+
+  const totalProperties = await Property.countDocuments(baseQuery);
+
+  /* QUERY */
+
+  const queryBuilder = new QueryBuilder(Property.find(baseQuery), queryString)
     .search()
     .filter()
     .sort()
     .paginate(resultPerPage);
 
   const properties = await queryBuilder.mongooseQuery.lean();
+
+  /* RESPONSE */
 
   const allProperties = {
     properties,
@@ -157,9 +174,9 @@ export const getAllPropertiesService = async (queryString) => {
     },
   };
 
-  if (allProperties) {
-    await setCache(cacheKey, allProperties, 300);
-  }
+  /* CACHE */
+
+  await setCache(cacheKey, allProperties, 300);
 
   return allProperties;
 };

@@ -1,7 +1,10 @@
 import { ArrowRight } from "@/shared/constants/icons";
-import { pendingOwners } from "./dashboard.data";
+import { Link } from "react-router-dom";
+import { useOwners } from "../../hooks";
 
 const DashboardPendingOwners = () => {
+  const { owners } = useOwners("pending");
+
   return (
     <div className="ls-card p-6">
       <div className="mb-6 flex items-center justify-between">
@@ -13,26 +16,29 @@ const DashboardPendingOwners = () => {
           </p>
         </div>
 
-        <button className="text-sm font-medium text-primary hover:underline">
-          View All
-        </button>
+        <Link to={"/admin/owners"}>
+          <button className="text-sm font-medium text-primary hover:underline">
+            View All
+          </button>
+        </Link>
       </div>
 
       <div className="space-y-4">
-        {pendingOwners.map((owner) => (
+        {owners?.map((owner) => (
           <div
-            key={owner.id}
+            key={owner._id}
             className="flex items-center justify-between rounded-xl border border-border p-4 dark:border-border-dark"
           >
             <div>
-              <p className="font-medium">{owner.name}</p>
+              <p className="font-medium">{owner.userName}</p>
 
               <p className="text-sm text-text-muted dark:text-text-darkMuted">
-                {owner.city}
+                {owner.email}
               </p>
             </div>
-
-            <ArrowRight size={18} className="text-primary" />
+            <Link to={"/admin/owners"}>
+              <ArrowRight size={18} className="text-primary" />
+            </Link>
           </div>
         ))}
       </div>

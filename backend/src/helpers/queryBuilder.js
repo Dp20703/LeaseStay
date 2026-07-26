@@ -2,14 +2,26 @@ class QueryBuilder {
   constructor(mongooseQuery, queryString) {
     this.mongooseQuery = mongooseQuery;
     this.queryString = queryString;
+
+    this.allowedFilters = {
+      status: true,
+    };
+  }
+
+  disableStatusFilter() {
+    this.allowedFilters.status = false;
+    return this;
   }
 
   search() {
     if (this.queryString.keyword) {
       this.mongooseQuery = this.mongooseQuery.find({
-        $text: { $search: this.queryString.keyword },
+        $text: {
+          $search: this.queryString.keyword,
+        },
       });
     }
+
     return this;
   }
 
@@ -29,7 +41,6 @@ class QueryBuilder {
     if (queryObj.location) {
       filterQuery.location = {
         $regex: queryObj.location,
-
         $options: "i",
       };
 
@@ -47,7 +58,6 @@ class QueryBuilder {
 
     if (queryObj.propertyType) {
       filterQuery.propertyType = queryObj.propertyType;
-
       delete queryObj.propertyType;
     }
 
@@ -55,7 +65,6 @@ class QueryBuilder {
 
     if (queryObj.bedrooms) {
       filterQuery.bedrooms = Number(queryObj.bedrooms);
-
       delete queryObj.bedrooms;
     }
 
@@ -63,7 +72,6 @@ class QueryBuilder {
 
     if (queryObj.bathrooms) {
       filterQuery.bathrooms = Number(queryObj.bathrooms);
-
       delete queryObj.bathrooms;
     }
 
@@ -88,13 +96,12 @@ class QueryBuilder {
 
     if (queryObj.availabilityStatus) {
       filterQuery.availabilityStatus = queryObj.availabilityStatus;
-
       delete queryObj.availabilityStatus;
     }
 
     /* STATUS */
 
-    if (queryObj.status) {
+    if (this.allowedFilters.status && queryObj.status) {
       filterQuery.status = queryObj.status;
       delete queryObj.status;
     }

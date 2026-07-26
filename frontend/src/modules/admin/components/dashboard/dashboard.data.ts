@@ -121,42 +121,6 @@ export const propertyStatus = [
   },
 ];
 
-export const pendingOwners = [
-  {
-    id: 1,
-    name: "John Carter",
-    city: "Ahmedabad",
-  },
-  {
-    id: 2,
-    name: "Emma Watson",
-    city: "Surat",
-  },
-  {
-    id: 3,
-    name: "Rahul Patel",
-    city: "Rajkot",
-  },
-];
-
-export const pendingProperties = [
-  {
-    id: 1,
-    title: "Luxury Apartment",
-    owner: "John Carter",
-  },
-  {
-    id: 2,
-    title: "Modern Villa",
-    owner: "Emma Watson",
-  },
-  {
-    id: 3,
-    title: "Studio Flat",
-    owner: "Rahul Patel",
-  },
-];
-
 export const recentActivities = [
   {
     icon: UserCheck,
@@ -200,5 +164,41 @@ export const quickActions = [
     title: "View Payments",
     icon: IndianRupee,
     path: "/admin/payments",
+  },
+];
+
+export const pendingOwners = [
+  {
+    id: 1,
+    name: "John Carter",
+    city: "Ahmedabad",
+  },
+  {
+    id: 2,
+    name: "Emma Watson",
+    city: "Surat",
+  },
+  {
+    id: 3,
+    name: "Rahul Patel",
+    city: "Rajkot",
+  },
+];
+
+export const pendingProperties = [
+  {
+    id: 1,
+    title: "Luxury Apartment",
+    owner: "John Carter",
+  },
+  {
+    id: 2,
+    title: "Modern Villa",
+    owner: "Emma Watson",
+  },
+  {
+    id: 3,
+    title: "Studio Flat",
+    owner: "Rahul Patel",
   },
 ];

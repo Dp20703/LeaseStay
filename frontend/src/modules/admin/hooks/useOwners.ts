@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { adminOwnerService } from "../services";
 import type { IOwner, IOwnersFilterState } from "../types/owners.types";
 
-export const useOwners = () => {
+export const useOwners = (mode: "all" | "pending" = "all") => {
   const [owners, setOwners] = useState<IOwner[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -53,8 +53,12 @@ export const useOwners = () => {
   }, []);
 
   useEffect(() => {
-    fetchOwners();
-  }, [fetchOwners]);
+    if (mode === "pending") {
+      fetchPendingOwnerVerifications();
+    } else {
+      fetchOwners();
+    }
+  }, [mode, fetchOwners, fetchPendingOwnerVerifications]);
 
   // Handle Approve Owner Verification with Optimistic UI Update
   const approveOwner = async (userId: string) => {

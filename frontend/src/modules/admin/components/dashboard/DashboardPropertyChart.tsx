@@ -1,8 +1,48 @@
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
-import { propertyStatus } from "./dashboard.data";
+interface DashboardPropertyChartProps {
+  approved: number;
+  pending: number;
+  rejected: number;
+  hidden: number;
+}
 
-const DashboardPropertyChart = () => {
+const COLORS = {
+  approved: "#22c55e",
+  pending: "#f59e0b",
+  rejected: "#ef4444",
+  hidden: "#6366f1",
+};
+
+const DashboardPropertyChart = ({
+  approved,
+  pending,
+  rejected,
+  hidden,
+}: DashboardPropertyChartProps) => {
+  const propertyStatus = [
+    {
+      name: "Approved",
+      value: approved,
+      color: COLORS.approved,
+    },
+    {
+      name: "Pending",
+      value: pending,
+      color: COLORS.pending,
+    },
+    {
+      name: "Rejected",
+      value: rejected,
+      color: COLORS.rejected,
+    },
+    {
+      name: "Hidden",
+      value: hidden,
+      color: COLORS.hidden,
+    },
+  ];
+
   return (
     <div className="ls-card p-6">
       <div className="mb-6">

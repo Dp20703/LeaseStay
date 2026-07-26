@@ -5,9 +5,11 @@ import type {
   IProperty,
 } from "../types/properties.types";
 
-export const useProperties = () => {
+type PropertyMode = "all" | "Pending" | "Approved" | "Rejected";
+
+export const useProperties = (mode: PropertyMode = "all") => {
   const [properties, setProperties] = useState<IProperty[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const [filter, setFilter] = useState<IPropertiesFilterState>({
@@ -17,161 +19,223 @@ export const useProperties = () => {
     limit: 10,
   });
 
-  // Fetch initial data
+  /* ---------------------------------------------------
+     FETCHERS
+  --------------------------------------------------- */
+
   const fetchProperties = useCallback(async () => {
     setIsLoading(true);
     setError(null);
+
     try {
-      const data = await adminPropertyService.getProperties();
+      const properties = await adminPropertyService.getProperties();
 
-      // Robust array extraction to prevent crashes
-      let propertyArray: IProperty[] = [];
-      if (Array.isArray(data)) {
-        propertyArray = data;
-      } else if (data && Array.isArray(data.data)) {
-        propertyArray = data.data;
-      }
-
-      setProperties(propertyArray);
+      setProperties(properties);
     } catch (err: any) {
-      const errorMessage =
+      setError(
         err?.response?.data?.message ||
-        err?.message ||
-        "Failed to fetch properties.";
-      setError(errorMessage);
+          err?.message ||
+          "Failed to fetch properties.",
+      );
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  useEffect(() => {
-    fetchProperties();
-  }, [fetchProperties]);
+  const fetchPendingProperties = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
 
-  // --- Actions with Optimistic UI Updates ---
+    try {
+      const properties = await adminPropertyService.getPendingProperties();
+
+      setProperties(properties);
+    } catch (err: any) {
+      setError(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Failed to fetch pending properties.",
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const fetchApprovedProperties = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const properties = await adminPropertyService.getApprovedProperties();
+      setProperties(properties);
+    } catch (err: any) {
+      setError(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Failed to fetch approved properties.",
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const fetchRejectedProperties = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const properties = await adminPropertyService.getRejectedProperties();
+      setProperties(properties);
+    } catch (err: any) {
+      setError(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Failed to fetch rejected properties.",
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  /* ---------------------------------------------------
+     INITIAL FETCH
+  --------------------------------------------------- */
+
+  useEffect(() => {
+    switch (mode) {
+      case "Pending":
+        fetchPendingProperties();
+        break;
+
+      case "Approved":
+        fetchApprovedProperties();
+        break;
+
+      case "Rejected":
+        fetchRejectedProperties();
+        break;
+
+      default:
+        fetchProperties();
+    }
+  }, [
+    mode,
+    fetchProperties,
+    fetchPendingProperties,
+    fetchApprovedProperties,
+    fetchRejectedProperties,
+  ]);
+
+  /* ---------------------------------------------------
+     ACTIONS
+  --------------------------------------------------- */
 
   const approveProperty = async (propertyId: string) => {
     try {
-      setProperties((prev) =>
-        prev.map((p) =>
-          p._id === propertyId ? { ...p, status: "Approved" } : p,
-        ),
-      );
       await adminPropertyService.approveProperty(propertyId);
+
+      mode === "pending" ? fetchPendingProperties() : fetchProperties();
     } catch (err) {
-      fetchProperties(); // Revert on failure
-      console.error("Failed to approve property", err);
+      console.error(err);
     }
   };
 
   const rejectProperty = async (propertyId: string, reason: string) => {
     try {
-      setProperties((prev) =>
-        prev.map((p) =>
-          p._id === propertyId
-            ? { ...p, status: "Rejected", verificationRejectedReason: reason }
-            : p,
-        ),
-      );
       await adminPropertyService.rejectProperty(propertyId, reason);
+
+      mode === "pending" ? fetchPendingProperties() : fetchProperties();
     } catch (err) {
-      fetchProperties(); // Revert
-      console.error("Failed to reject property", err);
+      console.error(err);
     }
   };
 
   const hideProperty = async (propertyId: string) => {
     try {
-      setProperties((prev) =>
-        prev.map((p) =>
-          p._id === propertyId ? { ...p, status: "Hidden" } : p,
-        ),
-      );
       await adminPropertyService.hideProperty(propertyId);
+
+      fetchProperties();
     } catch (err) {
-      fetchProperties(); // Revert
-      console.error("Failed to hide property", err);
+      console.error(err);
     }
   };
 
   const restoreProperty = async (propertyId: string) => {
     try {
-      setProperties((prev) =>
-        prev.map((p) =>
-          p._id === propertyId ? { ...p, status: "Approved" } : p,
-        ),
-      );
       await adminPropertyService.restoreProperty(propertyId);
+
+      fetchProperties();
     } catch (err) {
-      fetchProperties(); // Revert
-      console.error("Failed to restore property", err);
+      console.error(err);
     }
   };
 
+  /* ---------------------------------------------------
+     FILTER
+  --------------------------------------------------- */
+
   const handleFilterChange = (newFilter: Partial<IPropertiesFilterState>) => {
-    setFilter((prev) => ({ ...prev, ...newFilter }));
+    setFilter((prev) => ({
+      ...prev,
+      ...newFilter,
+    }));
   };
 
-  // Client-side filtering with bulletproof string parsing
   const filteredProperties = useMemo(() => {
-    const searchLower = (filter.search || "").toLowerCase().trim();
+    const search = filter.search.toLowerCase().trim();
 
-    return properties.filter((property) => {
-      // Safely parse strings to prevent crashes on malformed data
-      const safeTitle = String(property?.title || "");
-      const safeLocation = String(property?.location || "");
+    return properties?.filter((property) => {
+      const title = property.title ?? "";
+      const location = property.location ?? "";
 
-      // Safely parse the object or string owner name for searching
-      let safeOwnerName = "";
-      if (typeof property?.owner?.fullName === "string") {
-        safeOwnerName = property.owner.fullName;
-      } else if (
-        typeof property?.owner?.fullName === "object" &&
-        property?.owner?.fullName !== null
-      ) {
-        safeOwnerName = `${property.owner.fullName.firstName || ""} ${property.owner.fullName.lastName || ""}`;
-      }
+      const ownerName =
+        typeof property.owner?.fullName === "string"
+          ? property.owner.fullName
+          : `${property.owner?.fullName?.firstName ?? ""} ${property.owner?.fullName?.lastName ?? ""}`;
 
       const matchesSearch =
-        searchLower === "" ||
-        safeTitle.toLowerCase().includes(searchLower) ||
-        safeLocation.toLowerCase().includes(searchLower) ||
-        safeOwnerName.toLowerCase().includes(searchLower);
+        !search ||
+        title.toLowerCase().includes(search) ||
+        location.toLowerCase().includes(search) ||
+        ownerName.toLowerCase().includes(search);
 
       const matchesStatus =
-        filter.status === "ALL"
-          ? true
-          : filter.status === "PENDING"
-            ? property?.status === "Pending"
-            : filter.status === "APPROVED"
-              ? property?.status === "Approved"
-              : filter.status === "REJECTED"
-                ? property?.status === "Rejected"
-                : filter.status === "HIDDEN"
-                  ? property?.status === "Hidden"
-                  : true;
+        filter.status === "ALL" ? true : property.status === filter.status;
 
       return matchesSearch && matchesStatus;
     });
   }, [properties, filter]);
 
-  // Client-side pagination
+  /* ---------------------------------------------------
+     PAGINATION
+  --------------------------------------------------- */
+
   const paginatedProperties = useMemo(() => {
-    const startIndex = (filter.page - 1) * filter.limit;
-    return filteredProperties.slice(startIndex, startIndex + filter.limit);
+    const start = (filter.page - 1) * filter.limit;
+
+    return filteredProperties.slice(start, start + filter.limit);
   }, [filteredProperties, filter]);
 
   return {
     properties: paginatedProperties,
     totalProperties: filteredProperties.length,
+
     isLoading,
     error,
+
     filter,
     handleFilterChange,
+
     approveProperty,
     rejectProperty,
     hideProperty,
     restoreProperty,
+
     refreshProperties: fetchProperties,
+
+    fetchProperties,
+    fetchPendingProperties,
+    fetchApprovedProperties,
+    fetchRejectedProperties,
   };
 };

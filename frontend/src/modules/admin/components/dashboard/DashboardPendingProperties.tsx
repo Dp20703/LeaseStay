@@ -1,7 +1,11 @@
 import { ArrowRight } from "@/shared/constants/icons";
+import { Link } from "react-router-dom";
+import { useProperties } from "../../hooks";
 import { pendingProperties } from "./dashboard.data";
 
 const DashboardPendingProperties = () => {
+  const { properties } = useProperties("Pending");
+
   return (
     <div className="ls-card p-6">
       <div className="mb-6 flex items-center justify-between">
@@ -13,26 +17,30 @@ const DashboardPendingProperties = () => {
           </p>
         </div>
 
-        <button className="text-sm font-medium text-primary hover:underline">
-          View All
-        </button>
+        <Link to={"/admin/properties"}>
+          <button className="text-sm font-medium text-primary hover:underline">
+            View All
+          </button>
+        </Link>
       </div>
 
       <div className="space-y-4">
-        {pendingProperties.map((property) => (
+        {properties?.map((property) => (
           <div
-            key={property.id}
+            key={property._id}
             className="flex items-center justify-between rounded-xl border border-border p-4 dark:border-border-dark"
           >
             <div>
               <p className="font-medium">{property.title}</p>
 
               <p className="text-sm text-text-muted dark:text-text-darkMuted">
-                Owner: {property.owner}
+                Address: {property?.address}
               </p>
             </div>
 
-            <ArrowRight size={18} className="text-primary" />
+            <Link to={"/admin/properties"}>
+              <ArrowRight size={18} className="text-primary" />
+            </Link>
           </div>
         ))}
       </div>

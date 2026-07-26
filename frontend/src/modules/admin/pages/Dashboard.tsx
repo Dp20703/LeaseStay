@@ -9,7 +9,6 @@ import { useDashboard } from "../hooks";
 
 const Dashboard = () => {
   const { dashboard, loading, refreshDashboard } = useDashboard();
-  console.log("dashboard:", dashboard);
 
   if (loading) {
     return <DashboardSkeleton />;
@@ -19,8 +18,8 @@ const Dashboard = () => {
     <section className="space-y-8">
       <DashboardHeader refresh={refreshDashboard} />
       <DashboardStats stats={dashboard} />
-      <DashboardCharts dashboard={dashboard} />
-      <DashboardBottom dashboard={dashboard} />
+      <DashboardCharts stats={dashboard} />
+      <DashboardBottom stats={dashboard} />
     </section>
   );
 };
