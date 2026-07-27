@@ -102,7 +102,6 @@ export const UsersTable: React.FC<UsersTableProps> = ({
         <tbody>
           {users.map((user) => {
             const displayName = formatFullName(user.fullName);
-            console.log(("Role:", user.role));
             return (
               <tr key={user._id}>
                 <td>

@@ -20,8 +20,6 @@ export const Properties: React.FC = () => {
     restoreProperty,
   } = useProperties();
 
-  console.log("ADMIN properites:", properties);
-
   // Local UI State for Modal and View Drawer
   const [selectedPropertyForReject, setSelectedPropertyForReject] =
     useState<IProperty | null>(null);

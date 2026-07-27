@@ -18,6 +18,9 @@ export const getDashboardStatsService = async () => {
     approvedProperties,
     rejectedProperties,
     hiddenProperties,
+    totalBookings,
+    totalPayments,
+    revenueAggregation,
   ] = await Promise.all([
     User.countDocuments({
       role: ROLES.USER,
@@ -57,7 +60,66 @@ export const getDashboardStatsService = async () => {
       status: "Hidden",
       isDeleted: false,
     }),
+
+    Booking.countDocuments(),
+
+    Payment.countDocuments(),
+
+    Payment.aggregate([
+      {
+        $match: {
+          status: "paid",
+        },
+      },
+      {
+        $group: {
+          _id: {
+            month: {
+              $month: "$paidAt",
+            },
+          },
+          revenue: {
+            $sum: "$amount",
+          },
+        },
+      },
+      {
+        $sort: {
+          "_id.month": 1,
+        },
+      },
+    ]),
   ]);
+
+  /* ─────────────────────────────────────────────
+     MONTHLY REVENUE
+  ───────────────────────────────────────────── */
+
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const revenueMap = {};
+
+  revenueAggregation.forEach((item) => {
+    revenueMap[item._id.month] = item.revenue;
+  });
+
+  const monthlyRevenue = months.map((month, index) => ({
+    month,
+    revenue: revenueMap[index + 1] || 0,
+  }));
 
   /* ─────────────────────────────────────────────
      RECENT ACTIVITIES
@@ -82,9 +144,7 @@ export const getDashboardStatsService = async () => {
         owner.ownerVerificationStatus === "approved"
           ? "Owner Approved"
           : "Owner Rejected",
-
       subtitle: `${owner.fullName.firstName} ${owner.fullName.lastName}`,
-
       createdAt: owner.updatedAt,
     });
   });
@@ -143,7 +203,7 @@ export const getDashboardStatsService = async () => {
     });
   });
 
-  // Sort all activities
+  // Sort activities
   recentActivities.sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
   );
@@ -157,6 +217,9 @@ export const getDashboardStatsService = async () => {
     approvedProperties,
     rejectedProperties,
     hiddenProperties,
+    totalBookings,
+    totalPayments,
+    monthlyRevenue,
     recentActivities: recentActivities.slice(0, 5),
   };
 };

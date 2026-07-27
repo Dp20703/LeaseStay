@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { PAYMENT_STATUS } from "./payment.constants.js";
 const { Schema } = mongoose;
 
 const paymentSchema = new Schema(
@@ -46,7 +47,7 @@ const paymentSchema = new Schema(
 
     status: {
       type: String,
-      enum: ["created", "pending", "paid", "failed", "refunded", "cancelled"],
+      enum: PAYMENT_STATUS,
       default: "created",
       index: true,
     },
