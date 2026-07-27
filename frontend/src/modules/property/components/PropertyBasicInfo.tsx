@@ -34,7 +34,7 @@ const PropertyBasicInfo = ({ register, errors }: Props) => {
         <textarea
           {...register("description")}
           placeholder="Description"
-          className={`ls-input min-h-[150px] ${errors.description && "border-red-500"}
+          className={`ls-input p-5 min-h-[150px] ${errors.description && "border-red-500"}
           `}
         />
 

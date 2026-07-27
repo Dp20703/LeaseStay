@@ -37,10 +37,10 @@ const userRoutes: RouteObject[] = [
             path: "/settings",
             element: <SettingsPage />,
           },
-          {
-            path: "/payment/:id",
-            element: <PaymentPage />,
-          },
+          // {
+          //   path: "/payment/:id",
+          //   element: <PaymentPage />,
+          // },
         ],
       },
     ],

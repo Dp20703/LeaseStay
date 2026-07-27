@@ -39,7 +39,7 @@ export const PropertyDetails = ({ register, errors }: Props) => {
         <input
           type="number"
           min={0}
-          placeholder="Price ₹"
+          placeholder="Price ₹ (monthly)"
           className="ls-input"
           {...register("price", {
             valueAsNumber: true,

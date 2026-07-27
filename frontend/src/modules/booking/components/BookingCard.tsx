@@ -1,15 +1,15 @@
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 import { useBooking } from "@/modules/booking/hooks/useBooking";
 import type { Booking } from "@/modules/booking/types/booking.types";
 import {
   Calendar,
-  MapPin,
-  IndianRupee,
-  Home,
   Check,
+  Home,
+  IndianRupee,
+  MapPin,
   X,
 } from "@/shared/constants/icons";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface BookingCardProps {
   booking: Booking;
@@ -204,9 +204,16 @@ const BookingCard = ({ booking, isOwnerView = false }: BookingCardProps) => {
                   Proceed To Payment
                 </Link>
               )}
+            {!isOwnerView &&
+              status === "under_verification" &&
+              paymentStatus === "paid" && (
+                <span className="rounded-full bg-red-100 px-4 py-3 text-center text-sm font-medium text-red-700">
+                  Under Verification
+                </span>
+              )}
 
-            {paymentStatus === "paid" && (
-              <span className="rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
+            {status === "completed" && paymentStatus === "paid" && (
+              <span className="rounded-full bg-green-100 px-4 py-3 text-center text-sm font-medium text-green-700">
                 Payment Completed
               </span>
             )}

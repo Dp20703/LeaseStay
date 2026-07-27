@@ -5,7 +5,7 @@ import { useBooking } from "@/modules/booking/hooks/useBooking";
 
 const OwnerBookingRequestsPage = () => {
   const { loading, bookings, getOwnerBookingRequests } = useBooking();
-  console.log(bookings);
+  console.log("owner bookings:", bookings);
 
   useEffect(() => {
     getOwnerBookingRequests();

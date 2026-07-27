@@ -18,7 +18,9 @@ export const OwnersPage: React.FC = () => {
     handleFilterChange,
     approveOwner,
     rejectOwner,
-  } = useOwners();
+  } = useOwners("all");
+
+  console.log("owners:", owners);
 
   // Local UI State for Modal and Drawer
   const [selectedOwnerForReject, setSelectedOwnerForReject] =

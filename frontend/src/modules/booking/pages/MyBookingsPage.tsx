@@ -1,13 +1,12 @@
 import { useEffect } from "react";
 
+import BookingCard from "@/modules/booking/components/BookingCard";
 import { useBooking } from "@/modules/booking/hooks/useBooking";
 import LoaderScreen from "@/shared/components/common/LoaderScreen";
-import BookingCard from "@/modules/booking/components/BookingCard";
 
 const MyBookingsPage = () => {
   const { bookings, getMyBookings, loading } = useBooking();
 
-  console.log(bookings);
   useEffect(() => {
     getMyBookings();
   }, []);

@@ -1,7 +1,8 @@
-import { createContext, useState } from "react";
 import type { ReactNode } from "react";
-import type { Booking } from "@/modules/booking/types/booking.types";
+import { createContext, useCallback, useMemo, useState } from "react";
+
 import bookingAPI from "@/modules/booking/services/bookingService";
+import type { Booking } from "@/modules/booking/types/booking.types";
 
 /* ─────────────────────────────────────────────
    TYPES
@@ -11,10 +12,12 @@ interface BookingContextType {
   bookings: Booking[];
   booking: Booking | null;
   loading: boolean;
+
   createBooking: (bookingData: any) => Promise<any>;
   getMyBookings: () => Promise<any>;
   getSingleBooking: (bookingId: string) => Promise<any>;
   cancelBooking: (bookingId: string) => Promise<any>;
+
   getOwnerBookingRequests: () => Promise<any>;
   acceptBooking: (bookingId: string) => Promise<any>;
   rejectBooking: (bookingId: string, reason?: string) => Promise<any>;
@@ -43,12 +46,12 @@ export const BookingProvider = ({ children }: BookingProviderProps) => {
 
   /* Create Booking */
 
-  const createBooking = async (bookingData) => {
+  const createBooking = useCallback(async (bookingData: any) => {
     try {
       setLoading(true);
-      console.log(bookingData);
+
       const response = await bookingAPI.createBooking(bookingData);
-      console.log(response);
+
       return response.data;
     } catch (error) {
       console.log("Create Booking Context Error:", error);
@@ -56,16 +59,16 @@ export const BookingProvider = ({ children }: BookingProviderProps) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   /* Fetch My Bookings */
 
-  const getMyBookings = async () => {
+  const getMyBookings = useCallback(async () => {
     try {
       setLoading(true);
 
       const response = await bookingAPI.getMyBookings();
-      console.log(response);
+
       setBookings(response.data);
 
       return response.data;
@@ -75,11 +78,11 @@ export const BookingProvider = ({ children }: BookingProviderProps) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  /* Get Single Booking*/
+  /* Get Single Booking */
 
-  const getSingleBooking = async (bookingId: string) => {
+  const getSingleBooking = useCallback(async (bookingId: string) => {
     try {
       setLoading(true);
 
@@ -90,16 +93,15 @@ export const BookingProvider = ({ children }: BookingProviderProps) => {
       return response.data;
     } catch (error) {
       console.log("Get Booking Error:", error);
-
       throw error;
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  /* Cancel Booking*/
+  /* Cancel Booking */
 
-  const cancelBooking = async (bookingId: string) => {
+  const cancelBooking = useCallback(async (bookingId: string) => {
     try {
       setLoading(true);
 
@@ -114,16 +116,15 @@ export const BookingProvider = ({ children }: BookingProviderProps) => {
       return response.data;
     } catch (error) {
       console.log("Cancel Booking Error:", error);
-
       throw error;
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   /* Owner Requests */
 
-  const getOwnerBookingRequests = async () => {
+  const getOwnerBookingRequests = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -134,16 +135,15 @@ export const BookingProvider = ({ children }: BookingProviderProps) => {
       return response.data;
     } catch (error) {
       console.log("Owner Requests Error:", error);
-
       throw error;
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  /* Accept Booking*/
+  /* Accept Booking */
 
-  const acceptBooking = async (bookingId: string) => {
+  const acceptBooking = useCallback(async (bookingId: string) => {
     try {
       setLoading(true);
 
@@ -158,16 +158,15 @@ export const BookingProvider = ({ children }: BookingProviderProps) => {
       return response.data;
     } catch (error) {
       console.log("Accept Booking Error:", error);
-
       throw error;
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  /* Reject Booking*/
+  /* Reject Booking */
 
-  const rejectBooking = async (bookingId: string, reason = "") => {
+  const rejectBooking = useCallback(async (bookingId: string, reason = "") => {
     try {
       setLoading(true);
 
@@ -182,27 +181,44 @@ export const BookingProvider = ({ children }: BookingProviderProps) => {
       return response.data;
     } catch (error) {
       console.log("Reject Booking Error:", error);
-
       throw error;
     } finally {
       setLoading(false);
     }
-  };
-  const values: BookingContextType = {
-    bookings,
-    booking,
+  }, []);
 
-    loading,
+  /* Context Value */
 
-    createBooking,
-    getMyBookings,
-    getSingleBooking,
-    cancelBooking,
+  const values = useMemo<BookingContextType>(
+    () => ({
+      bookings,
+      booking,
+      loading,
 
-    getOwnerBookingRequests,
-    acceptBooking,
-    rejectBooking,
-  };
+      createBooking,
+      getMyBookings,
+      getSingleBooking,
+      cancelBooking,
+
+      getOwnerBookingRequests,
+      acceptBooking,
+      rejectBooking,
+    }),
+    [
+      bookings,
+      booking,
+      loading,
+
+      createBooking,
+      getMyBookings,
+      getSingleBooking,
+      cancelBooking,
+
+      getOwnerBookingRequests,
+      acceptBooking,
+      rejectBooking,
+    ],
+  );
 
   return (
     <BookingContext.Provider value={values}>{children}</BookingContext.Provider>

@@ -42,7 +42,7 @@ export const BookingsTable: React.FC<BookingsTableProps> = ({
   onUpdateStatus,
   onUpdatePaymentStatus,
 }) => {
-  // Loading Skeleton State
+  console.log("boookign in admin:", bookings);
   if (isLoading) {
     return (
       <div className="ls-table-wrapper">
@@ -209,25 +209,37 @@ export const BookingsTable: React.FC<BookingsTableProps> = ({
                               ? "ls-badge-info"
                               : booking.status === "cancelled"
                                 ? "ls-badge-neutral"
-                                : "ls-badge-warning"
+                                : booking.status === "under_verification"
+                                  ? "ls-badge-primary"
+                                  : "ls-badge-warning"
                       }`}
                     >
                       {booking.status === "accepted" && (
                         <CheckCircle2 className="w-3 h-3 mr-1" />
                       )}
+
                       {booking.status === "rejected" && (
                         <XCircle className="w-3 h-3 mr-1" />
                       )}
+
                       {booking.status === "completed" && (
                         <CheckCheck className="w-3 h-3 mr-1" />
                       )}
+
                       {booking.status === "cancelled" && (
                         <Ban className="w-3 h-3 mr-1" />
                       )}
-                      {booking.status === "pending" && (
+
+                      {(booking.status === "pending" ||
+                        booking.status === "under_verification") && (
                         <Clock className="w-3 h-3 mr-1" />
                       )}
-                      <span className="capitalize">{booking.status}</span>
+
+                      <span>
+                        {booking.status === "under_verification"
+                          ? "Under Verification"
+                          : booking.status.replace("_", " ")}
+                      </span>
                     </span>
 
                     {/* Payment Status Badge */}
@@ -235,9 +247,15 @@ export const BookingsTable: React.FC<BookingsTableProps> = ({
                       className={`text-[10px] px-2 py-0.5 rounded font-medium uppercase tracking-wider ${
                         booking.paymentStatus === "paid"
                           ? "bg-green-50 text-green-600 dark:bg-green-950/50 dark:text-green-400"
-                          : booking.paymentStatus === "refunded"
-                            ? "bg-purple-50 text-purple-600 dark:bg-purple-950/50 dark:text-purple-400"
-                            : "bg-amber-50 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400"
+                          : booking.paymentStatus === "pending"
+                            ? "bg-amber-50 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400"
+                            : booking.paymentStatus === "failed"
+                              ? "bg-red-50 text-red-600 dark:bg-red-950/50 dark:text-red-400"
+                              : booking.paymentStatus === "refunded"
+                                ? "bg-purple-50 text-purple-600 dark:bg-purple-950/50 dark:text-purple-400"
+                                : booking.paymentStatus === "created"
+                                  ? "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                                  : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"
                       }`}
                     >
                       Pay: {booking.paymentStatus}
@@ -248,26 +266,28 @@ export const BookingsTable: React.FC<BookingsTableProps> = ({
                 {/* Actions */}
                 <td>
                   <div className="flex items-center justify-end gap-2">
-                    {booking.status === "pending" && (
-                      <>
-                        <button
-                          onClick={() =>
-                            onUpdateStatus(booking._id, "accepted")
-                          }
-                          className="ls-btn !px-3 !py-1.5 text-xs bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/40 dark:text-green-400"
-                        >
-                          Accept
-                        </button>
-                        <button
-                          onClick={() =>
-                            onUpdateStatus(booking._id, "rejected")
-                          }
-                          className="ls-btn !px-3 !py-1.5 text-xs bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/40 dark:text-red-400"
-                        >
-                          Reject
-                        </button>
-                      </>
-                    )}
+                    {booking.status === "under_verification" &&
+                      booking.paymentStatus === "paid" && (
+                        <>
+                          <button
+                            onClick={() =>
+                              onUpdateStatus(booking._id, "accepted")
+                            }
+                            className="ls-btn !px-3 !py-1.5 text-xs bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/40 dark:text-green-400"
+                          >
+                            Accept
+                          </button>
+
+                          <button
+                            onClick={() =>
+                              onUpdateStatus(booking._id, "rejected")
+                            }
+                            className="ls-btn !px-3 !py-1.5 text-xs bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/40 dark:text-red-400"
+                          >
+                            Reject
+                          </button>
+                        </>
+                      )}
 
                     {booking.status === "accepted" && (
                       <button
@@ -275,17 +295,6 @@ export const BookingsTable: React.FC<BookingsTableProps> = ({
                         className="ls-btn-secondary !px-3 !py-1.5 text-xs"
                       >
                         Complete
-                      </button>
-                    )}
-
-                    {booking.paymentStatus === "pending" && (
-                      <button
-                        onClick={() =>
-                          onUpdatePaymentStatus(booking._id, "paid")
-                        }
-                        className="ls-btn-outline !px-3 !py-1.5 text-xs"
-                      >
-                        Mark Paid
                       </button>
                     )}
                   </div>

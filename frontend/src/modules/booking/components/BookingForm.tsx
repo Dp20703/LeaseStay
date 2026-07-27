@@ -121,7 +121,7 @@ const BookingForm = ({ property, onSuccess }: BookingFormProps) => {
           rows={4}
           placeholder="Tell the owner about your requirements..."
           {...register("message")}
-          className="ls-input resize-none"
+          className="ls-input resize-none p-2"
         />
       </div>
 

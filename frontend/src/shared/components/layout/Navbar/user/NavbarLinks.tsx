@@ -29,7 +29,7 @@ const NavbarLinks = () => {
 
       {/* USER */}
 
-      {user && (
+      {user?.role === ROLES.USER && (
         <>
           <NavLink to="/wishlist" className={navLinkClass}>
             Wishlist
@@ -37,6 +37,10 @@ const NavbarLinks = () => {
 
           <NavLink to="/bookings" className={navLinkClass}>
             My Bookings
+          </NavLink>
+
+          <NavLink to="/become-owner" className={navLinkClass}>
+            Become Owner
           </NavLink>
         </>
       )}
@@ -50,17 +54,17 @@ const NavbarLinks = () => {
           </NavLink>
 
           <NavLink to="/owner/properties" className={navLinkClass}>
-            My Properties
+            Properties
           </NavLink>
+
+          <NavLink to="/owner/booking-requests" className={navLinkClass}>
+            Bookings
+          </NavLink>
+
+          {/* <NavLink to="/owner/payments" className={navLinkClass}>
+            Payments
+          </NavLink> */}
         </>
-      )}
-
-      {/* USER → OWNER */}
-
-      {user?.role === ROLES.USER && (
-        <NavLink to="/become-owner" className={navLinkClass}>
-          Become Owner
-        </NavLink>
       )}
     </nav>
   );

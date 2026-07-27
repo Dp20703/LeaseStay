@@ -1,9 +1,10 @@
 import crypto from "crypto";
 import Razorpay from "razorpay";
-import Payment from "./payment.model.js";
+import { ApiError } from "../../helpers/index.js";
+import { BOOKING_STATUS } from "../bookings/booking.constants.js";
 import Booking from "../bookings/booking.model.js";
 import Property from "../properties/property.model.js";
-import { ApiError } from "../../helpers/index.js";
+import Payment from "./payment.model.js";
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -80,6 +81,12 @@ export const verifyPayment = async (payload) => {
     paymentId: razorpay_payment_id,
     signature: razorpay_signature,
   });
+
+  // Update booking after successful payment verification
+  booking.paymentStatus = "paid";
+  booking.status = BOOKING_STATUS.UNDER_VERIFICATION;
+
+  await booking.save();
 
   return payment;
 };
