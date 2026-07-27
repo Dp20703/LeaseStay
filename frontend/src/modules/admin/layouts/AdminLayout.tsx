@@ -1,5 +1,5 @@
-import { Outlet } from "react-router-dom";
 import { useState } from "react";
+import { Outlet } from "react-router-dom";
 
 import AdminMobileSidebar from "../components/dashboard/AdminMobileSidebar";
 import AdminNavbar from "../components/dashboard/AdminNavbar";

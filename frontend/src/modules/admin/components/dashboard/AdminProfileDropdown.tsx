@@ -44,7 +44,7 @@ const AdminProfileDropdown = () => {
       <MenuButton className="flex items-center gap-3 rounded-xl border border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark px-3 py-2 transition hover:border-primary">
         {/* Avatar */}
 
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white overflow-hidden">
+        <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white overflow-hidden">
           {admin?.profileImage?.url ? (
             <img
               src={admin.profileImage.url}
