@@ -57,6 +57,7 @@ export {
   Settings,
   Share2,
   Shield,
+  ShieldAlert,
   ShieldBan,
   SlidersHorizontal,
   Star,

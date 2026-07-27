@@ -1,9 +1,13 @@
 import express from "express";
+
 import { ROLES } from "../../constants/roles.constants.js";
+
 import { verifyJWT } from "../../middlewares/auth.middleware.js";
 import { authorizeRoles } from "../../middlewares/role.middleware.js";
 import validate from "../../middlewares/validate.middleware.js";
+
 import * as AdminController from "./admin.controller.js";
+
 import {
   approveOwnerVerificationValidation,
   approvePropertyVerificationValidation,
@@ -13,10 +17,16 @@ import {
 
 const router = express.Router();
 
-// LOGIN
+/* ─────────────────────────────────────────────
+   AUTH
+───────────────────────────────────────────── */
+
 router.post("/login", AdminController.adminLogin);
 
-// FIND USERS
+/* ─────────────────────────────────────────────
+   USERS
+───────────────────────────────────────────── */
+
 router.get(
   "/users",
   verifyJWT,
@@ -24,7 +34,24 @@ router.get(
   AdminController.fetchAllUsers,
 );
 
-// FIND OWNERS
+router.patch(
+  "/users/:userId/block",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  AdminController.blockUser,
+);
+
+router.patch(
+  "/users/:userId/unblock",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  AdminController.unblockUser,
+);
+
+/* ─────────────────────────────────────────────
+   OWNERS
+───────────────────────────────────────────── */
+
 router.get(
   "/owners",
   verifyJWT,
@@ -32,15 +59,6 @@ router.get(
   AdminController.fetchAllOwners,
 );
 
-// FIND PROPERTIES
-router.get(
-  "/properties",
-  verifyJWT,
-  authorizeRoles(ROLES.ADMIN),
-  AdminController.fetchAllProperties,
-);
-
-// OWNER VERIFICATION
 router.get(
   "/owner-verifications/pending",
   verifyJWT,
@@ -64,12 +82,36 @@ router.patch(
   AdminController.rejectOwnerVerification,
 );
 
-// PROPERTY VERIFICATION
+/* ─────────────────────────────────────────────
+   PROPERTIES
+───────────────────────────────────────────── */
+
+router.get(
+  "/properties",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  AdminController.fetchAllProperties,
+);
+
 router.get(
   "/property-verifications/pending",
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
   AdminController.getPendingPropertyVerifications,
+);
+
+router.get(
+  "/property-verifications/approved",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  AdminController.getApprovedProperties,
+);
+
+router.get(
+  "/property-verifications/rejected",
+  verifyJWT,
+  authorizeRoles(ROLES.ADMIN),
+  AdminController.getRejectedProperties,
 );
 
 router.patch(
@@ -88,27 +130,6 @@ router.patch(
   AdminController.rejectPropertyVerification,
 );
 
-/* ─────────────────────────────────────────────
-   PROPERTY MODERATION
-───────────────────────────────────────────── */
-
-// GET REJECTED PROPERTIES
-router.get(
-  "/property-verifications/rejected",
-  verifyJWT,
-  authorizeRoles(ROLES.ADMIN),
-  AdminController.getRejectedProperties,
-);
-
-// GET APPROVED PROPERTIES
-router.get(
-  "/property-verifications/approved",
-  verifyJWT,
-  authorizeRoles(ROLES.ADMIN),
-  AdminController.getApprovedProperties,
-);
-
-// HIDE PROPERTY
 router.patch(
   "/property-verifications/:propertyId/hide",
   verifyJWT,
@@ -116,7 +137,6 @@ router.patch(
   AdminController.hideProperty,
 );
 
-// RESTORE PROPERTY
 router.patch(
   "/property-verifications/:propertyId/restore",
   verifyJWT,
@@ -125,28 +145,9 @@ router.patch(
 );
 
 /* ─────────────────────────────────────────────
-   USER MANAGEMENT
-───────────────────────────────────────────── */
-
-// BLOCK USER
-router.patch(
-  "/users/:userId/block",
-  verifyJWT,
-  authorizeRoles(ROLES.ADMIN),
-  AdminController.blockUser,
-);
-
-// UNBLOCK USER
-router.patch(
-  "/users/:userId/unblock",
-  verifyJWT,
-  authorizeRoles(ROLES.ADMIN),
-  AdminController.unblockUser,
-);
-
-/* ─────────────────────────────────────────────
    BOOKINGS
 ───────────────────────────────────────────── */
+
 router.get(
   "/bookings",
   verifyJWT,
@@ -171,12 +172,14 @@ router.patch(
 /* ─────────────────────────────────────────────
    PAYMENTS
 ───────────────────────────────────────────── */
+
 router.get(
   "/payments",
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
   AdminController.fetchAllPayments,
 );
+
 router.get(
   "/payments/stats",
   verifyJWT,
@@ -187,6 +190,7 @@ router.get(
 /* ─────────────────────────────────────────────
    SETTINGS
 ───────────────────────────────────────────── */
+
 router.patch(
   "/settings/profile",
   verifyJWT,
@@ -212,7 +216,6 @@ router.patch(
    DASHBOARD
 ───────────────────────────────────────────── */
 
-// ADMIN DASHBOARD STATS
 router.get(
   "/dashboard/stats",
   verifyJWT,
