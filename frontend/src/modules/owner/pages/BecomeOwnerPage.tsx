@@ -1,4 +1,4 @@
-import { BecomeOwnerCard } from "../components/ownerpage";
+import { BecomeOwnerCard } from "../components/becomeOwner";
 
 const BecomeOwnerPage = () => {
   return (
