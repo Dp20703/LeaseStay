@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { Mail, IndianRupee, User } from "@/shared/constants/icons";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import BookingModal from "@/modules/booking/components/BookingModal";
 import ContactOwner from "@/modules/property/components/ContactOwner";
+import { IndianRupee, Mail, User } from "@/shared/constants/icons";
+
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const PropertySidebar = ({ property, showContact, setShowContact }: any) => {
   const [showBooking, setShowBooking] = useState(false);
@@ -24,6 +25,7 @@ const PropertySidebar = ({ property, showContact, setShowContact }: any) => {
 
     setShowBooking(true);
   };
+
   return (
     <div>
       <div className="ls-card sticky top-24 p-7 space-y-6">

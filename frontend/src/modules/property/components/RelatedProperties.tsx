@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
-import { useProperty } from "@/modules/property/hooks/useProperty";
-import RelatedPropertiesSkeleton from "@/modules/property/components/RelatedPropertiesSkeleton";
 import PropertyCard from "@/modules/property/components/PropertyCard";
+import RelatedPropertiesSkeleton from "@/modules/property/components/RelatedPropertiesSkeleton";
+import { useProperty } from "@/modules/property/hooks/useProperty";
+
+import { useEffect, useState } from "react";
 
 interface Props {
   propertyId: string;
@@ -19,7 +20,7 @@ const RelatedProperties = ({ propertyId }: Props) => {
         setLoading(true);
 
         const response = await getRelatedProperties(propertyId);
-        console.log(response);
+
         setRelatedProperties(response);
       } catch (error) {
         console.log(error);

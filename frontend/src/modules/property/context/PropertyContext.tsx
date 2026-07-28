@@ -1,7 +1,7 @@
-import { createContext, useState } from "react";
-import type { ReactNode } from "react";
-import type { Property } from "@/modules/property/types";
 import propertyAPI from "@/modules/property/services/propertyService";
+import type { Property } from "@/modules/property/types";
+import type { ReactNode } from "react";
+import { createContext, useEffect, useState } from "react";
 
 interface PropertyContextType {
   properties: Property[];
@@ -16,11 +16,12 @@ interface PropertyContextType {
   updateProperty: (id: string, formData: FormData) => Promise<void>;
   deleteProperty: (id: string) => Promise<void>;
   getFeaturedProperties: () => Promise<Property[]>;
-  saveProperty: (id: string) => Promise<void>;
+  saveProperty: (property: Property) => Promise<void>;
   unsaveProperty: (id: string) => Promise<void>;
   trackPropertyShareCount: (id: string) => Promise<void>;
   contactOwner: (id: string, message: string) => Promise<any>;
   getOwnerProperties: () => Promise<Property[]>;
+  getSavedProperties: () => Promise<void>;
 }
 
 export const PropertyContext = createContext<PropertyContextType | undefined>(
@@ -120,9 +121,17 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
 
   /* SAVE PROPERTY */
 
-  const saveProperty = async (id: string) => {
+  const saveProperty = async (propertyData: Property) => {
     try {
-      const response = await propertyAPI.saveProperty(id);
+      const response = await propertyAPI.saveProperty(propertyData._id);
+
+      setSavedProperties((prev) => {
+        const exists = prev.some((item) => item._id === propertyData._id);
+
+        if (exists) return prev;
+
+        return [...prev, propertyData];
+      });
 
       return response.data;
     } catch (error) {
@@ -132,9 +141,13 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
 
   /* UNSAVE PROPERTY */
 
+  /* UNSAVE PROPERTY */
+
   const unsaveProperty = async (id: string) => {
     try {
       const response = await propertyAPI.unsaveProperty(id);
+
+      setSavedProperties((prev) => prev.filter((item) => item._id !== id));
 
       return response.data;
     } catch (error) {
@@ -224,6 +237,10 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
       console.log("Share Count Error:", error);
     }
   };
+
+  useEffect(() => {
+    getSavedProperties().catch(console.error);
+  }, []);
 
   return (
     <PropertyContext.Provider

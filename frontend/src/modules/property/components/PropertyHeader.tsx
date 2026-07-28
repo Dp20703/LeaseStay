@@ -1,18 +1,21 @@
 import {
-  ArrowLeft,
-  Heart,
-  MapPin,
-  Tag,
-  Home,
   Eye,
+  Heart,
+  Home,
+  MapPin,
   Share2,
+  Tag,
 } from "@/shared/constants/icons";
+import { ROLES } from "@/shared/constants/role.constants";
+import { HeartPlus } from "lucide-react";
+import { BiHeartSquare } from "react-icons/bi";
 
 const PropertyHeader = ({
   property,
   isSaved,
   onWishlist,
   setShareOpen,
+  user,
 }: any) => {
   return (
     <div className="flex flex-col lg:flex-row justify-between gap-8">
@@ -53,13 +56,22 @@ const PropertyHeader = ({
           <Share2 />
           Share
         </button>
-        <button
-          onClick={onWishlist}
-          className="ls-btn-outline flex items-center gap-3 h-fit"
-        >
-          {isSaved ? <Heart /> : <Heart />}
-          {isSaved ? "Saved" : "Save Property"}
-        </button>
+
+        {user?.role === ROLES.USER && (
+          <button
+            onClick={onWishlist}
+            className="ls-btn-outline flex items-center gap-3 h-fit"
+          >
+            <Heart
+              className={`h-5 w-5 transition ${
+                isSaved
+                  ? "fill-red-500 text-red-500"
+                  : "fill-transparent text-gray-500 hover:text-red-500"
+              }`}
+            />
+            {isSaved ? "Saved" : "Save Property"}
+          </button>
+        )}
       </div>
     </div>
   );
