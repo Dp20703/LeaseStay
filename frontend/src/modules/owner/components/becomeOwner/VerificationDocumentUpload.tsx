@@ -1,4 +1,4 @@
-import type { VerificationDocumentUploadProps } from "../types";
+import type { VerificationDocumentUploadProps } from "../../types";
 
 const VerificationDocumentUpload = ({
   file,

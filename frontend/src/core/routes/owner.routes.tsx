@@ -1,14 +1,14 @@
 import type { RouteObject } from "react-router-dom";
 
 import OwnerWrapper from "@/core/wrappers/OwnerWrapper";
-
 import OwnerLayout from "@/layouts/OwnerLayout";
 
 import DashboardPage from "@/modules/owner/pages/DashboardPage";
 import OwnerBookingRequestsPage from "@/modules/owner/pages/OwnerBookingRequestsPage";
 
+import OwnerPaymentsPage from "@/modules/owner/pages/OwnerPaymentsPage";
+import OwnerPropertiesPage from "@/modules/owner/pages/OwnerPropertiesPage";
 import CreatePropertyPage from "@/modules/property/pages/CreatePropertyPage";
-import OwnerPropertiesPage from "@/modules/property/pages/OwnerPropertiesPage";
 
 const ownerRoutes: RouteObject[] = [
   {
@@ -32,6 +32,10 @@ const ownerRoutes: RouteObject[] = [
           {
             path: "/owner/booking-requests",
             element: <OwnerBookingRequestsPage />,
+          },
+          {
+            path: "/owner/payments",
+            element: <OwnerPaymentsPage />,
           },
         ],
       },

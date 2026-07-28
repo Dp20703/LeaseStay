@@ -29,7 +29,7 @@ const CreatePropertyPage = () => {
   };
 
   return (
-    <section className="ls-container py-10">
+    <section className="ls-container">
       <div className="mb-8">
         <h1 className="text-4xl font-bold">Create Property</h1>
 

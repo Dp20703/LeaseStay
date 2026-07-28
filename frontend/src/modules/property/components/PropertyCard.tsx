@@ -9,6 +9,7 @@ import {
   MapPin,
   Ruler,
 } from "@/shared/constants/icons";
+import { ROLES } from "@/shared/constants/role.constants";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -68,19 +69,20 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         </span>
 
         {/* SAVE BUTTON */}
-
-        <button
-          type="button"
-          onClick={handleSave}
-          className="absolute top-4 right-4 h-11 w-11 rounded-full bg-white/90 dark:bg-slate-900/90 
+        {user?.role == ROLES.USER && (
+          <button
+            type="button"
+            onClick={handleSave}
+            className="absolute top-4 right-4 h-11 w-11 rounded-full bg-white/90 dark:bg-slate-900/90 
           flex items-center justify-center shadow-lg hover:scale-110 transition"
-        >
-          {isSaved ? (
-            <Heart className=" text-red-500 text-lg" />
-          ) : (
-            <Heart className="text-red-500 text-lg" />
-          )}
-        </button>
+          >
+            {isSaved ? (
+              <Heart className=" text-red-500 text-lg" />
+            ) : (
+              <Heart className="text-red-500 text-lg" />
+            )}
+          </button>
+        )}
       </div>
 
       {/* CONTENT */}

@@ -5,7 +5,6 @@ import { useBooking } from "@/modules/booking/hooks/useBooking";
 
 const OwnerBookingRequestsPage = () => {
   const { loading, bookings, getOwnerBookingRequests } = useBooking();
-  console.log("owner bookings:", bookings);
 
   useEffect(() => {
     getOwnerBookingRequests();
@@ -16,7 +15,7 @@ const OwnerBookingRequestsPage = () => {
   }
 
   return (
-    <section className="ls-container py-8">
+    <section className="ls-container">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Bookings Requests</h1>
 

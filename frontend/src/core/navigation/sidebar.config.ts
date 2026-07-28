@@ -5,6 +5,7 @@ import {
   ClipboardList,
   Heart,
   Home,
+  IndianRupee,
   LayoutDashboard,
   Plus,
   Settings,
@@ -57,6 +58,11 @@ export const SIDEBAR_CONFIG: Record<string, SidebarItem[]> = {
       path: "/owner/booking-requests",
       label: "Booking Requests",
       icon: ClipboardList,
+    },
+    {
+      path: "/owner/payments",
+      label: "My Payments",
+      icon: IndianRupee,
     },
     {
       path: "/owner/properties/create",

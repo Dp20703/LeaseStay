@@ -15,7 +15,7 @@ const WishListPage = () => {
   }
 
   return (
-    <section className="ls-container py-10 space-y-8">
+    <section className="ls-container space-y-8">
       <div>
         <h1 className="text-4xl font-bold">My Properties</h1>
 

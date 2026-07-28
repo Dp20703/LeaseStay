@@ -1,4 +1,4 @@
-import type { BecomeOwnerSubmitButtonProps } from "../types";
+import type { BecomeOwnerSubmitButtonProps } from "../../types";
 
 const BecomeOwnerSubmitButton = ({ loading }: BecomeOwnerSubmitButtonProps) => {
   return (

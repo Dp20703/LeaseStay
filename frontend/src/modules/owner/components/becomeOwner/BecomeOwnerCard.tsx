@@ -4,7 +4,7 @@ import {
   DocumentTypeSelect,
   VerificationDocumentUpload,
 } from ".";
-import useBecomeOwner from "../hooks/useBecomeOwner";
+import useBecomeOwner from "../../hooks/useBecomeOwner";
 
 const BecomeOwnerCard = () => {
   const {
@@ -22,9 +22,7 @@ const BecomeOwnerCard = () => {
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-6">
         <DocumentTypeSelect value={documentType} onChange={setDocumentType} />
-
         <VerificationDocumentUpload file={file} onChange={setFile} />
-
         <BecomeOwnerSubmitButton loading={loading} />
       </form>
     </div>

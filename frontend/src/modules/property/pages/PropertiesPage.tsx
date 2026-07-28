@@ -6,8 +6,6 @@ import { useEffect } from "react";
 const PropertiesPage = () => {
   const { fetchProperties, properties, loading } = useProperty();
 
-  console.log("ALL PROPERTIES:", properties);
-
   useEffect(() => {
     fetchProperties();
   }, []);

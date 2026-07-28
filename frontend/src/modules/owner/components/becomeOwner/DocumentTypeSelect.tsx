@@ -1,4 +1,4 @@
-import type { DocumentTypeSelectProps } from "../types";
+import type { DocumentTypeSelectProps } from "../../types";
 
 const DocumentTypeSelect = ({ value, onChange }: DocumentTypeSelectProps) => {
   return (

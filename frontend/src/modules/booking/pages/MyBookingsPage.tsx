@@ -16,7 +16,7 @@ const MyBookingsPage = () => {
   }
 
   return (
-    <section className="ls-container py-8">
+    <section className="ls-container">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">My Bookings</h1>
 
