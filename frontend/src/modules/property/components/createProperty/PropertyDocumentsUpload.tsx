@@ -1,14 +1,10 @@
-import type { UseFormRegister, FieldErrors } from "react-hook-form";
-
 import type { CreatePropertyFormData } from "@/validations/property.schema";
+import type { FieldErrors, UseFormRegister } from "react-hook-form";
 
 interface Props {
   register: UseFormRegister<CreatePropertyFormData>;
-
   errors: FieldErrors<CreatePropertyFormData>;
-
   setDocuments: (files: FileList | null) => void;
-
   error?: string;
 }
 

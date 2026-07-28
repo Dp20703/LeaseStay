@@ -9,15 +9,16 @@ import { useProperty } from "@/modules/property/hooks/useProperty";
 import LoaderScreen from "@/shared/components/common/LoaderScreen";
 import { ROLES } from "@/shared/constants/role.constants";
 
-import PropertyShareModal from "@/modules/booking/components/PropertyShareModal";
-
-import PropertyAmenities from "../components/PropertyAmenities";
-import PropertyDescription from "../components/PropertyDescription";
-import PropertyDetailsCard from "../components/PropertyDetailsCard";
-import PropertyGallery from "../components/PropertyGallery";
-import PropertyHeader from "../components/PropertyHeader";
-import PropertySidebar from "../components/PropertySidebar";
-import RelatedProperties from "../components/RelatedProperties";
+import {
+  PropertyAmenities,
+  PropertyDescription,
+  PropertyDetailsCard,
+  PropertyGallery,
+  PropertyHeader,
+  PropertyShareModal,
+  PropertySidebar,
+  RelatedProperties,
+} from "../components/propertyDetails/index";
 
 const PropertyDetailsPage = () => {
   const { slug } = useParams();
@@ -90,9 +91,7 @@ const PropertyDetailsPage = () => {
       <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
         <div className="space-y-8">
           <PropertyDescription description={property.description} />
-
           <PropertyDetailsCard property={property} />
-
           <PropertyAmenities amenities={property.amenities} />
         </div>
 

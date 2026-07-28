@@ -1,11 +1,12 @@
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import BookingModal from "@/modules/booking/components/BookingModal";
-import ContactOwner from "@/modules/property/components/ContactOwner";
 import { IndianRupee, Mail, User } from "@/shared/constants/icons";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
+import BookingModal from "@/modules/booking/components/BookingModal";
+import ContactOwner from "./ContactOwner";
 
 const PropertySidebar = ({ property, showContact, setShowContact }: any) => {
   const [showBooking, setShowBooking] = useState(false);

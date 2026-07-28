@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
 import { useProperty } from "@/modules/property/hooks/useProperty";
-import PropertyForm from "@/modules/property/components/PropertyForm";
 import { formatValidationErrors } from "@/shared/utils/formatValidationErrors";
+
+import { PropertyForm } from "../components/createProperty";
 
 const CreatePropertyPage = () => {
   const navigate = useNavigate();
