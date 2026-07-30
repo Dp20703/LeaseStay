@@ -1,18 +1,26 @@
 import { createClient } from "redis";
 
-const redisClient = createClient({
-  url: process.env.REDIS_URL || "redis://localhost:6379",
-});
+const REDIS_URL =
+  process.env.REDIS_URL ||
+  (process.env.NODE_ENV === "development" ? "redis://localhost:6379" : null);
 
-redisClient.on("error", (err) => {
-  console.error("Redis Error❌:", err);
-});
+let redisClient = null;
 
-try {
-  await redisClient.connect();
-  console.log("Redis Connected ✅");
-} catch (error) {
-  console.error("Redis Connection Failed❌:", error);
+if (REDIS_URL) {
+  redisClient = createClient({
+    url: REDIS_URL,
+  });
+
+  redisClient.on("error", (err) => {
+    console.error("Redis Error❌:", err.message);
+  });
+
+  try {
+    await redisClient.connect();
+    console.log("✅ Redis Connected");
+  } catch (error) {
+    console.log("⚠️ Redis unavailable. Continuing without Redis.");
+  }
 }
 
 export default redisClient;
