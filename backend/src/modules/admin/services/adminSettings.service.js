@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { ApiError } from "../../../helpers/index.js";
 import User from "../../users/user.model.js";
 
