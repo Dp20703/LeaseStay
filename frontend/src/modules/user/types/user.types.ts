@@ -1,7 +1,4 @@
-export type UserRole =
-  | "user"
-  | "owner"
-  | "admin";
+export type UserRole = "user" | "owner" | "admin";
 
 export type OwnerVerificationStatus =
   | "not_applied"
@@ -29,7 +26,7 @@ export type FullName = {
 export type User = {
   _id: string;
   userName: string;
-   profileImage?: {
+  profileImage?: {
     url: string;
     publicId: string;
   };

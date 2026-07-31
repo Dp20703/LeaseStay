@@ -7,12 +7,12 @@ import type { User } from "@/modules/user/types";
 ───────────────────────────────────────────── */
 
 export interface AdminAuthResponse {
-  user: User;
+  user: User | null;
   token: string;
 }
 
 export interface CurrentAdminResponse {
-  user: User;
+  user: User | null;
 }
 
 export interface LogoutResponse {

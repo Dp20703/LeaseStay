@@ -3,7 +3,7 @@ import React from "react";
 import type { User } from "../../types";
 
 type ProfileCardProps = {
-  user: User;
+  user: User | null;
   isEditing: boolean;
   previewImage: string | null;
   setPreviewImage: (value: string | null) => void;

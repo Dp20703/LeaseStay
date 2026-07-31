@@ -10,7 +10,7 @@ import type { User } from "@/modules/user/types";
 ───────────────────────────────────────────── */
 
 export interface AuthResponse {
-  user: User;
+  user: User | null;
   token: string;
 }
 

@@ -1,11 +1,12 @@
 import api from "@/core/api/axios";
+import type { Booking, BookingId } from "../types/booking.types";
 
 const bookingAPI = {
   /* ─────────────────────────────────────────────
      CREATE BOOKING
   ───────────────────────────────────────────── */
 
-  createBooking: async (bookingData) => {
+  createBooking: async (bookingData: Booking) => {
     const response = await api.post("/bookings", bookingData);
 
     return response.data;
@@ -25,7 +26,7 @@ const bookingAPI = {
      SINGLE BOOKING
   ───────────────────────────────────────────── */
 
-  getSingleBooking: async (bookingId) => {
+  getSingleBooking: async (bookingId: BookingId) => {
     const response = await api.get(`/bookings/${bookingId}`);
 
     return response.data;
@@ -35,7 +36,7 @@ const bookingAPI = {
      CANCEL BOOKING
   ───────────────────────────────────────────── */
 
-  cancelBooking: async (bookingId) => {
+  cancelBooking: async (bookingId: BookingId) => {
     const response = await api.patch(`/bookings/${bookingId}/cancel`);
 
     return response.data;
@@ -55,7 +56,7 @@ const bookingAPI = {
      ACCEPT BOOKING
   ───────────────────────────────────────────── */
 
-  acceptBooking: async (bookingId) => {
+  acceptBooking: async (bookingId: BookingId) => {
     const response = await api.patch(`/bookings/${bookingId}/accept`);
 
     return response.data;
@@ -65,7 +66,7 @@ const bookingAPI = {
      REJECT BOOKING
   ───────────────────────────────────────────── */
 
-  rejectBooking: async (bookingId, reason = "") => {
+  rejectBooking: async (bookingId: BookingId, reason = "") => {
     const response = await api.patch(`/bookings/${bookingId}/reject`, {
       reason,
     });

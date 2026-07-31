@@ -5,7 +5,7 @@ import userAPI from "../../services/userService";
 import type { ProfileFormData, User } from "../../types";
 
 type ProfileEditCardProps = {
-  user: User;
+  user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   logout: () => void;
   isEditing: boolean;
@@ -14,7 +14,7 @@ type ProfileEditCardProps = {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   formData: ProfileFormData;
   setFormData: React.Dispatch<React.SetStateAction<ProfileFormData>>;
-  setPreviewImage: React.Dispatch<React.SetStateAction<string | null>>; // Added
+  setPreviewImage: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const ProfileEditCard = ({
