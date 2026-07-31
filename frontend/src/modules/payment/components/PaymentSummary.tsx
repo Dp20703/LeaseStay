@@ -4,7 +4,7 @@ import {
   IndianRupee,
   ShieldCheck,
 } from "@/shared/constants/icons";
-import type { Booking } from "@/types/entities/payment.types";
+import type { Booking } from "../types";
 
 interface Props {
   booking: Booking;

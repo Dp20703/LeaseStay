@@ -32,7 +32,7 @@ const adminAuthService = {
       data,
     );
 
-    return response;
+    return response.data;
   },
 
   /* CURRENT ADMIN */
@@ -40,7 +40,7 @@ const adminAuthService = {
   me: async (): Promise<CurrentAdminResponse> => {
     const { data: response } = await api.get<CurrentAdminResponse>("/auth/me");
 
-    return response;
+    return response.data;
   },
 
   /* LOGOUT */

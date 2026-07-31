@@ -7,8 +7,8 @@ import {
   MapPin,
   User,
 } from "@/shared/constants/icons";
-import type { Booking } from "@/types/entities/payment.types";
 import { Link } from "react-router-dom";
+import type { Booking } from "../types";
 
 interface Props {
   booking: Booking;

@@ -1,5 +1,5 @@
-import type { IBooking } from "@/modules/booking/types/booking.types";
-import type { IProperty } from "@/modules/property/types/property.types";
+import type { Booking } from "@/modules/booking/types/booking.types";
+import type { Property } from "@/modules/property/types/property.types";
 
 export interface OwnerDashboard {
   properties: {
@@ -26,6 +26,6 @@ export interface OwnerDashboard {
     }[];
   };
 
-  recentBookings: IBooking[];
-  recentProperties: IProperty[];
+  recentBookings: Booking[];
+  recentProperties: Property[];
 }

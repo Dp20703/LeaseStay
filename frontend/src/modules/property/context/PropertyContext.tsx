@@ -16,6 +16,7 @@ interface PropertyContextType {
   updateProperty: (id: string, formData: FormData) => Promise<void>;
   deleteProperty: (id: string) => Promise<void>;
   getFeaturedProperties: () => Promise<Property[]>;
+  getRelatedProperties: () => Promise<Property[]>;
   saveProperty: (property: Property) => Promise<void>;
   unsaveProperty: (id: string) => Promise<void>;
   trackPropertyShareCount: (id: string) => Promise<void>;

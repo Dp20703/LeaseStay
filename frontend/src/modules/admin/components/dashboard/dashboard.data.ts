@@ -9,13 +9,13 @@ import {
   Users,
   XCircle,
 } from "@/shared/constants/icons";
-import type { DashboardData } from "../../types/dashboard.types";
+import type { AdminDashboardData } from "../../types/dashboard.types";
 
-type Props = {
-  dashboard: DashboardData;
-};
+// type Props = {
+//   dashboard: AdminDashboardData;
+// };
 
-export const dashboardStats: DashboardData = [
+export const dashboardStats: AdminDashboardData = [
   {
     key: "totalUsers",
     title: "Total Users",

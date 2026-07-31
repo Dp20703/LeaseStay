@@ -1,4 +1,3 @@
-import { AuthContext } from "@/modules/auth/context/AuthContext";
 import { BookingContext } from "@/modules/booking/context/BookingContext";
 import { useContext } from "react";
 

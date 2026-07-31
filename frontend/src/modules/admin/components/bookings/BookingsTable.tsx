@@ -1,4 +1,3 @@
-import { IndianRupee } from "@/shared/constants/icons";
 import {
   Ban,
   Building2,
@@ -7,10 +6,11 @@ import {
   CheckCircle2,
   Clock,
   Inbox,
+  IndianRupee,
   MapPin,
   User,
   XCircle,
-} from "lucide-react";
+} from "@/shared/constants/icons";
 import React from "react";
 import type { IBooking } from "../../types/bookings.types";
 
@@ -40,7 +40,6 @@ export const BookingsTable: React.FC<BookingsTableProps> = ({
   bookings,
   isLoading,
   onUpdateStatus,
-  onUpdatePaymentStatus,
 }) => {
   if (isLoading) {
     return (

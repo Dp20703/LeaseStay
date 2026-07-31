@@ -3,7 +3,7 @@ import { Search } from "@/shared/constants/icons";
 interface Props {
   placeholder?: string;
   value: string;
-  setSearch: string;
+  setSearch: (string) => void;
 }
 
 const SearchInput = ({

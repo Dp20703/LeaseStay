@@ -1,7 +1,4 @@
-import type {
-  LoginFormData,
-  LoginFormErrors,
-} from "@/types/forms/auth-form.types";
+import type { LoginFormData, LoginFormErrors } from "@/modules/auth/types";
 
 export const validateLoginForm = (data: LoginFormData) => {
   const errors: LoginFormErrors = {};

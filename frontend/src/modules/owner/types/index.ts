@@ -1,1 +1,2 @@
-export * from "./owner.types";
+export * from "./becomeOwner.types";
+

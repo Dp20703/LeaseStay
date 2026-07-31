@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import LoaderScreen from "@/shared/components/common/LoaderScreen";
 import BookingCard from "@/modules/booking/components/BookingCard";
 import { useBooking } from "@/modules/booking/hooks/useBooking";
+import LoaderScreen from "@/shared/components/common/LoaderScreen";
+import { useEffect } from "react";
 
 const OwnerBookingRequestsPage = () => {
   const { loading, bookings, getOwnerBookingRequests } = useBooking();

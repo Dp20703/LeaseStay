@@ -61,7 +61,7 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
 
       const response = await adminAuthService.me();
 
-      setAdmin(response.data);
+      setAdmin(response);
     } catch (error) {
       console.error("Failed to fetch current admin:", error);
 
@@ -86,7 +86,7 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
 
       const response = await adminAuthService.login(data);
 
-      const { token, user } = response.data;
+      const { token, user } = response;
 
       localStorage.setItem("adminToken", token);
 

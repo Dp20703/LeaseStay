@@ -26,11 +26,10 @@ const BookingForm = ({ property, onSuccess }: BookingFormProps) => {
 
   const onSubmit = async (data: BookingFormData) => {
     try {
-      const res = await createBooking({
+      await createBooking({
         propertyId: property._id,
         ...data,
       });
-      console.log(res);
 
       toast.success("Booking request sent successfully");
 

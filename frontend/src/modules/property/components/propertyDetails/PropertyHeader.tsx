@@ -7,8 +7,6 @@ import {
   Tag,
 } from "@/shared/constants/icons";
 import { ROLES } from "@/shared/constants/role.constants";
-import { HeartPlus } from "lucide-react";
-import { BiHeartSquare } from "react-icons/bi";
 
 const PropertyHeader = ({
   property,

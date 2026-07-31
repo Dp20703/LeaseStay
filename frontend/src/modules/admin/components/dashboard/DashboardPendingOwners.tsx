@@ -3,8 +3,11 @@ import { Link } from "react-router-dom";
 import { useOwners } from "../../hooks";
 
 const DashboardPendingOwners = () => {
-  const { owners } = useOwners("pending");
+  const { owners } = useOwners();
 
+  const pendingOwners = owners.filter(
+    (owner) => owner?.ownerVerificationStatus === "pending",
+  );
   return (
     <div className="ls-card p-6">
       <div className="mb-6 flex items-center justify-between">
@@ -24,7 +27,7 @@ const DashboardPendingOwners = () => {
       </div>
 
       <div className="space-y-4">
-        {owners?.map((owner) => (
+        {pendingOwners?.map((owner) => (
           <div
             key={owner._id}
             className="flex items-center justify-between rounded-xl border border-border p-4 dark:border-border-dark"

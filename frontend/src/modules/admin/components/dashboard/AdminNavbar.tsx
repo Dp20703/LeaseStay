@@ -4,7 +4,6 @@ import {
   NotificationButton,
   ThemeToggle,
 } from "@/shared/components/layout/navbar/common";
-import { useState } from "react";
 import AdminProfileDropdown from "./AdminProfileDropdown";
 
 interface AdminNavbarProps {
@@ -12,7 +11,7 @@ interface AdminNavbarProps {
 }
 
 const AdminNavbar = ({ onSidebarToggle }: AdminNavbarProps) => {
-  const [search, setSearch] = useState("");
+  // const [search, setSearch] = useState("");
 
   return (
     <header className="sticky top-0 z-40 h-16 border-b border-border-light dark:border-border-dark bg-card-light/95 dark:bg-card-dark/95 backdrop-blur supports-[backdrop-filter]:bg-card-light/80 supports-[backdrop-filter]:dark:bg-card-dark/80">

@@ -1,30 +1,30 @@
-import { Calendar, IndianRupee, MapPin } from "@/shared/constants/icons";
-import type { Booking } from "@/types/entities/payment.types";
+import { MapPin } from "@/shared/constants/icons";
 import { Link } from "react-router-dom";
+import type { Booking } from "../types";
 
 interface Props {
   booking: Booking;
 }
 
-const BookingInfo = ({ booking }: Props) => {
-  const STATUS_STYLES = {
-    pending: "bg-yellow-100 text-yellow-700",
-    accepted: "bg-green-100 text-green-700",
-    rejected: "bg-red-100 text-red-700",
-    cancelled: "bg-gray-100 text-gray-700",
-    completed: "bg-blue-100 text-blue-700",
-  };
+const STATUS_STYLES = {
+  pending: "bg-yellow-100 text-yellow-700",
+  accepted: "bg-green-100 text-green-700",
+  rejected: "bg-red-100 text-red-700",
+  cancelled: "bg-gray-100 text-gray-700",
+  completed: "bg-blue-100 text-blue-700",
+};
 
+const BookingInfo = ({ booking }: Props) => {
   const {
     property,
-    tenant,
-    moveInDate,
-    moveOutDate,
-    phoneNumber,
-    message,
+    // tenant,
+    // moveInDate,
+    // moveOutDate,
+    // phoneNumber,
+    // message,
     status,
-    monthlyRent,
-    paymentStatus,
+    // monthlyRent,
+    // paymentStatus,
   } = booking;
   return (
     <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">

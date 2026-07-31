@@ -1,7 +1,6 @@
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useAuth } from "@/modules/auth/hooks/useAuth";
-import api from "@/core/api/axios";
 import userAPI from "../../services/userService";
 
 const DangerZoneCard = () => {

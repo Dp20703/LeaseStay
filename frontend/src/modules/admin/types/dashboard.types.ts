@@ -70,8 +70,8 @@ export interface PendingProperty {
 export interface DashboardCardConfig {
   key: string;
   title: string;
-  valueKey: keyof DashboardStats;
-  changeKey?: keyof DashboardStats;
+  valueKey: keyof AdminDashboardData;
+  changeKey?: keyof AdminDashboardData;
   suffix?: string;
   defaultChange?: string;
   path: string;

@@ -1,5 +1,5 @@
-import { forwardRef, HTMLAttributes } from "react";
 import clsx from "clsx";
+import type { forwardRef, HTMLAttributes } from "react";
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   hover?: boolean;

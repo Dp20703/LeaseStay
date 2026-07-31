@@ -1,5 +1,5 @@
 import api from "@/core/api/axios";
-import type { User } from "@/types/entities/user.types";
+import type { User } from "@/modules/user/types";
 
 /* ─────────────────────────────────────────────
    TYPES

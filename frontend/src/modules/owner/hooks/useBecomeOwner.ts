@@ -11,7 +11,7 @@ const useBecomeOwner = (): UseBecomeOwnerReturn => {
   const [documentType, setDocumentType] = useState("aadhaar");
   const [file, setFile] = useState(null);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     if (!file) {

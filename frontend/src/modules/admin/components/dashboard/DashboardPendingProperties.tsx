@@ -1,7 +1,6 @@
 import { ArrowRight } from "@/shared/constants/icons";
 import { Link } from "react-router-dom";
 import { useProperties } from "../../hooks";
-import { pendingProperties } from "./dashboard.data";
 
 const DashboardPendingProperties = () => {
   const { properties } = useProperties("Pending");
