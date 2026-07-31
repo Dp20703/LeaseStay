@@ -64,7 +64,6 @@ const ProfileEditCard = ({
       }
 
       const response = await userAPI.updateProfile(updatedFormData);
-      console.log(response);
       // UPDATE USER
       setUser(response.data);
 

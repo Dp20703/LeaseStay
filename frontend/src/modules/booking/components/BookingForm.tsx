@@ -1,7 +1,7 @@
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import { useBooking } from "@/modules/booking/hooks/useBooking";
 import type { Property } from "@/modules/property/types";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 interface BookingFormProps {
   property: Property;
@@ -26,7 +26,6 @@ const BookingForm = ({ property, onSuccess }: BookingFormProps) => {
 
   const onSubmit = async (data: BookingFormData) => {
     try {
-      console.log(data);
       const res = await createBooking({
         propertyId: property._id,
         ...data,

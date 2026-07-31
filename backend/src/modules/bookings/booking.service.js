@@ -1,8 +1,8 @@
-import Property from "../properties/property.model.js";
-import Booking from "./booking.model.js";
-import User from "../users/user.model.js";
-import { sendMail } from "../../utils/mail/sendMail.js";
 import { ApiError } from "../../helpers/index.js";
+import { sendMail } from "../../utils/mail/sendMail.js";
+import Property from "../properties/property.model.js";
+import User from "../users/user.model.js";
+import Booking from "./booking.model.js";
 
 const OWNER_POPULATE = "userName email fullName profileImage";
 
@@ -35,7 +35,6 @@ export const createBookingService = async ({
     "owner",
     OWNER_POPULATE,
   );
-  console.log(property);
 
   if (!property) {
     throw new ApiError(404, "Property not found");

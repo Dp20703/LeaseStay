@@ -8,7 +8,6 @@ const ownerAPI = {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log("Response of apply owner:", response);
     return response.data;
   },
 };

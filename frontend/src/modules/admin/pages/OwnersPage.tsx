@@ -20,8 +20,6 @@ export const OwnersPage: React.FC = () => {
     rejectOwner,
   } = useOwners("all");
 
-  console.log("owners:", owners);
-
   // Local UI State for Modal and Drawer
   const [selectedOwnerForReject, setSelectedOwnerForReject] =
     useState<IOwner | null>(null);
@@ -44,7 +42,6 @@ export const OwnersPage: React.FC = () => {
 
   // --- Verification Handlers ---
   const handleApprove = (ownerId: string) => {
-    console.log("handle approved:", ownerId);
     approveOwner(ownerId);
   };
 

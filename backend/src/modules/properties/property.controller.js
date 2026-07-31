@@ -1,10 +1,8 @@
+import { ApiError, ApiResponse, asyncHandler } from "../../helpers/index.js";
 import * as PropertyService from "./property.service.js";
-import { asyncHandler, ApiError, ApiResponse } from "../../helpers/index.js";
 
 // Create a new property listing.
 export const createProperty = asyncHandler(async (req, res) => {
-  console.log("Create property req.body", req.body);
-  console.log("Create property req.files", req?.files);
   const property = await PropertyService.createPropertyService({
     body: req.body,
     files: req.files,
@@ -184,7 +182,6 @@ export const contactPropertyOwner = asyncHandler(async (req, res) => {
 
 // Fetch featured properties.
 export const getFeaturedProperties = asyncHandler(async (req, res) => {
-  console.log("req.query", req.query);
   const properties = await PropertyService.getFeaturedPropertiesService(
     req.query,
   );

@@ -15,7 +15,6 @@ const CreatePropertyPage = () => {
   const handleSubmit = async (formData: FormData) => {
     try {
       const res = await createProperty(formData);
-      console.log("res of create proeprty:", res);
       toast.success("Property created successfully");
 
       navigate("/owner/properties");

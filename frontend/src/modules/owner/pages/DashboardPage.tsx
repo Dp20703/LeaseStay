@@ -9,7 +9,6 @@ import DashboardStats from "../components/dashboard/DashboardStats";
 
 const DashboardPage = () => {
   const { dashboard, loading } = useOwnerDashboard();
-  console.log("Dashobard:", dashboard);
   if (loading) {
     return (
       <div className="flex items-center justify-center py-24">

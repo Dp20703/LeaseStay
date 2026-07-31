@@ -42,7 +42,6 @@ export const BookingsTable: React.FC<BookingsTableProps> = ({
   onUpdateStatus,
   onUpdatePaymentStatus,
 }) => {
-  console.log("boookign in admin:", bookings);
   if (isLoading) {
     return (
       <div className="ls-table-wrapper">

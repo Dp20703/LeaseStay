@@ -1,15 +1,18 @@
+import AuthHeader from "@/modules/auth/components/AuthHeader";
+import GoogleAuthButton from "@/modules/auth/components/GoogleAuthButton";
+import PasswordInput from "@/modules/auth/components/PasswordInput";
+import RegisterInput from "@/modules/auth/components/RegisterInput";
+import { validateRegisterForm } from "@/modules/auth/components/RegisterValidation";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+import type {
+  RegisterFormData,
+  RegisterFormErrors,
+} from "@/modules/auth/types";
+import { Mail, Phone, User } from "@/shared/constants/icons";
+import { formatValidationErrors } from "@/shared/utils/formatValidationErrors";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Mail, Phone, User } from "@/shared/constants/icons";
-import { useAuth } from "@/modules/auth/hooks/useAuth";
-import type { RegisterFormData, RegisterFormErrors } from "@/modules/auth/types";
-import AuthHeader from "@/modules/auth/components/AuthHeader";
-import RegisterInput from "@/modules/auth/components/RegisterInput";
-import PasswordInput from "@/modules/auth/components/PasswordInput";
-import GoogleAuthButton from "@/modules/auth/components/GoogleAuthButton";
-import { validateRegisterForm } from "@/modules/auth/components/RegisterValidation";
-import { formatValidationErrors } from "@/shared/utils/formatValidationErrors";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
@@ -84,8 +87,6 @@ const RegisterForm = () => {
 
       navigate("/");
     } catch (error: any) {
-      console.log("REGISTER ERROR:", error.response?.data);
-
       /* BACKEND VALIDATION ERRORS */
       if (error.response?.data?.errors) {
         setErrors(formatValidationErrors(error.response.data.errors));

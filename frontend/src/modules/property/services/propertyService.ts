@@ -133,8 +133,7 @@ const propertyAPI = {
 
   trackPropertyShareCount: async (id: string) => {
     const response = await api.patch(`/properties/${id}/share`);
-    console.log("share count:", response);
-    // return response.data;
+    return response.data;
   },
 };
 

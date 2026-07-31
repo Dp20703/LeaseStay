@@ -57,8 +57,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const response = await authAPI.getCurrentUser();
       setUser(response.data);
     } catch (error) {
-      console.log("ME ERROR:", error);
-
       localStorage.removeItem("userToken");
       setUser(null);
     } finally {

@@ -25,9 +25,7 @@ export const createOrder = async (userId, bookingId) => {
   if (booking.paymentStatus === "paid") {
     throw new ApiError(400, "Booking already paid");
   }
-  console.log(booking);
-  console.log("Booking Amount:", booking.monthlyRent);
-  console.log("Razorpay Amount:", booking.monthlyRent * 100);
+
   const options = {
     amount: booking.monthlyRent * 100,
     currency: "INR",

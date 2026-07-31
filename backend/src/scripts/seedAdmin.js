@@ -2,8 +2,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import mongoose from "mongoose";
-import User from "../modules/users/user.model.js";
 import { ROLES } from "../constants/roles.constants.js";
+import User from "../modules/users/user.model.js";
 
 try {
   await mongoose.connect(process.env.MONGO_URI);
@@ -13,7 +13,6 @@ try {
   });
 
   if (exists) {
-    console.log("Admin already exists");
     process.exit(0);
   }
 
@@ -26,8 +25,6 @@ try {
     password: process.env.ADMIN_PASSWORD,
     role: ROLES.ADMIN,
   });
-
-  console.log("Admin created successfully");
 } catch (error) {
   console.error("Error:", error);
 } finally {

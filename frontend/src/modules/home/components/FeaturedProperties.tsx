@@ -13,7 +13,6 @@ const FeaturedProperties = () => {
   if (loading) {
     return <LoaderScreen />;
   }
-  console.log("properties", featuredProperties);
 
   return (
     <section className="py-24">

@@ -11,6 +11,7 @@ import morgan from "morgan";
 
 import routes from "./routes/index.js";
 
+import redisClient from "./config/redis.config.js";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 import { notFoundMiddleware } from "./middlewares/notFound.middleware.js";
 

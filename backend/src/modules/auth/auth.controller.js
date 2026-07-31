@@ -124,7 +124,6 @@ export const googleAuth = asyncHandler(async (req, res) => {
       userName: await generateUniqueUsername(email?.split("@")[0]),
       fullName: { firstName: name, lastName: "" },
     });
-    console.log("new-user:", user);
   }
 
   if (isNewUser) {

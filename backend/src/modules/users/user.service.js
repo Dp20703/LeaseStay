@@ -50,8 +50,6 @@ export const updateProfileService = async ({ userId, body, file }) => {
   // PROFILE IMAGE
 
   if (file) {
-    console.log("File in server:", file);
-
     // Clone old image (avoid reference issues)
     const oldImage = user.profileImage
       ? {
@@ -66,8 +64,6 @@ export const updateProfileService = async ({ userId, body, file }) => {
       CLOUDINARY_FOLDERS.PROFILE_IMAGES,
     );
 
-    console.log("New Image:", { url, publicId });
-
     // Replace MongoDB object
     user.profileImage = {
       url,
@@ -78,8 +74,6 @@ export const updateProfileService = async ({ userId, body, file }) => {
     // Delete old image from Cloudinary
     if (oldImage?.publicId) {
       try {
-        console.log("Deleting old image:", oldImage.publicId);
-
         await deleteFromCloudinary(oldImage.publicId);
       } catch (error) {
         console.error("Failed to delete old image:", error.message);
@@ -267,9 +261,7 @@ export const deleteAccountService = async (userId) => {
   if (user.profileImage?.publicId) {
     try {
       await deleteFromCloudinary(user.profileImage.publicId);
-    } catch (error) {
-      console.log("Profile image delete failed:", error.message);
-    }
+    } catch (error) {}
   }
 
   /* SOFT DELETE */

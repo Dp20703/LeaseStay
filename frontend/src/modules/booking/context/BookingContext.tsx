@@ -54,7 +54,6 @@ export const BookingProvider = ({ children }: BookingProviderProps) => {
 
       return response.data;
     } catch (error) {
-      console.log("Create Booking Context Error:", error);
       throw error;
     } finally {
       setLoading(false);
@@ -73,7 +72,6 @@ export const BookingProvider = ({ children }: BookingProviderProps) => {
 
       return response.data;
     } catch (error) {
-      console.log("My Bookings Context Error:", error);
       throw error;
     } finally {
       setLoading(false);
