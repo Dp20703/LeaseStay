@@ -68,4 +68,14 @@ app.use(errorMiddleware);
 /* NOT FOUND */
 app.use(notFoundMiddleware);
 
+app.get("/redis-test", async (req, res) => {
+  await redisClient.set("name", "LeaseStay");
+
+  const value = await redisClient.get("name");
+
+  res.json({
+    value,
+  });
+});
+
 export default app;
