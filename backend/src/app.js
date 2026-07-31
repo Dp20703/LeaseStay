@@ -52,13 +52,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.get("/", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "LeaseStay API is running successfully",
-  });
-});
-
 /* ROUTES */
 app.use("/api/v1", routes);
 
@@ -67,6 +60,13 @@ app.use(errorMiddleware);
 
 /* NOT FOUND */
 app.use(notFoundMiddleware);
+
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "LeaseStay API is running successfully",
+  });
+});
 
 app.get("/redis-test", async (req, res) => {
   await redisClient.set("name", "LeaseStay");
