@@ -2,8 +2,13 @@ import DashboardPendingOwners from "./DashboardPendingOwners";
 import DashboardPendingProperties from "./DashboardPendingProperties";
 import DashboardQuickActions from "./DashboardQuickActions";
 import DashboardRecentActivities from "./DashboardRecentActivities";
+import type { AdminDashboardData } from "../../types";
 
-const DashboardBottom = ({ stats }) => {
+interface DashboardBottomProps {
+  stats: AdminDashboardData | null;
+}
+
+const DashboardBottom = ({ stats }: DashboardBottomProps) => {
   return (
     <section className="space-y-6">
       <div className="grid gap-6 xl:grid-cols-2">

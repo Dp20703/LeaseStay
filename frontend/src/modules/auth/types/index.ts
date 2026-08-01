@@ -1,1 +1,6 @@
-export * from "./auth-form.types";
+export type {
+  LoginFormData,
+  LoginFormErrors,
+  RegisterFormData,
+  RegisterFormErrors,
+} from "./auth-form.types";

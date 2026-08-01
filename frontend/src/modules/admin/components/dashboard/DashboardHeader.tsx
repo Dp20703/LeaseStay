@@ -1,6 +1,10 @@
 import { RefreshCcw } from "@/shared/constants/icons";
 
-const DashboardHeader = ({ refresh }) => {
+interface DashboardHeaderProps {
+  refresh: () => void;
+}
+
+const DashboardHeader = ({ refresh }: DashboardHeaderProps) => {
   return (
     <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
       <div>

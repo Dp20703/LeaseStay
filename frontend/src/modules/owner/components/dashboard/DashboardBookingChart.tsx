@@ -78,7 +78,7 @@ const DashboardBookingChart = ({ dashboard }: Props) => {
             </Pie>
 
             <Tooltip
-              formatter={(value: number) => [value, "Bookings"]}
+              formatter={(value) => [value, "Bookings"]}
               contentStyle={{
                 borderRadius: 16,
                 border: "none",

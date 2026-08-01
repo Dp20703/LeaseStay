@@ -2,6 +2,7 @@ import PropertyCard from "@/modules/property/components/propertyDetails/Property
 
 import { useProperty } from "@/modules/property/hooks/useProperty";
 import { useEffect, useState } from "react";
+import type { Property } from "@/modules/property/types";
 import RelatedPropertiesSkeleton from "./RelatedPropertiesSkeleton";
 
 interface Props {

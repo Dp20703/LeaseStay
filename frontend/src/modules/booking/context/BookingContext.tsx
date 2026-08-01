@@ -3,7 +3,7 @@ import { createContext, useCallback, useMemo, useState } from "react";
 
 import bookingAPI from "@/modules/booking/services/bookingService";
 import type { Booking } from "@/modules/booking/types/booking.types";
-import type { CreateBookingFormData } from "../validations/booking.schema";
+import type { CreateBookingPayload } from "@/types";
 
 /* ─────────────────────────────────────────────
    TYPES
@@ -14,7 +14,7 @@ interface BookingContextType {
   booking: Booking | null;
   loading: boolean;
 
-  createBooking: (bookingData: CreateBookingFormData) => Promise<any>;
+  createBooking: (bookingData: CreateBookingPayload) => Promise<any>;
   getMyBookings: () => Promise<any>;
   getSingleBooking: (bookingId: string) => Promise<any>;
   cancelBooking: (bookingId: string) => Promise<any>;
@@ -47,7 +47,7 @@ export const BookingProvider = ({ children }: BookingProviderProps) => {
 
   /* Create Booking */
 
-  const createBooking = useCallback(async (bookingData: any) => {
+  const createBooking = useCallback(async (bookingData: CreateBookingPayload) => {
     try {
       setLoading(true);
 

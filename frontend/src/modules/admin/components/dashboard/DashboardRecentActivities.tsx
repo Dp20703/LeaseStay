@@ -8,7 +8,9 @@ import {
   XCircle,
 } from "@/shared/constants/icons";
 
-const getActivityMeta = (activity: any) => {
+import type { AdminDashboardData, Activity } from "../../types";
+
+const getActivityMeta = (activity: Activity) => {
   switch (activity.type) {
     case "approved":
       return {
@@ -68,7 +70,11 @@ const getActivityMeta = (activity: any) => {
   }
 };
 
-const DashboardRecentActivities = ({ stats }) => {
+interface DashboardRecentActivitiesProps {
+  stats: AdminDashboardData | null;
+}
+
+const DashboardRecentActivities = ({ stats }: DashboardRecentActivitiesProps) => {
   return (
     <div className="ls-card p-6">
       <div className="mb-6 flex items-center justify-between">

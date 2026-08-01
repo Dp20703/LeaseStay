@@ -1,6 +1,7 @@
-import type { Booking } from "../booking/booking.types";
 import type { Property, PropertyStatus } from "../property/property.types";
-import type { OwnerVerificationStatus, User } from "../user/user.types";
+import type { User } from "../user/user.types";
+import type { OwnerVerificationStatus } from "../user/user.types";
+import type { Booking } from "../booking/booking.types";
 
 export interface MonthlyRevenuePoint {
   month: string;
@@ -35,20 +36,14 @@ export interface AdminDashboardStats {
   recentActivities: AdminDashboardActivity[];
 }
 
-export interface OwnerDashboardPropertyRef extends Pick<
-  Property,
-  "_id" | "title" | "slug" | "location" | "thumbnail" | "price"
-> {}
+export interface OwnerDashboardPropertyRef
+  extends Pick<Property, "_id" | "title" | "slug" | "location" | "thumbnail" | "price"> {}
 
-export interface OwnerDashboardTenantRef extends Pick<
-  User,
-  "_id" | "fullName" | "profileImage" | "email"
-> {}
+export interface OwnerDashboardTenantRef
+  extends Pick<User, "_id" | "fullName" | "profileImage" | "email"> {}
 
-export interface OwnerDashboardRecentBooking extends Omit<
-  Booking,
-  "tenant" | "property"
-> {
+export interface OwnerDashboardRecentBooking
+  extends Omit<Booking, "tenant" | "property"> {
   tenant: OwnerDashboardTenantRef;
   property: OwnerDashboardPropertyRef;
 }

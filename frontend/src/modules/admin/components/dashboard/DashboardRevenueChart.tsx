@@ -1,6 +1,11 @@
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
+import type { AdminDashboardData } from "../../types";
 
-const DashboardRevenueChart = ({ stats }) => {
+interface DashboardRevenueChartProps {
+  stats: AdminDashboardData | null;
+}
+
+const DashboardRevenueChart = ({ stats }: DashboardRevenueChartProps) => {
   return (
     <div className="ls-card p-6">
       <div className="mb-6">

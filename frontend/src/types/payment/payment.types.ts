@@ -1,19 +1,7 @@
-import type { Booking } from "../booking/booking.types";
 import type { BaseEntity, ID, Nullable } from "../common/common.types";
+import type { Booking } from "../booking/booking.types";
 import type { Property } from "../property/property.types";
 import type { User } from "../user/user.types";
-
-/* ============================================================================
- * Payment Types
- * ============================================================================
- * Frontend DTOs derived from the backend Payment model
- * (modules/payments/payment.model.js) and the Razorpay integration in
- * payment.service.js.
- *
- * Like Booking, populate selects differ by endpoint — there is no single
- * "populated Payment" shape. Each list/detail endpoint gets its own view
- * type below, named after the service that returns it.
- * ========================================================================== */
 
 export type PaymentStatus =
   | "created"
@@ -32,7 +20,6 @@ export type PaymentType =
   | "subscription"
   | "other";
 
-/** Distinct from BookingPaymentMethod — different value set/casing on this model. */
 export type PaymentMethod =
   | "upi"
   | "card"
@@ -72,88 +59,52 @@ export interface Payment extends BaseEntity {
   isPaid: boolean;
 }
 
-/** getMyPayments — populates only `property`, select "title price". */
-export interface MyPaymentPropertyRef extends Pick<
-  Property,
-  "_id" | "title" | "price"
-> {}
+export interface MyPaymentPropertyRef
+  extends Pick<Property, "_id" | "title" | "price"> {}
 
-/** getPaymentById (findAccessiblePayment) — populates `property` with "title price location". */
-export interface PaymentDetailsPropertyRef extends Pick<
-  Property,
-  "_id" | "title" | "price" | "location"
-> {}
+export interface PaymentDetailsPropertyRef
+  extends Pick<Property, "_id" | "title" | "price" | "location"> {}
 
-/** getPaymentById + getPropertyPayments both select "fullName email" for `tenant`. */
-export interface PaymentPartyRef extends Pick<
-  User,
-  "_id" | "fullName" | "email"
-> {}
+export interface PaymentPartyRef
+  extends Pick<User, "_id" | "fullName" | "email"> {}
 
-/** adminPayment.service.js fetchAllPaymentsService — populates `property` with "title location". */
-export interface AdminPaymentPropertyRef extends Pick<
-  Property,
-  "_id" | "title" | "location"
-> {}
+export interface AdminPaymentPropertyRef
+  extends Pick<Property, "_id" | "title" | "location"> {}
 
-/** adminPayment.service.js — populates `tenant`/`landlord` with "fullName email profileImage". */
-export interface AdminPaymentPartyRef extends Pick<
-  User,
-  "_id" | "fullName" | "email" | "profileImage"
-> {}
+export interface AdminPaymentPartyRef
+  extends Pick<User, "_id" | "fullName" | "email" | "profileImage"> {}
 
-/**
- * adminPayment.service.js populates `booking` selecting "bookingReference" —
- * that field does not exist on the Booking model (booking.model.js has no
- * `bookingReference`), so in practice this populate only yields `_id`. Typed
- * to match what's actually returned, not the (non-existent) intended field;
- * worth fixing on the backend in Phase B.
- */
 export interface AdminPaymentBookingRef extends Pick<Booking, "_id"> {}
 
-/** getMyPayments — tenant's payment history list. */
 export interface MyPayment extends Omit<Payment, "property"> {
   property: MyPaymentPropertyRef;
 }
 
-/** getPaymentById — single payment detail (tenant, landlord, or admin). */
 export interface PaymentDetails extends Omit<Payment, "property" | "tenant"> {
   property: PaymentDetailsPropertyRef;
   tenant: PaymentPartyRef;
 }
 
-/** getPropertyPayments — owner viewing payments for one of their properties. */
 export interface PropertyPayment extends Omit<Payment, "tenant"> {
   tenant: PaymentPartyRef;
 }
 
-/** adminPayment.service.js fetchAllPaymentsService — Admin Payments table row. */
-export interface AdminPaymentSummary extends Omit<
-  Payment,
-  "property" | "tenant" | "landlord" | "booking"
-> {
+export interface AdminPaymentSummary
+  extends Omit<Payment, "property" | "tenant" | "landlord" | "booking"> {
   property: AdminPaymentPropertyRef;
   tenant: AdminPaymentPartyRef;
   landlord: AdminPaymentPartyRef;
   booking: AdminPaymentBookingRef;
 }
 
-/** owner/services/payment.service.js getOwnerPaymentsService — populates `property` with "title location". */
-export interface OwnerPaymentPropertyRef extends Pick<
-  Property,
-  "_id" | "title" | "location"
-> {}
+export interface OwnerPaymentPropertyRef
+  extends Pick<Property, "_id" | "title" | "location"> {}
 
-/** Same service — populates `tenant` with "fullName profileImage" (no email). */
-export interface OwnerPaymentTenantRef extends Pick<
-  User,
-  "_id" | "fullName" | "profileImage"
-> {}
+export interface OwnerPaymentTenantRef
+  extends Pick<User, "_id" | "fullName" | "profileImage"> {}
 
-export interface OwnerPaymentListItem extends Omit<
-  Payment,
-  "tenant" | "property"
-> {
+export interface OwnerPaymentListItem
+  extends Omit<Payment, "tenant" | "property"> {
   tenant: OwnerPaymentTenantRef;
   property: OwnerPaymentPropertyRef;
 }

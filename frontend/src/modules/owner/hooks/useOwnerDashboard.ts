@@ -17,6 +17,7 @@ const initialDashboard: OwnerDashboard = {
     underVerification: 0,
     accepted: 0,
     completed: 0,
+    rejected: 0,
   },
 
   revenue: {

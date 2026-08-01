@@ -6,14 +6,6 @@ import type {
   PropertyStatus,
 } from "./property.types";
 
-/* ============================================================================
- * Property Form / Request Types
- * ============================================================================
- * Create/update are sent as multipart FormData (images + propertyDocuments
- * files alongside these fields) — these types describe the non-file fields
- * per createPropertyValidation.js / updatePropertyValidation.js.
- * ========================================================================== */
-
 export interface PropertyFormData {
   title: string;
   description: string;

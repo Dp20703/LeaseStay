@@ -7,6 +7,7 @@ const ChangePasswordCard = () => {
   const [formData, setFormData] = useState({
     currentPassword: "",
     newPassword: "",
+    confirmPassword: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -27,7 +28,7 @@ const ChangePasswordCard = () => {
       const response = await userAPI.changePassword(formData);
 
       toast.success(response?.message);
-      setFormData({ currentPassword: "", newPassword: "" });
+      setFormData({ currentPassword: "", newPassword: "", confirmPassword: "" });
     } catch (error: any) {
       toast.error(error?.response?.message || "Password update failed");
     } finally {
@@ -65,6 +66,20 @@ const ChangePasswordCard = () => {
             onChange={handleChange}
             className="ls-input mt-2"
             placeholder="Enter new password"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="ls-label">Confirm New Password</label>
+
+          <input
+            type="password"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            className="ls-input mt-2"
+            placeholder="Re-enter new password"
             required
           />
         </div>

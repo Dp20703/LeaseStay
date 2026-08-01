@@ -4,8 +4,20 @@ import type {
   IPropertiesFilterState,
   IProperty,
 } from "../types/properties.types";
+import type { PropertyStatus } from "@/types";
 
 type PropertyMode = "all" | "Pending" | "Approved" | "Rejected";
+
+/** Maps the local UI filter's uppercase status values to the real backend PropertyStatus casing. */
+const FILTER_STATUS_TO_PROPERTY_STATUS: Record<
+  Exclude<IPropertiesFilterState["status"], "ALL">,
+  PropertyStatus
+> = {
+  PENDING: "Pending",
+  APPROVED: "Approved",
+  REJECTED: "Rejected",
+  HIDDEN: "Hidden",
+};
 
 export const useProperties = (mode: PropertyMode = "all") => {
   const [properties, setProperties] = useState<IProperty[]>([]);
@@ -134,7 +146,7 @@ export const useProperties = (mode: PropertyMode = "all") => {
     try {
       await adminPropertyService.approveProperty(propertyId);
 
-      mode === "pending" ? fetchPendingProperties() : fetchProperties();
+      mode === "Pending" ? fetchPendingProperties() : fetchProperties();
     } catch (err) {
       console.error(err);
     }
@@ -144,7 +156,7 @@ export const useProperties = (mode: PropertyMode = "all") => {
     try {
       await adminPropertyService.rejectProperty(propertyId, reason);
 
-      mode === "pending" ? fetchPendingProperties() : fetchProperties();
+      mode === "Pending" ? fetchPendingProperties() : fetchProperties();
     } catch (err) {
       console.error(err);
     }
@@ -200,7 +212,9 @@ export const useProperties = (mode: PropertyMode = "all") => {
         ownerName.toLowerCase().includes(search);
 
       const matchesStatus =
-        filter.status === "ALL" ? true : property.status === filter.status;
+        filter.status === "ALL"
+          ? true
+          : property.status === FILTER_STATUS_TO_PROPERTY_STATUS[filter.status];
 
       return matchesSearch && matchesStatus;
     });

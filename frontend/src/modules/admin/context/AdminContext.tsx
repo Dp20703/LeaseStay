@@ -61,7 +61,7 @@ export const AdminProvider = ({ children }: AdminProviderProps) => {
 
       const response = await adminAuthService.me();
 
-      setAdmin(response);
+      setAdmin(response.user);
     } catch (error) {
       console.error("Failed to fetch current admin:", error);
 

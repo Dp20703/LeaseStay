@@ -1,4 +1,5 @@
 import type { DocumentTypeSelectProps } from "../../types";
+import type { VerificationDocumentType } from "@/types";
 
 const DocumentTypeSelect = ({ value, onChange }: DocumentTypeSelectProps) => {
   return (
@@ -9,7 +10,7 @@ const DocumentTypeSelect = ({ value, onChange }: DocumentTypeSelectProps) => {
 
       <select
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange(e.target.value as VerificationDocumentType)}
         className="w-full rounded-xl border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark px-4 py-3 text-text-light dark:text-text-dark focus:border-primary focus:ring-2 focus:ring-primary-light outline-none transition-normal"
       >
         <option value="aadhaar">Aadhaar Card</option>

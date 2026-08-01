@@ -18,6 +18,7 @@ const BOOKING_STATUS = {
   pending: "bg-yellow-100 text-yellow-700",
   accepted: "bg-green-100 text-green-700",
   under_verification: "bg-blue-100 text-blue-700",
+  confirmed: "bg-emerald-100 text-emerald-700",
   completed: "bg-emerald-100 text-emerald-700",
   rejected: "bg-red-100 text-red-700",
   cancelled: "bg-gray-100 text-gray-700",
@@ -48,7 +49,6 @@ const PaymentPropertyCard = ({ booking }: Props) => {
       <img
         src={
           property?.thumbnail?.url ||
-          property?.images?.[0]?.url ||
           "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200"
         }
         alt={property?.title}

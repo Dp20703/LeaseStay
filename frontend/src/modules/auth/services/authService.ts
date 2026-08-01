@@ -36,9 +36,9 @@ const authAPI = {
     formData.append("email", data.email);
     formData.append("password", data.password);
     formData.append("confirmPassword", data.confirmPassword);
-    formData.append("phone", data.phone);
+    if (data.phone) formData.append("phone", data.phone);
     formData.append("firstName", data.firstName);
-    formData.append("lastName", data.lastName);
+    if (data.lastName) formData.append("lastName", data.lastName);
 
     const response = await api.post("/auth/register", formData);
 

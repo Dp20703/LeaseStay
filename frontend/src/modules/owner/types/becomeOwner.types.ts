@@ -1,4 +1,5 @@
 import type { VerificationDocumentType } from "@/types";
+import type { Dispatch, FormEvent, SetStateAction } from "react";
 
 export type DocumentType = VerificationDocumentType;
 
@@ -20,7 +21,7 @@ export interface UseBecomeOwnerReturn {
   loading: boolean;
   documentType: DocumentType;
   file: File | null;
-  setDocumentType: React.Dispatch<React.SetStateAction<DocumentType>>;
-  setFile: React.Dispatch<React.SetStateAction<File | null>>;
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+  setDocumentType: Dispatch<SetStateAction<DocumentType>>;
+  setFile: Dispatch<SetStateAction<File | null>>;
+  handleSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>;
 }

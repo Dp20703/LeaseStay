@@ -1,16 +1,25 @@
 import { dashboardStats } from "./dashboard.data";
 import DashboardStatCard from "./DashboardStatCard";
+import type { AdminDashboardData } from "../../types";
 
-const DashboardStats = ({ stats }) => {
+interface DashboardStatsProps {
+  stats: AdminDashboardData | null;
+}
+
+const DashboardStats = ({ stats }: DashboardStatsProps) => {
   return (
     <section className="grid gap-6 sm:grid-cols-2 xl:grid-cols-5">
       {dashboardStats?.map((card) => {
-        const value = stats?.[card.valueKey] ?? 0;
+        const rawValue = stats?.[card.valueKey];
+        const value: number | string =
+          typeof rawValue === "number" || typeof rawValue === "string"
+            ? rawValue
+            : 0;
 
         const change =
-          stats?.[card.changeKey] !== undefined
+          card.changeKey && stats?.[card.changeKey] !== undefined
             ? `${stats[card.changeKey]}${card.suffix}`
-            : card.defaultChange;
+            : (card.defaultChange ?? "");
 
         return (
           <DashboardStatCard

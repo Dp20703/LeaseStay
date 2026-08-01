@@ -77,10 +77,6 @@ const PaymentTable = ({ payments }: Props) => {
                         {payment.tenant.fullName.firstName}{" "}
                         {payment.tenant.fullName.lastName}
                       </p>
-
-                      <p className="text-xs text-text-muted">
-                        {payment.tenant.email}
-                      </p>
                     </div>
                   </div>
                 </td>

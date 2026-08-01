@@ -11,7 +11,7 @@ import type { AuthenticationData } from "./auth.types";
 /* -------------------------------------------------------------------------- */
 
 export interface RegisterPayload {
-  userName?: string;
+  userName: string;
   email: string;
   password: string;
   confirmPassword: string;

@@ -47,7 +47,7 @@ const userAPI = {
 
   /* CHANGE EMAIL */
 
-  changeEmail: async (formData: { email: string; password: string }) => {
+  changeEmail: async (formData: { newEmail: string; password: string }) => {
     const response = await api.patch("/users/change-email", formData);
 
     return response.data as MessageResponse;
@@ -58,7 +58,7 @@ const userAPI = {
   deleteProfileImage: async () => {
     const response = await api.delete("/users/delete-profile-image");
 
-    return response.data as MessageResponse;
+    return response.data as UserResponse;
   },
 
   /* DELETE ACCOUNT */

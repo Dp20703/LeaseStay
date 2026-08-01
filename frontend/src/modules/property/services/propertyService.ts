@@ -1,5 +1,5 @@
 import api from "@/core/api/axios";
-import type { Property } from "@/types/entities/property.types";
+import type { Property } from "@/types";
 
 /* ─────────────────────────────────────────────
    TYPES

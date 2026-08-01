@@ -1,4 +1,12 @@
-const PropertyInfoCard = ({ icon, title, value }: any) => {
+import type { ReactNode } from "react";
+
+interface PropertyInfoCardProps {
+  icon: ReactNode;
+  title: string;
+  value: string | number;
+}
+
+const PropertyInfoCard = ({ icon, title, value }: PropertyInfoCardProps) => {
   return (
     <div className=" ls-card p-5 flex items-center gap-5 hover:-translate-y-1 transition">
       <div className="text-3xl text-primary ">{icon}</div>
@@ -10,3 +18,5 @@ const PropertyInfoCard = ({ icon, title, value }: any) => {
     </div>
   );
 };
+
+export default PropertyInfoCard;

@@ -21,9 +21,6 @@ export interface JwtPayload {
 /* -------------------------------------------------------------------------- */
 /* Roles */
 /* -------------------------------------------------------------------------- */
-/* Re-exported for convenience so existing `import type { UserRole } from
-   "@/types/auth"` call sites keep working; user/user.types.ts is the
-   source of truth. */
 export type { UserRole };
 
 /* -------------------------------------------------------------------------- */

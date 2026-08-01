@@ -1,6 +1,7 @@
 import api from "@/core/api/axios";
 import type { LoginFormData } from "@/modules/auth/types/auth-form.types";
 import type { User } from "@/modules/user/types";
+import type { ApiResponse } from "@/types";
 
 /* ─────────────────────────────────────────────
    TYPES
@@ -27,7 +28,7 @@ const adminAuthService = {
   /* LOGIN */
 
   login: async (data: LoginFormData): Promise<AdminAuthResponse> => {
-    const { data: response } = await api.post<AdminAuthResponse>(
+    const { data: response } = await api.post<ApiResponse<AdminAuthResponse>>(
       "/admin/login",
       data,
     );
@@ -38,7 +39,8 @@ const adminAuthService = {
   /* CURRENT ADMIN */
 
   me: async (): Promise<CurrentAdminResponse> => {
-    const { data: response } = await api.get<CurrentAdminResponse>("/auth/me");
+    const { data: response } =
+      await api.get<ApiResponse<CurrentAdminResponse>>("/auth/me");
 
     return response.data;
   },

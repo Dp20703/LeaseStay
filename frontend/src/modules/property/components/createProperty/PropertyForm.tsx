@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 
 import {
   createPropertySchema,
@@ -35,8 +35,10 @@ const PropertyForm = ({ loading, onSubmit }: PropertyFormProps) => {
     setValue,
 
     formState: { errors },
-  } = useForm<CreatePropertyFormData>({
-    resolver: zodResolver(createPropertySchema),
+  } = useForm<CreatePropertyFormData, any, CreatePropertyFormData>({
+    resolver: zodResolver(
+      createPropertySchema,
+    ) as unknown as Resolver<CreatePropertyFormData>,
 
     defaultValues: {
       category: "Rent",
@@ -90,11 +92,11 @@ const PropertyForm = ({ loading, onSubmit }: PropertyFormProps) => {
       }
     });
 
-    Array.from(images).forEach((file) => {
+    Array.from(images ?? []).forEach((file) => {
       formData.append("images", file);
     });
 
-    Array.from(documents).forEach((file) => {
+    Array.from(documents ?? []).forEach((file) => {
       formData.append("propertyDocuments", file);
     });
 

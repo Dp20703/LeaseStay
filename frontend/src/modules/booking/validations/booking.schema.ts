@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const bookingSchema = z.object({
   moveInDate: z.string(),
-  moveOutDate: z.string().optional({ nullable: true, checkFalsy: true }),
+  moveOutDate: z.string().optional(),
   phoneNumber: z.string(),
   message: z.string().optional(),
 });

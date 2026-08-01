@@ -146,7 +146,7 @@ export const PropertyDetailsDrawer: React.FC<PropertyDetailsDrawerProps> = ({
                 <div>
                   <p className="text-xs text-text-muted">Area</p>
 
-                  <p className="font-semibold">{property.area} sq.ft</p>
+                  <p className="font-semibold">{property.size} sq.ft</p>
                 </div>
               </div>
 
@@ -230,7 +230,7 @@ export const PropertyDetailsDrawer: React.FC<PropertyDetailsDrawerProps> = ({
               </div>
             </div>
 
-            {property.approvedAt && (
+            {property.verifiedAt && (
               <div className="flex items-start gap-4">
                 <CheckCircle size={20} className="text-green-500" />
 
@@ -239,16 +239,16 @@ export const PropertyDetailsDrawer: React.FC<PropertyDetailsDrawerProps> = ({
                     Approved At
                   </p>
 
-                  <p>{new Date(property.approvedAt).toLocaleDateString()}</p>
+                  <p>{new Date(property.verifiedAt).toLocaleDateString()}</p>
                 </div>
               </div>
             )}
 
-            {property.rejectedReason && (
+            {property.verificationRejectedReason && (
               <div className="rounded-xl border border-red-200 bg-red-50 p-4 dark:border-red-900 dark:bg-red-900/20">
                 <p className="font-medium text-red-600">Rejection Reason</p>
 
-                <p className="mt-2 text-sm">{property.rejectedReason}</p>
+                <p className="mt-2 text-sm">{property.verificationRejectedReason}</p>
               </div>
             )}
           </section>

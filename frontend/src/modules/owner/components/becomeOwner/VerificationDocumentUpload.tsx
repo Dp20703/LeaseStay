@@ -13,7 +13,7 @@ const VerificationDocumentUpload = ({
       <input
         type="file"
         accept=".pdf,image/*"
-        onChange={(e) => onChange(e.target.files[0])}
+        onChange={(e) => onChange(e.target.files?.[0] ?? null)}
         className="block w-full rounded-xl border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark p-3 text-text-light dark:text-text-dark file:bg-primary file:text-white file:px-4 file:py-2 file:border-0 file:rounded-lg file:cursor-pointer"
       />
 

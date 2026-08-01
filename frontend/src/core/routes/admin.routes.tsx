@@ -1,14 +1,14 @@
 import AdminWrapper from "@/core/wrappers/AdminWrapper";
 import AdminLayout from "@/modules/admin/layouts/AdminLayout";
 import {
-  AdminProfilePage,
-  Bookings,
-  Dashboard,
-  OwnersPage,
-  Payments,
-  Properties,
-  SettingsPage,
-  UsersPage,
+    AdminProfilePage,
+    Bookings,
+    Dashboard,
+    OwnersPage,
+    Payments,
+    Properties,
+    SettingsPage,
+    UsersPage
 } from "@/modules/admin/pages";
 import type { RouteObject } from "react-router-dom";
 

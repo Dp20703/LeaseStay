@@ -149,7 +149,7 @@ export default function PropertyShareModal({
 
           {/* Native Share */}
 
-          {navigator.share && (
+          {"share" in navigator && (
             <button
               onClick={nativeShare}
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary p-3 text-white"

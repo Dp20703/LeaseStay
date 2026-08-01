@@ -87,9 +87,9 @@ export const UserDetailsDrawer: React.FC<UserDetailsDrawerProps> = ({
             <div className="flex gap-2 justify-center mt-2">
               <span
                 className={`border ls-badge ${
-                  user.role === "ADMIN"
+                  user.role === "admin"
                     ? "ls-badge-purple"
-                    : user.role === "OWNER"
+                    : user.role === "owner"
                       ? "ls-badge-info"
                       : "ls-badge-neutral"
                 }`}

@@ -134,9 +134,9 @@ export const UsersTable: React.FC<UsersTableProps> = ({
                 <td>
                   <span
                     className={`ls-badge ${
-                      user.role === "ADMIN"
+                      user.role === "admin"
                         ? "ls-badge-purple"
-                        : user.role === "OWNER"
+                        : user.role === "owner"
                           ? "ls-badge-info"
                           : "ls-badge-neutral"
                     }`}
