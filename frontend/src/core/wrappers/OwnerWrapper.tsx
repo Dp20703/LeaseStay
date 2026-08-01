@@ -5,13 +5,13 @@ import { Navigate, Outlet } from "react-router-dom";
 
 const OwnerWrapper = () => {
   const { user, loading } = useAuth();
-  
+
   if (loading) {
     return <LoaderScreen />;
   }
 
   if (!user) {
-       return <Navigate to="/login" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   if (user.role !== ROLES.OWNER) {

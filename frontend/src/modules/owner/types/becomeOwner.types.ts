@@ -1,4 +1,6 @@
-export type DocumentType = "aadhaar" | "pan" | "passport" | "driving_license";
+import type { VerificationDocumentType } from "@/types";
+
+export type DocumentType = VerificationDocumentType;
 
 export interface DocumentTypeSelectProps {
   value: DocumentType;

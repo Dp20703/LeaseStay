@@ -1,15 +1,15 @@
-import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { ROLES } from "@/shared/constants/role.constants";
+import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 import {
+  ChevronDown,
   CircleUser,
   Heart,
-  User,
-  LogOut,
-  ChevronDown,
-  Shield,
   LayoutDashboard,
+  LogOut,
+  Shield,
+  User,
 } from "@/shared/constants/icons";
 
 interface UserMenuProps {

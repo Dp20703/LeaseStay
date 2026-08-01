@@ -1,21 +1,17 @@
-/**
- * Represents the pure business data for a User returned by the backend.
- */
-export interface IUser {
-  _id: string;
-  fullName: string;
-  userName: string;
-  email: string;
-  role: "USER" | "OWNER" | "ADMIN";
-  isBlocked: boolean;
-  isDeleted: boolean;
-  profileImage?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import type { UserSummary } from "@/types";
 
 /**
- * Filter state managed by the parent UsersPage
+ * Sourced from the central type system (`@/types/user`).
+ * Fixes vs. the previous local definition: `role` is lowercase
+ * ("user"|"owner"|"admin", not "USER"|"OWNER"|"ADMIN"), `fullName` is an
+ * object ({ firstName, lastName }, not a flat string), and `profileImage`
+ * is an object ({ url, publicId, uploadedAt }, not a plain string).
+ */
+export type IUser = UserSummary;
+
+/**
+ * Filter state managed by the parent UsersPage — pure UI state, not an API
+ * response shape, so it stays local rather than moving to `@/types`.
  */
 export interface IUsersFilterState {
   search: string;

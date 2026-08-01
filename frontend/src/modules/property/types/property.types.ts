@@ -1,31 +1,34 @@
-export type PropertyStatus =
-  | "draft"
-  | "Pending"
-  | "Approved"
-  | "Rejected"
-  | "Hidden"
-  | "Inactive";
+import type {
+  AvailabilityStatus,
+  PropertyOwner as CentralPropertyOwner,
+  PropertyCard,
+  PropertyDetails,
+  PropertyDocumentItem,
+  PropertyDocumentType,
+  PropertyImageItem,
+  PropertyKind,
+  PropertyStatus,
+  PropertyThumbnail,
+} from "@/types";
 
-export type PropertyAvailabilityStatus = "available" | "occupied" | "reserved";
-
-export type PropertyType =
-  | "Apartment"
-  | "Villa"
-  | "House"
-  | "Studio"
-  | "PG"
-  | "Office";
-
-export type PropertyDocumentType =
-  | "sale_deed"
-  | "tax_receipt"
-  | "electricity_bill"
-  | "rental_agreement";
-
-export type PropertyImage = {
-  url: string;
-  publicId: string;
-};
+/**
+ * Sourced from the central type system (`@/types/property`). Kept under
+ * this module's original local names so existing component imports keep
+ * working. Fixes vs. the previous local definitions: `category` is now
+ * the real `"Rent" | "Sale"` union (was loosely `string`), `PropertyOwner`
+ * `profileImage` is now the real object shape (was `string`), and the
+ * full `Property` now includes the fields the backend actually returns
+ * (views, shareCount, savedBy, isFeatured, isVerifiedProperty, coordinates)
+ * that were previously missing.
+ */
+export type Property = PropertyDetails;
+export type { PropertyDocumentType, PropertyStatus };
+export type PropertyAvailabilityStatus = AvailabilityStatus;
+export type PropertyType = PropertyKind;
+export type PropertyImage = PropertyThumbnail;
+export type PropertyDocument = PropertyDocumentItem;
+export type PropertyOwner = CentralPropertyOwner;
+export type PropertyCardProps = PropertyCard;
 
 export const PropertyAmenities = [
   "WiFi",
@@ -40,64 +43,5 @@ export const PropertyAmenities = [
   "Swimming Pool",
 ];
 
-export type PropertyDocument = {
-  type: PropertyDocumentType;
-  url: string;
-  publicId: string;
-  uploadedAt: string;
-};
-
-export type PropertyOwner = {
-  _id: string;
-  userName: string;
-  email: string;
-  profileImage: string;
-  fullName: {
-    firstName: string;
-    lastName?: string;
-  };
-};
-
-export type PropertyCardProps = {
-  _id: string;
-  slug: string;
-  title: string;
-  location: string;
-  price: number;
-  bedrooms: number;
-  bathrooms: number;
-  propertyType: PropertyType;
-  availabilityStatus: PropertyAvailabilityStatus;
-  thumbnail: PropertyImage;
-  status: PropertyStatus;
-};
-
-export type Property = {
-  _id: string;
-  slug: string;
-  title: string;
-  description: string;
-  location: string;
-  address: string;
-  zipCode: string;
-  category: string;
-  size: number;
-  price: number;
-  bedrooms: number;
-  bathrooms: number;
-  amenities: string[];
-  images: PropertyImage[];
-  thumbnail: PropertyImage;
-  propertyType: PropertyType;
-  propertyDocuments: PropertyDocument[];
-  verifiedAt?: string;
-  verifiedBy?: string;
-  verificationRejectedReason?: string;
-  status: PropertyStatus;
-  owner: PropertyOwner;
-  availabilityStatus: PropertyAvailabilityStatus;
-  isDeleted: boolean;
-  deletedAt?: string | null;
-  createdAt: string;
-  updatedAt: string;
-};
+/** Kept for callers that specifically need the images array item shape (with `_id`). */
+export type { PropertyImageItem };

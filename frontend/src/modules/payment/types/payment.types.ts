@@ -1,19 +1,3 @@
-export interface Booking {
-  _id: string;
-  property: {
-    _id: string;
-    title: string;
-    location: string;
-  };
-  totalAmount: number;
-  moveInDate: string;
-  paymentStatus: string;
-}
+import type { CreateOrderResult } from "@/types";
 
-export interface CreateOrderResponse {
-  order: {
-    id: string;
-    amount: number;
-    currency: string;
-  };
-}
+export type CreateOrderResponse = CreateOrderResult;

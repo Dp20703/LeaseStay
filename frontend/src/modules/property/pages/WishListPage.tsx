@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import PropertyCard from "@/modules/property/components/propertyDetails/PropertyCard";
 import { useProperty } from "@/modules/property/hooks/useProperty";
 import LoaderScreen from "@/shared/components/common/LoaderScreen";
-import PropertyCard from "@/modules/property/components/propertyDetails/PropertyCard";
+import { useEffect } from "react";
 
 const WishListPage = () => {
   const { savedProperties, loading, getSavedProperties } = useProperty();

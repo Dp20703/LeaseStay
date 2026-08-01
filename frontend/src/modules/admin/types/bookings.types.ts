@@ -1,74 +1,22 @@
-/**
- * Represents the shape of a name object if the backend returns it as an object.
- */
-export interface INameObject {
-  firstName?: string;
-  lastName?: string;
-}
+import type {
+  AdminBookingPartyRef,
+  AdminBookingPropertyRef,
+  AdminBookingSummary,
+} from "@/types";
 
 /**
- * Represents the populated User data for both Tenants and Owners.
+ * Sourced from the central type system (`@/types/booking`), matching
+ * adminBooking.service.js's actual populate selects exactly. Fixes vs. the
+ * previous local definition: `status` now includes the full backend enum
+ * (was missing "under_verification"/"confirmed"), and `property.images` is
+ * now the real image object array (was typed as `string[]`).
  */
-export interface IBookingUser {
-  _id: string;
-  fullName: string | INameObject;
-  email: string;
-  profileImage?: string;
-}
+export type IBooking = AdminBookingSummary;
 
-/**
- * Represents the populated Property data inside a booking.
- */
-export interface IBookingProperty {
-  _id: string;
-  title: string;
-  location: string;
-  images: string[];
-}
+export type IBookingUser = AdminBookingPartyRef;
+export type IBookingProperty = AdminBookingPropertyRef;
 
-/**
- * Represents the pure business data for a Booking returned by your Mongoose backend.
- */
-export interface IBooking {
-  _id: string;
-
-  // Populated References
-  property: IBookingProperty;
-  tenant: IBookingUser;
-  owner: IBookingUser;
-
-  // Dates
-  moveInDate: string;
-  moveOutDate: string | null;
-
-  // Financials
-  monthlyRent: number;
-  securityDeposit: number;
-  totalAmount: number;
-
-  // Additional Info
-  phoneNumber: string;
-  message?: string;
-
-  // Statuses
-  status: "pending" | "accepted" | "rejected" | "cancelled" | "completed";
-  paymentStatus: "pending" | "paid" | "failed" | "refunded";
-  paymentMethod?: "card" | "upi" | "net_banking" | "wallet" | "cash";
-  payment?: string; // Payment ObjectId reference
-
-  // Owner Responses & Timestamps
-  ownerResponse?: string;
-  respondedAt?: string | null;
-  cancelledAt?: string | null;
-  completedAt?: string | null;
-
-  createdAt: string;
-  updatedAt: string;
-}
-
-/**
- * Filter state managed by the parent BookingsPage
- */
+/** Pure UI filter state — stays local. */
 export interface IBookingsFilterState {
   search: string;
   status:

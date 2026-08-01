@@ -1,45 +1,27 @@
-export interface IPaymentUser {
-  _id: string;
-  fullName: string | { firstName?: string; lastName?: string };
-  email: string;
-  profileImage?: string;
-}
+import type {
+  AdminPaymentBookingRef,
+  AdminPaymentPartyRef,
+  AdminPaymentPropertyRef,
+  AdminPaymentSummary,
+} from "@/types";
 
-export interface IPaymentProperty {
-  _id: string;
-  title: string;
-  location: string;
-}
+/**
+ * Sourced from the central type system (`@/types/payment`), matching
+ * adminPayment.service.js's fetchAllPaymentsService populate selects.
+ *
+ * NOTE: the backend populates `booking` selecting "bookingReference" — a
+ * field that does not exist on the Booking model — so in practice
+ * `booking` only ever resolves to `{ _id }`. `IPaymentBooking` reflects
+ * that reality rather than the (non-existent) `bookingReference` field the
+ * old local type assumed was there. Worth fixing on the backend.
+ */
+export type IPayment = AdminPaymentSummary;
 
-export interface IPaymentBooking {
-  _id: string;
-  bookingReference?: string;
-}
+export type IPaymentUser = AdminPaymentPartyRef;
+export type IPaymentProperty = AdminPaymentPropertyRef;
+export type IPaymentBooking = AdminPaymentBookingRef;
 
-export interface IPayment {
-  _id: string;
-  property: IPaymentProperty;
-  tenant: IPaymentUser;
-  landlord: IPaymentUser;
-  booking?: IPaymentBooking;
-  amount: number;
-  currency: string;
-  status: "created" | "pending" | "paid" | "failed" | "refunded" | "cancelled";
-  gateway: "razorpay" | "stripe" | "cashfree";
-  paymentType:
-    | "rent"
-    | "security_deposit"
-    | "booking"
-    | "subscription"
-    | "other";
-  orderId: string;
-  paymentId?: string;
-  paymentMethod: "upi" | "card" | "netbanking" | "wallet" | "emi" | "unknown";
-  paidAt?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
+/** Pure UI filter state — stays local. */
 export interface IPaymentsFilterState {
   search: string;
   status: "ALL" | "PAID" | "PENDING" | "FAILED" | "REFUNDED" | "CANCELLED";

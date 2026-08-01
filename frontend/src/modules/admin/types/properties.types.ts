@@ -1,48 +1,18 @@
-/**
- * Represents the shape of the name object if the backend returns it as an object
- * instead of a flat string.
- */
-export interface IOwnerName {
-  firstName?: string;
-  lastName?: string;
-}
+import type { PropertyDetails, PropertyOwner } from "@/types";
 
 /**
- * Represents the populated owner data inside a property.
+ * Sourced from the central type system (`@/types/property`). The previous
+ * local `IProperty` only carried a handful of fields — the admin property
+ * table/drawer actually needs the full detail shape (images, documents,
+ * verification fields), which is what every backend property endpoint
+ * returns anyway (there's no server-side trimming for admin views).
  */
-export interface IPropertyOwner {
-  _id: string;
-  fullName: string | IOwnerName;
-  userName: string;
-  profileImage?: string;
-}
+export type IProperty = PropertyDetails;
 
-/**
- * Represents the pure business data for a Property returned by the backend.
- */
-export interface IProperty {
-  _id: string;
-  title: string;
-  description: string;
-  price: number;
-  location: string;
-  images: string[];
-  owner: IPropertyOwner; // Populated by Mongoose
+/** Populated owner ref on a property — object shape, not the old string|object union. */
+export type IPropertyOwner = PropertyOwner;
 
-  // Verification & Moderation Status
-  status: "Pending" | "Approved" | "Rejected" | "Hidden";
-  verificationRejectedReason?: string;
-  verifiedAt?: string;
-  verifiedBy?: string; // Admin ID
-
-  isDeleted: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-/**
- * Filter state managed by the parent PropertiesPage
- */
+/** Pure UI filter state — stays local. */
 export interface IPropertiesFilterState {
   search: string;
   status: "ALL" | "PENDING" | "APPROVED" | "REJECTED" | "HIDDEN";

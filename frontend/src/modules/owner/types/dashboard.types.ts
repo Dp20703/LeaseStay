@@ -1,31 +1,6 @@
-import type { Booking } from "@/modules/booking/types/booking.types";
-import type { Property } from "@/modules/property/types/property.types";
+import type { OwnerDashboardStats } from "@/types";
 
-export interface OwnerDashboard {
-  properties: {
-    total: number;
-    approved: number;
-    pending: number;
-    rejected: number;
-  };
-
-  bookings: {
-    total: number;
-    pending: number;
-    underVerification: number;
-    accepted: number;
-    completed: number;
-  };
-
-  revenue: {
-    total: number;
-
-    monthlyRevenue: {
-      month: string;
-      revenue: number;
-    }[];
-  };
-
-  recentBookings: Booking[];
-  recentProperties: Property[];
-}
+/**
+ * Sourced from the central type system (`@/types/dashboard`).
+ */
+export type OwnerDashboard = OwnerDashboardStats;
