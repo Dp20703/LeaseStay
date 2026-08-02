@@ -40,9 +40,39 @@ app.use("/api/v1", apiLimiter);
 
 /* CORS */
 
+const parseOrigins = (value = "") =>
+  value
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+const DEFAULT_ALLOWED_ORIGINS = [
+  "http://localhost:5173",
+  "https://leasestay.vercel.app",
+];
+
+const allowedOrigins = Array.from(
+  new Set([
+    ...DEFAULT_ALLOWED_ORIGINS,
+    ...parseOrigins(process.env.CLIENT_URL),
+    ...parseOrigins(process.env.CLIENT_URLS),
+  ]),
+);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: (origin, callback) => {
+      // No Origin header = same-origin, server-to-server, curl, Postman, etc. Allow it.
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      console.warn(`CORS blocked request from origin: ${origin}`);
+
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   }),
 );
@@ -53,14 +83,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-/* ROUTES */
-app.use("/api/v1", routes);
-
-/* ERROR */
-app.use(errorMiddleware);
-
-/* NOT FOUND */
-app.use(notFoundMiddleware);
+/* HEALTH / DEBUG ROUTES */
+/* Moved above the route mounting + 404/error handlers below — see note. */
 
 app.get("/", (req, res) => {
   res.status(200).json({
@@ -69,14 +93,25 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/redis-test", async (req, res) => {
-  await redisClient.set("name", "LeaseStay");
+if (process.env.NODE_ENV !== "production") {
+  app.get("/redis-test", async (req, res) => {
+    await redisClient.set("name", "LeaseStay");
 
-  const value = await redisClient.get("name");
+    const value = await redisClient.get("name");
 
-  res.json({
-    value,
+    res.json({
+      value,
+    });
   });
-});
+}
+
+/* ROUTES */
+app.use("/api/v1", routes);
+
+/* NOT FOUND */
+app.use(notFoundMiddleware);
+
+/* ERROR */
+app.use(errorMiddleware);
 
 export default app;
