@@ -5,15 +5,84 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="LeaseStay — find and rent spaces easily. Listings, bookings and secure payments." />
+
+  <!-- Primary SEO -->
+  <title>LeaseStay — Find & Rent Your Perfect Space</title>
+  <meta name="title" content="LeaseStay — Find & Rent Your Perfect Space" />
+  <meta name="description"
+    content="LeaseStay is a modern rental marketplace — discover verified properties, book instantly, and pay securely. List your property and manage bookings as an owner, all in one place." />
+  <meta name="keywords"
+    content="LeaseStay, rental properties, rent a house, rent apartment, property listing, tenant, landlord, property owner, book rental, rental marketplace, house for rent, flat for rent, PG for rent" />
+  <meta name="author" content="LeaseStay" />
+  <meta name="robots" content="index, follow" />
+  <meta name="revisit-after" content="7 days" />
+  <meta name="language" content="English" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="canonical" href="https://leasestay.vercel.app/" />
+
+  <!-- Theme / Browser UI -->
   <meta name="theme-color" content="#0d9488" />
+  <meta name="color-scheme" content="light dark" />
+
+  <!-- Favicons / App Icons -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <!-- <link rel="manifest" href="/manifest.webmanifest" /> -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="LeaseStay" />
+  <meta property="og:url" content="https://leasestay.vercel.app/" />
+  <meta property="og:title" content="LeaseStay — Find & Rent Your Perfect Space" />
+  <meta property="og:description"
+    content="Discover verified rental properties, book instantly, and pay securely with LeaseStay. List your property and manage bookings as an owner." />
+  <meta property="og:image" content="https://leasestay.vercel.app/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="LeaseStay — Rental Property Marketplace" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://leasestay.vercel.app/" />
+  <meta name="twitter:title" content="LeaseStay — Find & Rent Your Perfect Space" />
+  <meta name="twitter:description"
+    content="Discover verified rental properties, book instantly, and pay securely with LeaseStay." />
+  <meta name="twitter:image" content="https://leasestay.vercel.app/og-image.png" />
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "LeaseStay",
+    "url": "https://leasestay.vercel.app/",
+    "logo": "https://leasestay.vercel.app/favicon.svg",
+    "description": "LeaseStay is a modern rental marketplace connecting tenants and property owners with verified listings, instant bookings, and secure payments."
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "LeaseStay",
+    "url": "https://leasestay.vercel.app/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://leasestay.vercel.app/properties?keyword={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <!-- Performance -->
   <link rel="preconnect" href="https://checkout.razorpay.com" crossorigin />
-  <!-- Preload main assets (adjust paths/names to your build output) -->
-  <!-- <link rel="preload" as="style" href="/assets/styles.css" /> -->
-  <!-- <link rel="preload" as="script" href="/assets/main.js" /> -->
-  <title>LeaseStay — Rent your space</title>
+  <link rel="preconnect" href="https://leasestay.onrender.com" crossorigin />
+  <link rel="dns-prefetch" href="https://leasestay.onrender.com" />
 </head>
 
 <body>

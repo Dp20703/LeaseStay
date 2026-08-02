@@ -21,11 +21,11 @@ const GoogleAuthButton = () => {
 
       await googleAuth(credentialResponse.credential);
 
-      toast.success("Google login successful");
+      toast.success("login successful");
 
       navigate("/");
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Google login failed");
+      toast.error(error?.response?.data?.message || "login failed");
     }
   };
 

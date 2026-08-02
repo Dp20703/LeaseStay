@@ -25,5 +25,7 @@ dist-ssr
 *.sw?
 .env
 
-*.zip
-*.md
+LEASESTAY_AI_CONTEXT.md
+Left.md
+backend/future.md
+README.md
