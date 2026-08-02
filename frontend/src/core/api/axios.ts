@@ -48,16 +48,22 @@ api.interceptors.response.use(
       requestUrl.includes("/login") || requestUrl.includes("/admin/login");
 
     if (status === 401 && !isLoginRequest && !isRedirecting) {
+      const hasAdminToken = !!localStorage.getItem("adminToken");
+      const targetPath = hasAdminToken ? "/admin/login" : "/login";
+
+      // Already there — nothing to do, avoids a pointless reload loop.
+      if (window.location.pathname === targetPath) {
+        return Promise.reject(error);
+      }
+
       isRedirecting = true;
 
       console.log("Session expired. Logging out...");
 
-      const hasAdminToken = !!localStorage.getItem("adminToken");
-
       localStorage.removeItem("userToken");
       localStorage.removeItem("adminToken");
 
-      window.location.replace(hasAdminToken ? "/admin/login" : "/login");
+      window.location.replace(targetPath);
     }
 
     return Promise.reject(error);
