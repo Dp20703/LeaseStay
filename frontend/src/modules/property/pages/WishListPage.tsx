@@ -17,9 +17,9 @@ const WishListPage = () => {
   return (
     <section className="ls-container space-y-8">
       <div>
-        <h1 className="text-4xl font-bold">My Properties</h1>
+        <h1 className="text-4xl font-bold">My Wishlist Properties</h1>
 
-        <p className="text-muted-foreground">Manage your property listings</p>
+        <p className="text-muted-foreground">Manage your wishlist property</p>
       </div>
 
       {savedProperties.length === 0 ? (

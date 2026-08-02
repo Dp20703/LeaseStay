@@ -21,6 +21,7 @@ try {
       firstName: "LeaseStay",
       lastName: "Admin",
     },
+    userName: "admin123",
     email: process.env.ADMIN_EMAIL,
     password: process.env.ADMIN_PASSWORD,
     role: ROLES.ADMIN,
