@@ -40,8 +40,12 @@ const Testimonials = () => {
               <CardContent className="p-8">
                 {/* Stars */}
                 <div className="flex items-center gap-1 text-amber-400">
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <Star key={index} />
+                  {[...Array(5)].map((_, index) => (
+                    <Star
+                      fill="currentColor"
+                      stroke="currentColor"
+                      className="h-4 w-4"
+                    />
                   ))}
                 </div>
                 {/* Review */}

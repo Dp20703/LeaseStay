@@ -37,7 +37,10 @@ const UserNavbar = () => {
               <ProfileDropdown />
             ) : (
               <div className="hidden items-center gap-3 lg:flex">
-                <Link to="/login" className="ls-btn-secondary">
+                <Link
+                  to="/login"
+                  className="ls-btn-secondary border-[.2px] border-gray-700"
+                >
                   Login
                 </Link>
 

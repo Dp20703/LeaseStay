@@ -1,8 +1,22 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { ChevronDown, LogOut, Settings, User } from "lucide-react";
+import {
+  ChevronDown,
+  Heart,
+  LayoutDashboard,
+  LogOut,
+  Settings,
+  Shield,
+  User,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "@/modules/auth/hooks/useAuth";
+import { ROLES } from "@/shared/constants/role.constants";
+
+const itemClass = (focus: boolean) =>
+  `flex items-center gap-3 rounded-xl px-4 py-3 text-sm ${
+    focus ? "bg-surface-light dark:bg-surface-dark" : ""
+  }`;
 
 const ProfileDropdown = () => {
   const navigate = useNavigate();
@@ -51,12 +65,7 @@ const ProfileDropdown = () => {
       >
         <MenuItem>
           {({ focus }) => (
-            <Link
-              to="/profile"
-              className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm ${
-                focus ? "bg-surface-light dark:bg-surface-dark" : ""
-              }`}
-            >
+            <Link to="/profile" className={itemClass(focus)}>
               <User size={18} />
               Profile
             </Link>
@@ -65,17 +74,45 @@ const ProfileDropdown = () => {
 
         <MenuItem>
           {({ focus }) => (
-            <Link
-              to="/settings"
-              className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm ${
-                focus ? "bg-surface-light dark:bg-surface-dark" : ""
-              }`}
-            >
+            <Link to="/settings" className={itemClass(focus)}>
               <Settings size={18} />
               Settings
             </Link>
           )}
         </MenuItem>
+
+        {user?.role === ROLES.USER && (
+          <MenuItem>
+            {({ focus }) => (
+              <Link to="/wishlist" className={itemClass(focus)}>
+                <Heart size={18} />
+                Wishlist
+              </Link>
+            )}
+          </MenuItem>
+        )}
+
+        {user?.role === ROLES.OWNER && (
+          <MenuItem>
+            {({ focus }) => (
+              <Link to="/owner/dashboard" className={itemClass(focus)}>
+                <LayoutDashboard size={18} />
+                Dashboard
+              </Link>
+            )}
+          </MenuItem>
+        )}
+
+        {user?.role === ROLES.ADMIN && (
+          <MenuItem>
+            {({ focus }) => (
+              <Link to="/admin" className={itemClass(focus)}>
+                <Shield size={18} />
+                Admin Panel
+              </Link>
+            )}
+          </MenuItem>
+        )}
 
         <div className="my-2 border-t border-border-light dark:border-border-dark" />
 
