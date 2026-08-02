@@ -42,6 +42,7 @@ const Testimonials = () => {
                 <div className="flex items-center gap-1 text-amber-400">
                   {[...Array(5)].map((_, index) => (
                     <Star
+                      key={index}
                       fill="currentColor"
                       stroke="currentColor"
                       className="h-4 w-4"
