@@ -23,7 +23,6 @@ interface PropertyCardProps {
 
 const PropertyCard = ({ property }: PropertyCardProps) => {
   const { user } = useAuth();
-
   const { savedProperties, saveProperty, unsaveProperty } = useProperty();
 
   const isSaved = useMemo(() => {
@@ -95,7 +94,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <MapPin />
-
           <span className="line-clamp-1">{property.location}</span>
         </div>
 
@@ -108,7 +106,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
           <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
             <Building2 />
-
             <span>{property.propertyType}</span>
           </div>
         </div>
@@ -119,7 +116,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           <span className="text-3xl font-extrabold text-primary">
             ₹{property.price.toLocaleString()}
           </span>
-
           {property.category === "Rent" && (
             <span className="text-sm text-muted-foreground"> /month</span>
           )}
@@ -130,7 +126,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         <div className="grid grid-cols-3 gap-3 border-y border-border-light py-4 text-sm dark:border-border-dark">
           <div className="flex items-center gap-2">
             <Bed className="text-primary" />
-
             <span>{property.bedrooms} Beds</span>
           </div>
 
@@ -142,7 +137,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
           <div className="flex items-center gap-2">
             <Ruler className="text-primary" />
-
             <span>{property.size} ft²</span>
           </div>
         </div>

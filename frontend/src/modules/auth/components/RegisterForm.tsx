@@ -17,11 +17,9 @@ import { toast } from "react-toastify";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
-
   const { register } = useAuth();
 
   const [loading, setLoading] = useState(false);
-
   const [errors, setErrors] = useState<RegisterFormErrors>({});
 
   // formData
@@ -66,11 +64,9 @@ const RegisterForm = () => {
     e.preventDefault();
 
     /* RESET ERRORS */
-
     setErrors({});
 
     /* FRONTEND VALIDATION */
-
     const validationErrors = validateRegisterForm(formData);
 
     if (Object.keys(validationErrors).length > 0) {
@@ -81,11 +77,8 @@ const RegisterForm = () => {
 
     try {
       setLoading(true);
-
       await register(formData);
-
       toast.success("Registered successfully");
-
       navigate("/");
     } catch (error: any) {
       /* BACKEND VALIDATION ERRORS */
@@ -94,7 +87,6 @@ const RegisterForm = () => {
       }
 
       /* GENERAL ERROR */
-
       toast.error(getErrorMessage(error, "Registration failed"));
     } finally {
       setLoading(false);

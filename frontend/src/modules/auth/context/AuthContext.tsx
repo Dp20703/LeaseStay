@@ -40,7 +40,6 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
-
   const [loading, setLoading] = useState(true);
 
   /* FETCH CURRENT USER */
@@ -109,7 +108,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setLoading(true);
 
       const response = await authAPI.googleAuth(credential);
-
       const { token, user } = response.data;
 
       localStorage.setItem("userToken", token);

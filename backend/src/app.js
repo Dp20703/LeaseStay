@@ -50,6 +50,9 @@ app.use("/api/v1", apiLimiter);
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 20,
+  // Only FAILED attempts count, so normal users are never locked out
+  // while brute-force / spam attempts still are.
+  skipSuccessfulRequests: true,
   message: "Too many attempts, please try again later.",
   skip: (req) => req.method === "OPTIONS",
 });

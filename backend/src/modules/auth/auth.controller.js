@@ -49,11 +49,16 @@ export const registerUser = asyncHandler(async (req, res) => {
 
   // EMAIL
 
-  await sendMail({
-    to: user.email,
-    subject: "Welcome to LeaseStay",
-    html: welcomeEmailTemplate(user.fullName?.firstName),
-  });
+  // A welcome email must never block (or fail) account creation.
+  try {
+    await sendMail({
+      to: user.email,
+      subject: "Welcome to LeaseStay",
+      html: welcomeEmailTemplate(user.fullName?.firstName),
+    });
+  } catch (mailError) {
+    console.error("Welcome email failed:", mailError.message);
+  }
 
   return res
     .status(201)
@@ -127,11 +132,16 @@ export const googleAuth = asyncHandler(async (req, res) => {
   }
 
   if (isNewUser) {
-    await sendMail({
+    // A welcome email must never block (or fail) account creation.
+    try {
+      await sendMail({
       to: user.email,
       subject: "Welcome to LeaseStay",
       html: welcomeEmailTemplate(user?.fullName?.firstName),
     });
+    } catch (mailError) {
+      console.error("Welcome email failed:", mailError.message);
+    }
   }
 
   // TOKEN WITH ROLE
