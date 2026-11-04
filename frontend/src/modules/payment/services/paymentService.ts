@@ -14,3 +14,8 @@ export const verifyPayment = async (payload: {
   const { data } = await api.post("/payments/verify", payload);
   return data.data;
 };
+
+export const getMyPayments = async () => {
+  const { data } = await api.get("/payments/my-payments");
+  return data.data;
+};

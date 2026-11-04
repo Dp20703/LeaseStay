@@ -212,12 +212,12 @@ export const getSavedPropertiesService = async (userId) => {
   const cachedProperties = await getCache(cacheKey);
 
   if (cachedProperties) {
-    console.log("FROM REDIS");
+    // cache hit
 
     return cachedProperties;
   }
 
-  console.log("FROM MONGODB");
+  // cache miss
 
   const user = await User.findById(userId)
     .populate({

@@ -49,8 +49,8 @@ export const registerValidation = [
   body("password")
     .notEmpty()
     .withMessage("Password is required")
-    .isLength({ min: 6 })
-    .withMessage("Password must be at least 6 characters")
+    .isLength({ min: 6, max: 72 })
+    .withMessage("Password must be between 6 and 72 characters")
     .matches(/[A-Z]/)
     .withMessage("Password must contain uppercase letter")
     .matches(/[a-z]/)
@@ -95,7 +95,11 @@ export const loginValidation = [
     .withMessage("Invalid email format")
     .normalizeEmail(),
 
-  body("password").notEmpty().withMessage("Password is required"),
+  body("password")
+    .notEmpty()
+    .withMessage("Password is required")
+    .isLength({ max: 72 })
+    .withMessage("Invalid password"),
 ];
 
 /* ─────────────────────────────────────────────
@@ -137,8 +141,8 @@ export const resetPasswordValidation = [
   body("password")
     .notEmpty()
     .withMessage("Password is required")
-    .isLength({ min: 6 })
-    .withMessage("Password must be at least 6 characters")
+    .isLength({ min: 6, max: 72 })
+    .withMessage("Password must be between 6 and 72 characters")
     .matches(/[A-Z]/)
     .withMessage("Password must contain uppercase letter")
     .matches(/[a-z]/)

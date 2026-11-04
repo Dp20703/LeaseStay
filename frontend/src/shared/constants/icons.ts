@@ -1,4 +1,6 @@
 export {
+  Receipt,
+  Trash2,
   Activity,
   AlertCircle,
   ArrowLeft,

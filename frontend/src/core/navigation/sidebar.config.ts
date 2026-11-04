@@ -31,6 +31,11 @@ export const SIDEBAR_CONFIG: Record<string, SidebarItem[]> = {
       icon: ClipboardCheck,
     },
     {
+      path: "/payments",
+      label: "My Payments",
+      icon: IndianRupee,
+    },
+    {
       path: "/become-owner",
       label: "Become owner",
       icon: User,

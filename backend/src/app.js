@@ -17,6 +17,14 @@ import { notFoundMiddleware } from "./middlewares/notFound.middleware.js";
 
 const app = express();
 
+/*
+  TRUST PROXY
+  Render (and most PaaS hosts) sit behind a reverse proxy. Without this,
+  req.ip is the proxy's IP, so every visitor shares ONE rate-limit bucket
+  and secure cookies / protocol detection can misbehave.
+*/
+app.set("trust proxy", 1);
+
 /* SECURITY */
 
 app.use(helmet());
@@ -37,6 +45,21 @@ const apiLimiter = rateLimit({
 
 // Apply to all /api/v1 routes
 app.use("/api/v1", apiLimiter);
+
+// Stricter limiter for credential endpoints (brute-force / email-bomb protection)
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  message: "Too many attempts, please try again later.",
+  skip: (req) => req.method === "OPTIONS",
+});
+
+app.use("/api/v1/auth/login", authLimiter);
+app.use("/api/v1/auth/register", authLimiter);
+app.use("/api/v1/auth/google", authLimiter);
+app.use("/api/v1/auth/forgot-password", authLimiter);
+app.use("/api/v1/auth/reset-password", authLimiter);
+app.use("/api/v1/admin/login", authLimiter);
 
 /* CORS */
 
@@ -79,7 +102,14 @@ app.use(
 
 /* BODY */
 
-app.use(express.json());
+// Razorpay signs the RAW request body, so the webhook must receive it
+// untouched. This has to be registered BEFORE express.json().
+app.use(
+  "/api/v1/payments/webhook",
+  express.raw({ type: "application/json", limit: "1mb" }),
+);
+
+app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 

@@ -82,7 +82,9 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
 
       return response;
     } catch (error) {
-      console.log(error);
+      // Re-throw so the page can show the real error (it used to be swallowed,
+      // which made failed creates look like successes).
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -98,7 +100,7 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
 
       setProperty(response.data);
     } catch (error) {
-      console.log(error);
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -113,8 +115,11 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
       await propertyAPI.deleteProperty(id);
 
       setProperties((prev) => prev.filter((property) => property._id !== id));
+      setOwnerProperties((prev) =>
+        prev.filter((property) => property._id !== id),
+      );
     } catch (error) {
-      console.log(error);
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -240,6 +245,11 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
+    // Saved properties need a logged-in user. Calling this for anonymous
+    // visitors returned 401 and the axios interceptor bounced them to /login
+    // (including from /admin/login).
+    if (!localStorage.getItem("userToken")) return;
+
     getSavedProperties().catch(console.error);
   }, []);
 

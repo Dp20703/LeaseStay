@@ -10,6 +10,7 @@ import type {
 } from "@/modules/auth/types";
 import { Mail, Phone, User } from "@/shared/constants/icons";
 import { formatValidationErrors } from "@/shared/utils/formatValidationErrors";
+import { getErrorMessage } from "@/shared/utils/getErrorMessage";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -88,13 +89,13 @@ const RegisterForm = () => {
       navigate("/");
     } catch (error: any) {
       /* BACKEND VALIDATION ERRORS */
-      if (error.response?.data?.errors) {
+      if (error.response?.data?.errors?.length) {
         setErrors(formatValidationErrors(error.response.data.errors));
       }
 
       /* GENERAL ERROR */
 
-      toast.error(error.response?.data?.message || "Registration failed");
+      toast.error(getErrorMessage(error, "Registration failed"));
     } finally {
       setLoading(false);
     }

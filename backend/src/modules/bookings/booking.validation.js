@@ -18,16 +18,24 @@ export const createBookingValidation = [
   body("moveOutDate")
     .optional({ nullable: true, checkFalsy: true })
     .isISO8601()
-    .withMessage("Invalid move out date"),
+    .withMessage("Invalid move out date")
+    .custom((value, { req }) => {
+      if (req.body.moveInDate && new Date(value) <= new Date(req.body.moveInDate)) {
+        throw new Error("Move out date must be after move in date");
+      }
+      return true;
+    }),
 
   body("phoneNumber")
+    .trim()
     .notEmpty()
     .withMessage("Phone number is required")
-    .isLength({ min: 10, max: 15 })
-    .withMessage("Phone number must be between 10 and 15 digits"),
+    .matches(/^\+?[0-9]{10,15}$/)
+    .withMessage("Phone number must be 10 to 15 digits"),
 
   body("message")
     .optional({ nullable: true, checkFalsy: true })
+    .trim()
     .isLength({ max: 1000 })
     .withMessage("Message cannot exceed 1000 characters"),
 ];

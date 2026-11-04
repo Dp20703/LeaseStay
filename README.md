@@ -45,7 +45,7 @@
 
 **LeaseStay** is a production-grade rental property marketplace connecting **tenants** looking for a place to stay with **property owners** who want to list and manage their properties — with a dedicated **Admin Dashboard** for platform-wide oversight.
 
-Tenants can search, filter, and book verified properties with secure online payments. Owners can list properties, manage bookings, and track revenue through a real-time dashboard. Admins verify property owners, moderate listings, and monitor platform-wide metrics.
+Tenants can search, filter, and book verified properties with secure online payments. Owners can list properties, manage bookings, and track revenue through a dashboard. Admins verify property owners, moderate listings, and monitor platform-wide metrics.
 
 The project is built with clean architecture, a fully centralized TypeScript type system shared across every feature module, and a premium, modern UI inspired by products like Vercel, Stripe, Linear, and Clerk.
 
@@ -197,18 +197,18 @@ The project is built with clean architecture, a fully centralized TypeScript typ
 - Detailed property pages with image gallery, amenities, and owner info
 - Save properties to a wishlist
 - Request bookings with move-in/move-out dates
-- Track booking status in real time (pending → accepted → confirmed → completed)
+- Track booking status (pending → accepted → under verification → confirmed → completed)
 - Secure online rent & deposit payments via Razorpay
-- View payment history and receipts
+- View payment history and receipts (My Payments page)
 - Google OAuth or email/password authentication
 
 ### 🏢 Property Owner
 
 - Apply for owner verification with document upload (Aadhaar, PAN, Passport, Driving License)
 - List properties with images, documents, pricing, and amenities
-- Manage property availability and edit listings
+- Manage property availability, edit listings (details, images, documents, thumbnail) and delete them
 - Review, accept, or reject booking requests
-- Real-time dashboard — revenue, booking stats, property status breakdown
+- Dashboard — revenue, booking stats, property status breakdown
 - Track payments received per property
 
 ### 🛡️ Admin
@@ -402,6 +402,15 @@ npm run dev
 The frontend runs at `http://localhost:5173` and the backend at `http://localhost:8000`.
 
 ---
+
+### Running Tests
+
+The backend has a small automated suite (Node's built-in test runner, no extra dependencies) covering Razorpay signature checks and API smoke tests (validation error format, auth guard, raw-body webhook signature):
+
+```bash
+cd backend
+npm test
+```
 
 ## Deployment
 

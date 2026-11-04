@@ -31,6 +31,9 @@ import {
   propertyIdValidation,
   availabilityValidation,
   searchPropertyValidation,
+  propertyImageParamsValidation,
+  propertyDocumentParamsValidation,
+  contactOwnerValidation,
 } from "./property.validation.js";
 
 const router = express.Router();
@@ -66,11 +69,13 @@ router.patch(
   "/:id",
   verifyJWT,
   authorizeRoles(ROLES.OWNER, ROLES.ADMIN),
-  validate(updatePropertyValidation),
+  // multer must run BEFORE validation: multipart fields are not in req.body
+  // until it has parsed the request.
   upload.fields([
     { name: "images", maxCount: 10 },
     { name: "propertyDocuments", maxCount: 5 },
   ]),
+  validate(updatePropertyValidation),
   updateProperty,
 );
 
@@ -97,7 +102,7 @@ router.delete(
   "/:id/images/:imageId",
   verifyJWT,
   authorizeRoles(ROLES.OWNER),
-  validate(propertyIdValidation),
+  validate(propertyImageParamsValidation),
   deletePropertyImage,
 );
 
@@ -115,10 +120,15 @@ router.delete(
 ───────────────────────────────────────────── */
 
 // SAVE PROPERTY
-router.post("/:id/save", verifyJWT, saveProperty);
+router.post("/:id/save", verifyJWT, validate(propertyIdValidation), saveProperty);
 
 // REMOVE SAVED PROPERTY
-router.delete("/:id/save", verifyJWT, unsaveProperty);
+router.delete(
+  "/:id/save",
+  verifyJWT,
+  validate(propertyIdValidation),
+  unsaveProperty,
+);
 
 /* ─────────────────────────────────────────────
    PROPERTY THUMBNAIL
@@ -129,6 +139,7 @@ router.patch(
   "/:id/thumbnail/:imageId",
   verifyJWT,
   authorizeRoles(ROLES.OWNER, ROLES.ADMIN),
+  validate(propertyImageParamsValidation),
   setPropertyThumbnail,
 );
 
@@ -141,6 +152,7 @@ router.delete(
   "/:id/documents/:documentId",
   verifyJWT,
   authorizeRoles(ROLES.OWNER, ROLES.ADMIN),
+  validate(propertyDocumentParamsValidation),
   deletePropertyDocument,
 );
 
@@ -159,7 +171,12 @@ router.patch("/:id/share", trackPropertyShareCount);
 ───────────────────────────────────────────── */
 
 // CONTACT PROPERTY OWNER
-router.post("/:id/contact-owner", verifyJWT, contactPropertyOwner);
+router.post(
+  "/:id/contact-owner",
+  verifyJWT,
+  validate(contactOwnerValidation),
+  contactPropertyOwner,
+);
 
 /* ─────────────────────────────────────────────
    SINGLE PROPERTY

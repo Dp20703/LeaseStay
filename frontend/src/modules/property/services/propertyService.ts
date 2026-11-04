@@ -71,6 +71,43 @@ const propertyAPI = {
     return response.data;
   },
 
+  /* AVAILABILITY */
+
+  changeAvailability: async (
+    id: string,
+    availabilityStatus: "available" | "occupied" | "reserved",
+  ) => {
+    const response = await api.patch(`/properties/${id}/availability`, {
+      availabilityStatus,
+    });
+
+    return response.data;
+  },
+
+  /* IMAGES */
+
+  deleteImage: async (id: string, imageId: string) => {
+    const response = await api.delete(`/properties/${id}/images/${imageId}`);
+
+    return response.data;
+  },
+
+  setThumbnail: async (id: string, imageId: string) => {
+    const response = await api.patch(`/properties/${id}/thumbnail/${imageId}`);
+
+    return response.data;
+  },
+
+  /* DOCUMENTS */
+
+  deleteDocument: async (id: string, documentId: string) => {
+    const response = await api.delete(
+      `/properties/${id}/documents/${documentId}`,
+    );
+
+    return response.data;
+  },
+
   /* SAVE PROPERTY */
 
   saveProperty: async (id: string) => {

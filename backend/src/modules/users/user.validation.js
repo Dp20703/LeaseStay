@@ -39,8 +39,20 @@ export const updateProfileValidation = [
 export const changePasswordValidation = [
   body("currentPassword").notEmpty().withMessage("Current password required"),
   body("newPassword")
-    .isLength({ min: 6 })
-    .withMessage("Password must be at least 6 characters"),
+    .isLength({ min: 6, max: 72 })
+    .withMessage("Password must be between 6 and 72 characters")
+    .matches(/[A-Z]/)
+    .withMessage("Password must contain uppercase letter")
+    .matches(/[a-z]/)
+    .withMessage("Password must contain lowercase letter")
+    .matches(/[0-9]/)
+    .withMessage("Password must contain number")
+    .custom((value, { req }) => {
+      if (value === req.body.currentPassword) {
+        throw new Error("New password must be different from current password");
+      }
+      return true;
+    }),
 ];
 
 // CHANGE EMAIL

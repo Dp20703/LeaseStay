@@ -17,9 +17,21 @@ import PropertyLocation from "./PropertyLocation";
 interface PropertyFormProps {
   loading: boolean;
   onSubmit: (formData: FormData) => Promise<void>;
+  /** "edit" pre-fills the form and makes new image / document uploads optional. */
+  mode?: "create" | "edit";
+  initialValues?: Partial<CreatePropertyFormData>;
+  existingImageCount?: number;
 }
 
-const PropertyForm = ({ loading, onSubmit }: PropertyFormProps) => {
+const PropertyForm = ({
+  loading,
+  onSubmit,
+  mode = "create",
+  initialValues,
+  existingImageCount = 0,
+}: PropertyFormProps) => {
+  const isEdit = mode === "edit";
+
   const [images, setImages] = useState<FileList | null>(null);
   const [documents, setDocuments] = useState<FileList | null>(null);
 
@@ -45,6 +57,7 @@ const PropertyForm = ({ loading, onSubmit }: PropertyFormProps) => {
       propertyType: "Apartment",
       documentType: "sale_deed",
       amenities: [],
+      ...initialValues,
     },
   });
 
@@ -60,13 +73,15 @@ const PropertyForm = ({ loading, onSubmit }: PropertyFormProps) => {
       documents: "",
     };
 
-    if (!images?.length) {
+    // Creating requires images + a document. Editing only needs them if the
+    // owner is adding new ones (existing media is managed separately).
+    if (!isEdit && !images?.length) {
       newErrors.images = "Upload at least one property image";
 
       hasError = true;
     }
 
-    if (!documents?.length) {
+    if (!isEdit && !documents?.length) {
       newErrors.documents = "Upload property document";
 
       hasError = true;
@@ -105,9 +120,8 @@ const PropertyForm = ({ loading, onSubmit }: PropertyFormProps) => {
 
   return (
     <form
-      onSubmit={handleSubmit(submitHandler, (errors) => {
-        console.log("ZOD ERRORS:", errors);
-      })}
+      onSubmit={handleSubmit(submitHandler)}
+      noValidate
       className="space-y-8"
     >
       {/* BASIC INFO */}
@@ -135,7 +149,11 @@ const PropertyForm = ({ loading, onSubmit }: PropertyFormProps) => {
 
       {/* IMAGES */}
 
-      <PropertyImageUpload setImages={setImages} error={fileErrors.images} />
+      <PropertyImageUpload
+        setImages={setImages}
+        error={fileErrors.images}
+        existingCount={existingImageCount}
+      />
 
       {/* DOCUMENTS */}
 
@@ -144,6 +162,7 @@ const PropertyForm = ({ loading, onSubmit }: PropertyFormProps) => {
         errors={errors}
         setDocuments={setDocuments}
         error={fileErrors.documents}
+        optional={isEdit}
       />
 
       <button
@@ -151,7 +170,13 @@ const PropertyForm = ({ loading, onSubmit }: PropertyFormProps) => {
         disabled={loading}
         className="ls-btn-primary w-full"
       >
-        {loading ? "Creating Property..." : "Create Property"}
+        {isEdit
+          ? loading
+            ? "Saving Changes..."
+            : "Save Changes"
+          : loading
+            ? "Creating Property..."
+            : "Create Property"}
       </button>
     </form>
   );

@@ -1,6 +1,39 @@
 import { body, param, query } from "express-validator";
 import { PROPERTY_DOCUMENTS, PROPERTY_TYPES } from "./property.constants.js";
 
+/* Amenities arrive as a JSON string (multipart) or an array. */
+const amenitiesValidator = body("amenities")
+  .optional({ nullable: true, checkFalsy: true })
+  .custom((value) => {
+    let parsed = value;
+
+    if (typeof value === "string") {
+      try {
+        parsed = JSON.parse(value);
+      } catch {
+        parsed = value
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean);
+      }
+    }
+
+    if (
+      !Array.isArray(parsed) ||
+      parsed.length > 30 ||
+      !parsed.every(
+        (item) =>
+          typeof item === "string" && item.trim() && item.trim().length <= 50,
+      )
+    ) {
+      throw new Error("Amenities must be a list of up to 30 short names");
+    }
+
+    return true;
+  });
+
+const MAX_PRICE = 1_000_000_000;
+
 export const propertyIdValidation = [
   param("id").isMongoId().withMessage("Invalid property id"),
 ];
@@ -39,13 +72,18 @@ export const createPropertyValidation = [
     .isLength({ min: 10, max: 120 })
     .withMessage("Location must be between 10 and 120 characters"),
 
-  body("address").trim().notEmpty().withMessage("Address is required"),
+  body("address")
+    .trim()
+    .notEmpty()
+    .withMessage("Address is required")
+    .isLength({ min: 5, max: 200 })
+    .withMessage("Address must be between 5 and 200 characters"),
 
   body("zipCode")
     .trim()
     .notEmpty()
     .withMessage("Zip code is required")
-    .isLength({ min: 2, max: 10 })
+    .isLength({ min: 4, max: 10 })
     .withMessage("Invalid zip code"),
 
   body("propertyType")
@@ -65,42 +103,32 @@ export const createPropertyValidation = [
   body("size")
     .notEmpty()
     .withMessage("Size is required")
-    .isNumeric()
-    .withMessage("Size must be numeric")
-    .custom((value) => value > 0)
-    .withMessage("Size must be greater than 0"),
+    .isFloat({ gt: 0, max: 1_000_000 })
+    .withMessage("Size must be a number greater than 0")
+    .toFloat(),
 
   body("price")
-    .toFloat()
     .notEmpty()
     .withMessage("Price is required")
-    .isNumeric()
-    .withMessage("Price must be numeric")
-    .custom((value) => value > 0)
-    .withMessage("Price must be greater than 0"),
+    .isFloat({ gt: 0, max: MAX_PRICE })
+    .withMessage("Price must be a number greater than 0")
+    .toFloat(),
 
   body("bedrooms")
     .notEmpty()
-    .toInt()
     .withMessage("Bedrooms is required")
-    .isNumeric()
-    .withMessage("Bedrooms must be numeric")
-    .custom((value) => value >= 0)
-    .withMessage("Bedrooms cannot be negative"),
+    .isInt({ min: 0, max: 50 })
+    .withMessage("Bedrooms must be a whole number between 0 and 50")
+    .toInt(),
 
   body("bathrooms")
     .notEmpty()
-    .toInt()
     .withMessage("Bathrooms is required")
-    .isNumeric()
-    .withMessage("Bathrooms must be numeric")
-    .custom((value) => value >= 0)
-    .withMessage("Bathrooms cannot be negative"),
+    .isInt({ min: 0, max: 50 })
+    .withMessage("Bathrooms must be a whole number between 0 and 50")
+    .toInt(),
 
-  // body("amenities")
-  //   .optional({ nullable: true, checkFalsy: true })
-  //   .custom((value) => {
-  //     const parsed = typeof value === "string" ? JSON.parse(value) : value;
+  amenitiesValidator,
 
   //     return (
   //       Array.isArray(parsed) &&
@@ -138,35 +166,30 @@ export const updatePropertyValidation = [
   body("title")
     .optional({ nullable: true, checkFalsy: true })
     .trim()
-    .escape()
     .isLength({ min: 5, max: 120 })
     .withMessage("Title must be between 5 and 120 characters"),
 
   body("description")
     .optional({ nullable: true, checkFalsy: true })
     .trim()
-    .escape()
     .isLength({ min: 20, max: 2000 })
     .withMessage("Description must be between 20 and 2000 characters"),
 
   body("location")
     .optional({ nullable: true, checkFalsy: true })
     .trim()
-    .escape()
     .notEmpty()
     .withMessage("Location cannot be empty"),
 
   body("address")
     .optional({ nullable: true, checkFalsy: true })
     .trim()
-    .escape()
     .notEmpty()
     .withMessage("Address cannot be empty"),
 
   body("zipCode")
     .optional({ nullable: true, checkFalsy: true })
     .trim()
-    .escape()
     .isLength({ min: 4, max: 10 })
     .withMessage("Invalid zip code"),
 
@@ -182,40 +205,30 @@ export const updatePropertyValidation = [
 
   body("size")
     .optional({ nullable: true, checkFalsy: true })
-    .isInt()
-    .isNumeric()
-    .withMessage("Size must be numeric")
-    .custom((value) => value > 0)
-    .withMessage("Size must be greater than 0"),
+    .isFloat({ gt: 0, max: 1_000_000 })
+    .withMessage("Size must be a number greater than 0")
+    .toFloat(),
 
   body("price")
     .optional({ nullable: true, checkFalsy: true })
-    .toFloat()
-    .isNumeric()
-    .withMessage("Price must be numeric")
-    .custom((value) => value > 0)
-    .withMessage("Price must be greater than 0"),
+    .isFloat({ gt: 0, max: MAX_PRICE })
+    .withMessage("Price must be a number greater than 0")
+    .toFloat(),
 
+  // checkFalsy is OFF for bedrooms/bathrooms so 0 is a valid value on update.
   body("bedrooms")
-    .optional({ nullable: true, checkFalsy: true })
-    .toInt()
-    .isNumeric()
-    .withMessage("Bedrooms must be numeric")
-    .custom((value) => value >= 0)
-    .withMessage("Bedrooms cannot be negative"),
+    .optional({ nullable: true, values: "undefined" })
+    .isInt({ min: 0, max: 50 })
+    .withMessage("Bedrooms must be a whole number between 0 and 50")
+    .toInt(),
 
   body("bathrooms")
-    .optional({ nullable: true, checkFalsy: true })
-    .toInt()
-    .isNumeric()
-    .withMessage("Bathrooms must be numeric")
-    .custom((value) => value >= 0)
-    .withMessage("Bathrooms cannot be negative"),
+    .optional({ nullable: true, values: "undefined" })
+    .isInt({ min: 0, max: 50 })
+    .withMessage("Bathrooms must be a whole number between 0 and 50")
+    .toInt(),
 
-  body("status")
-    .optional({ nullable: true, checkFalsy: true })
-    .isIn(["draft", "Pending", "Approved", "Rejected", "Hidden", "Inactive"])
-    .withMessage("Invalid status"),
+  amenitiesValidator,
 
   body("availabilityStatus")
     .optional({ nullable: true, checkFalsy: true })
@@ -272,4 +285,25 @@ export const searchPropertyValidation = [
   query("sort")
     .optional({ nullable: true, checkFalsy: true })
     .isIn(["price", "-price", "createdAt", "-createdAt"]),
+];
+
+export const propertyImageParamsValidation = [
+  param("id").isMongoId().withMessage("Invalid property id"),
+  param("imageId").isMongoId().withMessage("Invalid image id"),
+];
+
+export const propertyDocumentParamsValidation = [
+  param("id").isMongoId().withMessage("Invalid property id"),
+  param("documentId").isMongoId().withMessage("Invalid document id"),
+];
+
+export const contactOwnerValidation = [
+  param("id").isMongoId().withMessage("Invalid property id"),
+
+  body("message")
+    .trim()
+    .notEmpty()
+    .withMessage("Message is required")
+    .isLength({ min: 5, max: 1000 })
+    .withMessage("Message must be between 5 and 1000 characters"),
 ];

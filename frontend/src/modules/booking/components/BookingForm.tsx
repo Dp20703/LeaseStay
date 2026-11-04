@@ -2,6 +2,13 @@ import { useBooking } from "@/modules/booking/hooks/useBooking";
 import type { Property } from "@/modules/property/types";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { getErrorMessage } from "@/shared/utils/getErrorMessage";
+
+const todayISO = () => {
+  const d = new Date();
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().split("T")[0];
+};
 
 interface BookingFormProps {
   property: Property;
@@ -21,6 +28,7 @@ const BookingForm = ({ property, onSuccess }: BookingFormProps) => {
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<BookingFormData>();
 
@@ -35,7 +43,7 @@ const BookingForm = ({ property, onSuccess }: BookingFormProps) => {
 
       onSuccess();
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Failed to create booking");
+      toast.error(getErrorMessage(error, "Failed to create booking"));
     }
   };
 
@@ -68,8 +76,11 @@ const BookingForm = ({ property, onSuccess }: BookingFormProps) => {
 
         <input
           type="date"
+          min={todayISO()}
           {...register("moveInDate", {
             required: "Move in date is required",
+            validate: (value) =>
+              value >= todayISO() || "Move in date cannot be in the past",
           })}
           className="ls-input"
         />
@@ -86,7 +97,26 @@ const BookingForm = ({ property, onSuccess }: BookingFormProps) => {
       <div>
         <label className="mb-2 block text-sm font-medium">Move Out Date</label>
 
-        <input type="date" {...register("moveOutDate")} className="ls-input" />
+        <input
+          type="date"
+          min={todayISO()}
+          {...register("moveOutDate", {
+            validate: (value) => {
+              const moveIn = getValues("moveInDate");
+
+              if (!value || !moveIn) return true;
+
+              return value > moveIn || "Move out must be after move in date";
+            },
+          })}
+          className="ls-input"
+        />
+
+        {errors.moveOutDate && (
+          <p className="mt-1 text-sm text-red-500">
+            {errors.moveOutDate.message}
+          </p>
+        )}
       </div>
 
       {/* Phone */}
@@ -99,6 +129,10 @@ const BookingForm = ({ property, onSuccess }: BookingFormProps) => {
           placeholder="9876543210"
           {...register("phoneNumber", {
             required: "Phone number is required",
+            pattern: {
+              value: /^\+?[0-9]{10,15}$/,
+              message: "Enter a valid phone number (10 to 15 digits)",
+            },
           })}
           className="ls-input"
         />
@@ -118,9 +152,18 @@ const BookingForm = ({ property, onSuccess }: BookingFormProps) => {
         <textarea
           rows={4}
           placeholder="Tell the owner about your requirements..."
-          {...register("message")}
+          {...register("message", {
+            maxLength: {
+              value: 1000,
+              message: "Message cannot exceed 1000 characters",
+            },
+          })}
           className="ls-input resize-none p-2"
         />
+
+        {errors.message && (
+          <p className="mt-1 text-sm text-red-500">{errors.message.message}</p>
+        )}
       </div>
 
       {/* Submit */}

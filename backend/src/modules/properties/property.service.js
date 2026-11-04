@@ -20,6 +20,14 @@ import Property from "./property.model.js";
 // Populate owner
 const OWNER_POPULATE = "userName email fullName profileImage";
 
+const escapeHtml = (value = "") =>
+  String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
 // Normalize amenities input into a consistent array format.
 const parseAmenities = (value) => {
   if (!value) return [];
@@ -131,11 +139,11 @@ export const getAllPropertiesService = async (queryString) => {
   const cachedProperties = await getCache(cacheKey);
 
   if (cachedProperties) {
-    console.log("FROM REDIS");
+    // cache hit
     return cachedProperties;
   }
 
-  console.log("FROM MONGODB");
+  // cache miss
 
   const resultPerPage = Number(queryString.limit) || 10;
 
@@ -189,11 +197,11 @@ export const getSinglePropertyService = async (slug) => {
   const cachedProperty = await getCache(cacheKey);
 
   if (cachedProperty) {
-    console.log("FROM REDIS");
+    // cache hit
     return cachedProperty;
   }
 
-  console.log("FROM MONGODB");
+  // cache miss
 
   const property = await Property.findOne({
     slug,
@@ -218,12 +226,12 @@ export const getOwnerPropertiesService = async (ownerId) => {
   const cachedProperties = await getCache(cacheKey);
 
   if (cachedProperties) {
-    console.log("FROM REDIS");
+    // cache hit
 
     return cachedProperties;
   }
 
-  console.log("FROM MONGODB");
+  // cache miss
 
   const properties = await Property.find({ owner: ownerId, isDeleted: false })
     .populate("owner", OWNER_POPULATE)
@@ -243,12 +251,12 @@ export const getFeaturedPropertiesService = async ({ limit = 6 } = {}) => {
   const cachedProperties = await getCache(cacheKey);
 
   if (cachedProperties) {
-    console.log("FROM REDIS");
+    // cache hit
 
     return cachedProperties;
   }
 
-  console.log("FROM MONGODB");
+  // cache miss
 
   const properties = await Property.find({ isFeatured: true, isDeleted: false })
     .populate("owner", OWNER_POPULATE)
@@ -267,11 +275,11 @@ export const getRecommendedPropertiesService = async ({ limit = 6 } = {}) => {
   const cachedProperties = await getCache(cacheKey);
 
   if (cachedProperties) {
-    console.log("FROM REDIS");
+    // cache hit
     return cachedProperties;
   }
 
-  console.log("FROM MONGODB");
+  // cache miss
 
   const properties = await Property.find({
     status: PROPERTY_STATUS.APPROVED,
@@ -718,7 +726,6 @@ export const contactPropertyOwnerService = async ({
   if (!property) {
     throw new ApiError(404, "Property not found");
   }
-  console.log(property);
 
   if (!property.owner?.email) {
     throw new ApiError(404, "Owner email not found");
@@ -731,13 +738,13 @@ export const contactPropertyOwnerService = async ({
   }
 
   const senderName = user.fullName?.firstName || user.userName || "A user";
-  const subject = `Inquiry about ${property.title}`;
+  const subject = `Inquiry about ${String(property.title).replace(/[\r\n]+/g, " ")}`;
   const html = `
     <div>
-      <p>Hello ${property.owner.fullName?.firstName || property.owner.userName},</p>
-      <p>${senderName} is interested in your property <strong>${property.title}</strong>.</p>
-      <p><strong>Message:</strong> ${message || "No message provided"}</p>
-      <p>Property link: ${process.env.FRONTEND_URL || "http://localhost:5173"}/properties/${property.slug}</p>
+      <p>Hello ${escapeHtml(property.owner.fullName?.firstName || property.owner.userName)},</p>
+      <p>${escapeHtml(senderName)} is interested in your property <strong>${escapeHtml(property.title)}</strong>.</p>
+      <p><strong>Message:</strong> ${escapeHtml(message || "No message provided")}</p>
+      <p>Property link: ${process.env.FRONTEND_URL || process.env.CLIENT_URL || "http://localhost:5173"}/properties/${property.slug}</p>
     </div>
   `;
 

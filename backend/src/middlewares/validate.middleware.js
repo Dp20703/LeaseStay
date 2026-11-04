@@ -1,29 +1,37 @@
 import { validationResult } from "express-validator";
 import ApiError from "../helpers/ApiError.js";
 
+/**
+ * Runs express-validator chains and forwards a 400 with a field-level
+ * `errors` array: [{ field, message }].
+ *
+ * NOTE: request bodies are intentionally NOT logged here — they contain
+ * passwords and tokens.
+ */
 const validate = (validations) => {
   return async (req, res, next) => {
-    console.log("BEFORE VALIDATION REQ BODY:", req.body);
-    console.log("BEFORE VALIDATION REQ FILES:", req.file || req.files);
     await Promise.all(validations.map((validation) => validation.run(req)));
 
-    const errors = validationResult(req);
+    const result = validationResult(req);
 
-    if (!errors.isEmpty()) {
-      return next(
-        new ApiError(
-          400,
-          JSON.stringify(
-            errors.array().map((error) => ({
-              field: error.path,
-              message: error.msg,
-            })),
-          ),
-        ),
-      );
+    if (result.isEmpty()) {
+      return next();
     }
 
-    next();
+    // One entry per field (first message wins) so the UI can show it inline.
+    const seen = new Set();
+    const errors = [];
+
+    for (const error of result.array()) {
+      const field = error.path || "body";
+
+      if (seen.has(field)) continue;
+      seen.add(field);
+
+      errors.push({ field, message: error.msg });
+    }
+
+    return next(new ApiError(400, errors[0].message, errors));
   };
 };
 

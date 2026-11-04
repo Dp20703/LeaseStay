@@ -13,7 +13,7 @@ export const createOrder = asyncHandler(async (req, res) => {
 });
 
 export const verifyPayment = asyncHandler(async (req, res) => {
-  const result = await paymentService.verifyPayment(req.body);
+  const result = await paymentService.verifyPayment(req.user._id, req.body);
 
   return res
     .status(200)
@@ -42,7 +42,7 @@ export const getPaymentById = asyncHandler(async (req, res) => {
 export const getPropertyPayments = asyncHandler(async (req, res) => {
   const payments = await paymentService.getPropertyPayments(
     req.params.propertyId,
-    req.user._id,
+    req.user,
   );
 
   return res

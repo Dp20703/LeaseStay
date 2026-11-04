@@ -9,6 +9,8 @@ import { razorpayWebhook } from "./payment.webhook.js";
 
 import {
   createOrderValidation,
+  paymentIdValidation,
+  propertyIdValidation,
   verifyPaymentValidation,
 } from "./payment.validation.js";
 
@@ -18,6 +20,7 @@ const router = Router();
    WEBHOOK
 ---------------------------------- */
 
+// NOTE: body is parsed as raw Buffer in app.js (needed for signature check).
 router.post("/webhook", razorpayWebhook);
 
 /* ----------------------------------
@@ -48,6 +51,7 @@ router.get(
   "/property/:propertyId",
   verifyJWT,
   authorizeRoles(ROLES.OWNER, ROLES.ADMIN),
+  validate(propertyIdValidation),
   paymentController.getPropertyPayments,
 );
 
@@ -66,6 +70,7 @@ router.post(
   "/:paymentId/refund",
   verifyJWT,
   authorizeRoles(ROLES.ADMIN),
+  validate(paymentIdValidation),
   paymentController.refundPayment,
 );
 
@@ -73,6 +78,11 @@ router.post(
    DYNAMIC ROUTES LAST
 ---------------------------------- */
 
-router.get("/:paymentId", verifyJWT, paymentController.getPaymentById);
+router.get(
+  "/:paymentId",
+  verifyJWT,
+  validate(paymentIdValidation),
+  paymentController.getPaymentById,
+);
 
 export default router;

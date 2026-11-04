@@ -5,7 +5,7 @@ export const errorMiddleware = (error, req, res, next) => {
 
   let message = error.message || "Internal Server Error";
 
-  let errors = [];
+  let errors = Array.isArray(error.errors) ? error.errors : [];
 
   // MONGOOSE VALIDATION ERROR
 
@@ -37,6 +37,20 @@ export const errorMiddleware = (error, req, res, next) => {
     message = "Duplicate field";
   }
 
+  // INVALID OBJECT ID / CAST ERROR (e.g. /bookings/not-an-id)
+
+  if (error.name === "CastError") {
+    statusCode = 400;
+    message = `Invalid ${error.path || "value"}`;
+  }
+
+  // MALFORMED JSON BODY
+
+  if (error.type === "entity.parse.failed") {
+    statusCode = 400;
+    message = "Malformed JSON in request body";
+  }
+
   // MULTER ERRORS
 
   if (error instanceof multer.MulterError) {
@@ -55,8 +69,14 @@ export const errorMiddleware = (error, req, res, next) => {
     }
   }
 
-  console.log("GLOBAL ERROR:", error);
-  console.log("GLOBAL ERROR:", [error]);
+  if (statusCode >= 500) {
+    console.error("GLOBAL ERROR:", error);
+
+    // Never leak internals (stack hints, DB messages) to clients in production.
+    if (process.env.NODE_ENV === "production") {
+      message = "Internal Server Error";
+    }
+  }
 
   return res.status(statusCode).json({
     success: false,

@@ -39,7 +39,7 @@ const AdminNavbar = ({ onSidebarToggle }: AdminNavbarProps) => {
 
         <div className="flex items-center gap-2 lg:gap-3">
           <ThemeToggle />
-          <NotificationButton />
+          {/* <NotificationButton /> */}
           <AdminProfileDropdown />
         </div>
       </div>

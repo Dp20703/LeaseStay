@@ -9,6 +9,7 @@ import OwnerBookingRequestsPage from "@/modules/owner/pages/OwnerBookingRequests
 import OwnerPaymentsPage from "@/modules/owner/pages/OwnerPaymentsPage";
 import OwnerPropertiesPage from "@/modules/owner/pages/OwnerPropertiesPage";
 import CreatePropertyPage from "@/modules/property/pages/CreatePropertyPage";
+import EditPropertyPage from "@/modules/property/pages/EditPropertyPage";
 
 const ownerRoutes: RouteObject[] = [
   {
@@ -28,6 +29,10 @@ const ownerRoutes: RouteObject[] = [
           {
             path: "/owner/properties/create",
             element: <CreatePropertyPage />,
+          },
+          {
+            path: "/owner/properties/:id/edit",
+            element: <EditPropertyPage />,
           },
           {
             path: "/owner/booking-requests",

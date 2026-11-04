@@ -1,10 +1,20 @@
 import { ApiError } from "../../helpers/index.js";
 import { sendMail } from "../../utils/mail/sendMail.js";
+import { PROPERTY_STATUS } from "../properties/property.constants.js";
+import { BOOKING_STATUS } from "./booking.constants.js";
 import Property from "../properties/property.model.js";
 import User from "../users/user.model.js";
 import Booking from "./booking.model.js";
 
 const OWNER_POPULATE = "userName email fullName profileImage";
+
+const escapeHtml = (value = "") =>
+  String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 
 export const BOOKING_POPULATE = [
   {
@@ -44,16 +54,30 @@ export const createBookingService = async ({
     throw new ApiError(404, "Property not available");
   }
 
+  if (property.status !== PROPERTY_STATUS.APPROVED) {
+    throw new ApiError(400, "Property is not available for booking");
+  }
+
   if (property.availabilityStatus !== "available") {
     throw new ApiError(400, "Property is not available");
   }
 
-  if (property.owner.toString() === tenantId) {
+  // `owner` is populated, so compare against its _id (not the document).
+  if (property.owner._id.toString() === tenantId.toString()) {
     throw new ApiError(400, "You cannot book your own property");
   }
+
   const parsedMoveInDate = new Date(moveInDate);
 
-  if (parsedMoveInDate < new Date()) {
+  if (Number.isNaN(parsedMoveInDate.getTime())) {
+    throw new ApiError(400, "Invalid move in date");
+  }
+
+  // Allow "today": compare against the start of the current day.
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+
+  if (parsedMoveInDate < startOfToday) {
     throw new ApiError(400, "Move in date cannot be in the past");
   }
 
@@ -62,43 +86,36 @@ export const createBookingService = async ({
   if (moveOutDate) {
     parsedMoveOutDate = new Date(moveOutDate);
 
+    if (Number.isNaN(parsedMoveOutDate.getTime())) {
+      throw new ApiError(400, "Invalid move out date");
+    }
+
     if (parsedMoveOutDate <= parsedMoveInDate) {
       throw new ApiError(400, "Move out date must be after move in date");
     }
-  }
-
-  if (moveInDate < new Date()) {
-    throw new ApiError(400, "Move in date cannot be in the past");
   }
 
   const existingBooking = await Booking.findOne({
     property: propertyId,
     tenant: tenantId,
     status: {
-      $in: ["pending", "accepted"],
+      $in: [
+        BOOKING_STATUS.PENDING,
+        BOOKING_STATUS.ACCEPTED,
+        BOOKING_STATUS.UNDER_VERIFICATION,
+        BOOKING_STATUS.CONFIRMED,
+      ],
     },
   });
 
   if (existingBooking) {
     throw new ApiError(409, "Booking request already exists");
   }
-  const user = await User.findById(tenantId);
 
-  await sendMail({
-    to: property.owner.email,
-    subject: "New Booking Request",
-    html: `
-    <h2>New Booking Request</h2>
-
-    <p>${user?.userName || "An user"} requested to book:</p>
-
-    <strong>${property.title}</strong>
-  `,
-  });
-  return await Booking.create({
+  const booking = await Booking.create({
     property: property._id,
     tenant: tenantId,
-    owner: property.owner,
+    owner: property.owner._id,
 
     moveInDate: parsedMoveInDate,
     moveOutDate: parsedMoveOutDate || null,
@@ -107,6 +124,28 @@ export const createBookingService = async ({
     message,
     monthlyRent: property.price,
   });
+
+  // Notify the owner AFTER the booking exists, and never let an email
+  // failure (SMTP down, bad creds on the host) break the booking itself.
+  try {
+    const user = await User.findById(tenantId).select("userName");
+
+    await sendMail({
+      to: property.owner.email,
+      subject: "New Booking Request",
+      html: `
+    <h2>New Booking Request</h2>
+
+    <p>${escapeHtml(user?.userName || "A user")} requested to book:</p>
+
+    <strong>${escapeHtml(property.title)}</strong>
+  `,
+    });
+  } catch (error) {
+    console.error("Booking notification email failed:", error.message);
+  }
+
+  return booking;
 };
 
 // MY BOOKINGS
@@ -211,8 +250,24 @@ export const cancelBookingService = async ({ bookingId, tenantId }) => {
     throw new ApiError(403, "Unauthorized access");
   }
 
-  if (booking.status === "completed") {
-    throw new ApiError(400, "Cannot cancel completed booking");
+  const CANCELLABLE = [BOOKING_STATUS.PENDING, BOOKING_STATUS.ACCEPTED];
+
+  if (!CANCELLABLE.includes(booking.status)) {
+    // Paid bookings (under_verification / confirmed) go through a refund flow,
+    // not a silent status flip that would leave the money orphaned.
+    throw new ApiError(
+      400,
+      booking.paymentStatus === "paid"
+        ? "Paid bookings cannot be cancelled here. Please contact support for a refund."
+        : `A ${booking.status} booking cannot be cancelled`,
+    );
+  }
+
+  if (booking.paymentStatus === "paid") {
+    throw new ApiError(
+      400,
+      "Paid bookings cannot be cancelled here. Please contact support for a refund.",
+    );
   }
 
   booking.status = "cancelled";
