@@ -1,7 +1,6 @@
 import {
   MobileMenuButton,
   NavbarLogo,
-  NotificationButton,
   ThemeToggle,
 } from "@/shared/components/layout/navbar/common";
 import AdminProfileDropdown from "./AdminProfileDropdown";
