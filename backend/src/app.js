@@ -23,7 +23,9 @@ const app = express();
   req.ip is the proxy's IP, so every visitor shares ONE rate-limit bucket
   and secure cookies / protocol detection can misbehave.
 */
-app.set("trust proxy", 1);
+// Number of reverse proxies in front of the app.
+// Render / Railway: 1 (default).  AWS CloudFront + nginx: 2.
+app.set("trust proxy", Number(process.env.TRUST_PROXY_HOPS) || 1);
 
 /* SECURITY */
 
